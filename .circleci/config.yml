@@ -1,20 +1,20 @@
-version: 2.1  
+version: 2.1
 
 jobs:
   build:
-    working_directory: ~/ASDProject
+    working_directory: ~/circleci-python
     docker:
-      - image: cimg/python:3.12.0
-    steps:
-      - checkout
-      - run: python --version
-  test:
-    working_directory: ~/ASDProject
-    docker:
-      - image: cimg/python:3.12.0
+      - image: "circleci/python:3.6.4"
     steps:
       - checkout
       - run: python3 main.py
+  test:
+    working_directory: ~/circleci-python
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      - run: python3 main-test.py
 
 workflows:
   build_and_test:
