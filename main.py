@@ -1,43 +1,42 @@
-
 import tkinter as tk
-from tkinter import ttk
-import tkinter.messagebox as tkm
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("600x500")
-        self.title('Login')
-        self.configure(background='#2976E9')  
+        self.geometry("800x600")  
+        self.title('Horizon Restaurant')
+        self.configure(bg='#2976E9')  
+
         self.create_widgets()
 
+    def create_widgets(self):
+        # Container for the login components with slight transparency
+        container = tk.Frame(self, bg='#1A58B5', pady=75, padx=75)
+        container.place(relx=0.5, rely=0.5, anchor='center')
 
-    def create_widgets(self):        
-        username = tk.StringVar()
-        password = tk.StringVar()
+        # Title label
+        title = tk.Label(container, text="HORIZON RESTAURANT", bg='#1A58B5', fg='white', font=('inter', 24, 'bold'))
+        title.pack(fill='x', pady=(0, 20))
 
-        fields = {} # dictionary
-        fields['username_label'] = ttk.Label(text='User ID:')
-        fields['username'] = ttk.Entry(textvariable=username)   
-        fields['password_label'] = ttk.Label(text='Password:')
-        fields['password'] = ttk.Entry(textvariable=password, show="*")
-        
+        # Entry for the user code
+        userCodeLabel = tk.Label(container, text="User code:", bg='#1A58B5', fg='white', anchor='w', font=('inter', 14))
+        userCodeLabel.pack(fill='x')
+        userCodeEntry = tk.Entry(container, font=('inter', 14))
+        userCodeEntry.pack(fill='x', pady=5)
 
-        for field in fields.values():
+        # Entry for the password
+        passwordLabel = tk.Label(container, text="Password:", bg='#1A58B5', fg='white', anchor='w', font=('inter', 14))
+        passwordLabel.pack(fill='x')
+        passwordEntry = tk.Entry(container, show="*", font=('inter', 14))
+        passwordEntry.pack(fill='x', pady=5)
 
-            field.pack(anchor=tk.W, padx=50, pady=5, fill=tk.X, background='black')
+        # Login button
+        loginButton = tk.Button(container, text='Login',bg='white', command=self.login, fg='#1A58B5',width=20,height=2, font=('inter', 14))
+        loginButton.pack(pady=20)
 
-
-
-
-        ttk.Button(text='Login', command=lambda : self.login(username, password)).pack(anchor=tk.W, padx=10, pady=5)    
-    
-    def login(self, username, password):
-        print("User name : " + username.get() + "\nPassword : " + password.get())
-        # tkm.showinfo("Alert!", "User name : " + username.get() + "\nPassword : " + password.get())
+    def login(self):
+        print("Login")
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
-
-
