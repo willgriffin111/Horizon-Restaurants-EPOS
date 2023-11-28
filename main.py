@@ -16,24 +16,28 @@ class App(tk.Tk):
         title = tk.Label(container, text="HORIZON RESTAURANT", bg='#1A58B5', fg='white', font=('inter', 24, 'bold'))
         title.pack(fill='x', pady=(0, 20))
 
+        username = tk.StringVar()
+        password = tk.StringVar()
+        
         # Entry for the user code
         userCodeLabel = tk.Label(container, text="User code:", bg='#1A58B5', fg='white', anchor='w', font=('inter', 14))
         userCodeLabel.pack(fill='x')
-        userCodeEntry = tk.Entry(container, font=('inter', 14))
+        userCodeEntry = tk.Entry(container,textvariable=username, font=('inter', 14))
         userCodeEntry.pack(fill='x', pady=5)
 
         # Entry for the password
         passwordLabel = tk.Label(container, text="Password:", bg='#1A58B5', fg='white', anchor='w', font=('inter', 14))
         passwordLabel.pack(fill='x')
-        passwordEntry = tk.Entry(container, show="*", font=('inter', 14))
+        passwordEntry = tk.Entry(container, show="*",textvariable=password, font=('inter', 14))
         passwordEntry.pack(fill='x', pady=5)
 
         # Login button
-        loginButton = tk.Button(container, text='Login',bg='white', command=self.login, fg='#1A58B5',width=20,height=2, font=('inter', 14))
+        loginButton = tk.Button(container, text='Login', command=lambda : self.login(username, password), fg='black', bg='#1A58B5', width=20, height=2, font=('inter', 14))
         loginButton.pack(pady=20)
 
-    def login(self):
-        print("Login")
+    def login(self, username, password):
+
+        print(f"Username: {username.get()}  Password: {password.get()}")
 
 if __name__ == "__main__":
     app = App()
