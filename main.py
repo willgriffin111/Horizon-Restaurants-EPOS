@@ -6,11 +6,9 @@ class App(tk.Tk):
         self.geometry("800x600")  
         self.title('Horizon Restaurant')
         self.configure(bg='#2976E9')  
-
         self.create_widgets()
 
     def create_widgets(self):
-        # Container for the login components with slight transparency
         container = tk.Frame(self, bg='#1A58B5', pady=75, padx=75)
         container.place(relx=0.5, rely=0.5, anchor='center')
 
