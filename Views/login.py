@@ -9,6 +9,7 @@ class App(tk.Tk):
         self.create_widgets()
 
     def create_widgets(self):
+        
         container = tk.Frame(self, bg='#1A58B5', pady=75, padx=75)
         container.place(relx=0.5, rely=0.5, anchor='center')
 
