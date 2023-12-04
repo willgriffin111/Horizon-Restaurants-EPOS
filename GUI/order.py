@@ -1,4 +1,11 @@
+""" 
+AUTHOR : WILL GRIFFIN
+DATE : 29/11/2023
+VERSION : 1.0
+"""
 import tkinter as tk
+
+
 
 class App(tk.Tk):
     def __init__(self):
@@ -28,8 +35,8 @@ class App(tk.Tk):
         leftContainer.grid_columnconfigure(1, weight=1)
 
         # Creating buttons
-        leftContainerButtonLogOut = tk.Button(leftContainer, text="Log out", fg='black', font=('inter', 15), height=3, width=10)
-        leftContainerButtonTables = tk.Button(leftContainer, text="Tables", fg='black', font=('inter', 15), height=3, width=10)
+        leftContainerButtonLogOut = tk.Button(leftContainer, text="Log out", fg='black', font=('inter', 15), height=4, width=10)
+        leftContainerButtonTables = tk.Button(leftContainer, text="Tables", fg='black', font=('inter', 15), height=4, width=10)
         
         # leftContainerTest = tk.Label(leftContainer, text="Test", fg='black', font=('inter', 15), height=3, width=10)
         # leftContainerTest.pack(fill='x', pady=5)
@@ -39,7 +46,7 @@ class App(tk.Tk):
         leftContainerButtonTables.grid(row=0, column=1, sticky='nsew')
         
         # RIGHT CONTAINER
-        rightContainerTitle = tk.Label(rightContainer, text="Horizon Restaurant", fg='white', bg="#2976E9", font=('inter', 20))
+        rightContainerTitle = tk.Label(rightContainer, text="Horizon Restaurant", fg='white', bg="#2976E9", font=('inter', 20), height=2)
         rightContainerUserDetails = tk.Label(rightContainer, text="User details", fg='white', bg="#2976E9", font=('inter', 15))
         rightContainerSearch = tk.Entry(rightContainer, width=30, font=('inter', 15))
         

@@ -1,3 +1,8 @@
+""" 
+AUTHOR : WILL GRIFFIN
+DATE : 29/11/2023
+VERSION : 1.0
+"""
 import tkinter as tk
 
 class App(tk.Tk):
