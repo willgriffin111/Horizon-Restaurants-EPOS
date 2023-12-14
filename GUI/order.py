@@ -10,18 +10,49 @@ menuItems = {
     "Drinks": ["Drink1", "Drink2", "Drink3", "Drink4"]
 }
 
+tables = ["Table 1", "Table 2", "Table 3"]  
+
+# FIRST ITEM IS THE ITEM NAME, SECOND IS THE QUANTITY
+order = {
+            "Starter 1": (1, 6.50),
+            "Main 3": (2, 10.00),
+            "Dessert 5": (1, 4.50)
+        }
+'''
+Example of implentaion
+
+menuItems = {
+    "SELECT category FROM MENU": ["SELECT menuItem FROM MENU WHERE category IS 'Starters'"],
+    "SELECT category FROM MENU": ["SELECT menuItem FROM MENU WHERE category IS 'Mains'"],
+    "SELECT category FROM MENU": ["SELECT menuItem FROM MENU WHERE category IS 'Desserts'"],
+    "SELECT category FROM MENU": ["SELECT menuItem FROM MENU WHERE category IS 'Drinks'"]
+}
+
+tables = ["SELECT tableNumber FROM TABLE"] 
+
+order = {
+    "SELECT menuItem FROM ORDER WHERE tableNumber FROM Tabel IS 1": (SELECT , 6.50),
+    "SELECT menuItem FROM ORDER WHERE tableNumber FROM Tabel IS 2": (2, 10.00),
+    "SELECT menuItem FROM ORDER WHERE tableNumber FROM Tabel IS 3": (1, 4.50)
+}
+    
+'''
+
 class App(Tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry("800x600")
         self.title("Order Page")
         self.configure(bg="#1A58B5")
+
+        self.selected_table = Tk.StringVar()
+        self.selected_table.set(tables[0])  # Set the default value
+        
         self.sidebar()
         self.topbar(userName=userName, userID=userId)
         self.createMenuCategories()
-        # self.bottombar()
 
-    # Button function
+    # Jevs Button function
     def homeAction(self):
         print("Home button clicked")
 
@@ -64,8 +95,61 @@ class App(Tk.Tk):
         logOutButton = Tk.Button(topBox, command=self.logOutButton, text="Log Out", bg="white", padx=10, pady=0, borderwidth=0, highlightthickness=0, height=4, width=10)
         logOutButton.pack(side=Tk.LEFT)  # Aligns the Log Out button to the left
 
-        tableButton = Tk.Button(topBox, command=self.tableButton, text="Table", bg="white", padx=10, pady=0, borderwidth=0, highlightthickness=0, height=4, width=10)
-        tableButton.pack(side=Tk.LEFT)  # Aligns the Table button to the left next to Log Out button
+        # tableButton = Tk.Button(topBox, command=self.tableButton, text="Table", bg="white", padx=10, pady=0, borderwidth=0, highlightthickness=0, height=4, width=10)
+        # tableButton.pack(side=Tk.LEFT)  # Aligns the Table button to the left next to Log Out button
+        # Dropdown menu for tables
+        
+        tableMenu = Tk.OptionMenu(topBox, self.selected_table, *tables, command=self.getSelectedTable)
+        tableMenu.config(bg="white", padx=10, pady=0, borderwidth=0, highlightthickness=0, height=4, width=5)
+        tableMenu["menu"].config(bg="black")
+        tableMenu.pack(side=Tk.LEFT)  
+        
+        # Add a frame for the POS system interface
+        posFrame = Tk.Frame(sidebar, bg="white")
+        posFrame.pack(fill=Tk.BOTH, expand=True, padx=10, pady=10)
+
+        # Add a label and entry for item listing, quantity, and price
+        self.itemList = Tk.Listbox(posFrame)
+        self.itemList.pack(fill=Tk.BOTH, expand=True)
+
+        for item, (quantity, price) in order.items():
+            entry = f"{item} x {quantity} - £{price * quantity}"
+            self.itemList.insert(Tk.END, entry)
+
+        # Summary of the order
+        summaryFrame = Tk.Frame(posFrame, bg="#E8E8E8")
+        summaryFrame.pack(fill=Tk.BOTH, expand=True)
+
+        totalItems = 0
+        totalPrice = 0.0
+
+        # Loop through each order item to calculate the total items and total price
+        for item, details in order.items():
+            quantity, pricePerItem = details
+            totalItems += quantity
+            totalPrice += quantity * pricePerItem
+
+        Tk.Label(summaryFrame, text=f"Items: {totalItems}", bg="#E8E8E8").pack(side=Tk.LEFT)
+        Tk.Label(summaryFrame, text=f"Total: £{totalPrice}", bg="#E8E8E8").pack(side=Tk.RIGHT)
+
+        # Add buttons for actions
+        buttonsFrame = Tk.Frame(posFrame, bg="#E8E8E8")
+        buttonsFrame.pack(fill=Tk.BOTH, expand=True, pady=5)
+
+        # deleteButton = Tk.Button(buttonsFrame, text="Delete", bg="red", fg="white")
+        # deleteButton.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
+
+        # modifyButton = Tk.Button(buttonsFrame, text="Modify", bg="gray", fg="white")
+        # modifyButton.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
+
+        payButton = Tk.Button(buttonsFrame, text="Pay", bg="green", fg="black")
+        payButton.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
+
+    
+    def getSelectedTable(self, selectedValue):
+        print(selectedValue)
+
+        
     def createMenuCategories(self):
         self.menuFrame = Tk.Frame(self, bg="#1A58B5")
         self.menuFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
@@ -106,25 +190,37 @@ class App(Tk.Tk):
 
         # Fetch options for the selected category
         options = menuItems.get(category, [])
-        print(options)
 
         for index, option in enumerate(options):
             row = index // 2  # Calculate the row number
             col = index % 2  # Calculate the column number
 
-            optionButton = Tk.Button(self.optionsFrame, text=option, width=26, height=4)
+            optionButton = Tk.Button(self.optionsFrame, text=option, width=26, height=4, command=self.selectedCategoryOptions(category,option))
             optionButton.grid(row=row, column=col, padx=10, pady=5)
 
         # Configure column weights to ensure buttons expand to fill the frame
         for i in range(2):
             self.optionsFrame.grid_columnconfigure(i, weight=1)
 
-    def bottombar(self):
-        bottomFrame = Tk.Frame(self, borderwidth=7, relief=Tk.FLAT, bg="#2976E9")
-        bottomFrame.pack(fill=Tk.X, side=Tk.BOTTOM)
-        bottomLabel = Tk.Label(bottomFrame, text="", bg="#2976E9")
-        bottomLabel.pack()
+    def selectedCategoryOptions(self, category, item):
+        def inner():  
+            print(f"Selected Item: {item} in Category: {category} for Table: {self.selected_table.get()}")
+            ''' 
+            HERE IS WHERE WE WILL ADD THE ITEM TO THE ORDER IN THE DATABASE
+            WE ENTER TABLE NUMBER, ITEM, QUANTITY
+            USING THE VARIABLES
+            
+            self.selected_table.get() = TABLE NUMBER
+            item = ITEM
+            quantity = 1, as pressed once. If pressed twise the item will be added again under the same table number and will be shown the left x2
+            
+            WILL ALSO NEED A AUTO REFRESH FUNCTION TO UPDATE THE ORDER LIST
+            '''
+        return inner
+
+
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
