@@ -1,64 +1,113 @@
-""" 
-AUTHOR : WILL GRIFFIN
-DATE : 29/11/2023
-VERSION : 1.0
-"""
+'''
+Auther Jevhan Seechurn, Will Griffin
+Date: 13/12/2023 3am lmao
+Version: 1.0
+'''
+
 import tkinter as tk
+from tkinter import PhotoImage
 
-
+userName = "Will Griffin"
+userId = "193812"
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry("800x600")
-        self.title('Horizon Restaurant')
-        self.configure(bg='#2976E9')
-        self.create_widgets()
+        self.title('Order Page')
+        self.configure(bg='#1A58B5')
+        self.Sidebar()
+        self.topbar(userName=userName, userID=userId)
+        self.bottombar()
 
-    def create_widgets(self):
-        # Creating frames with proper assignment
-        leftContainer = tk.Frame(self, bg="white")
-        rightContainer = tk.Frame(self, bg='#1A58B5')
+    # button funtion
+    def home_action(self):
+        print("Option button clicked")
 
-        # Positioning frames
-        leftContainer.grid(row=0, column=0, sticky='nsew')
-        rightContainer.grid(row=0, column=1, sticky='nsew')
+    def Log_out_button(self):
+        print("Logged off")
 
-        # Configuring grid layout to expand containers
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=2)
-        self.grid_rowconfigure(0, weight=1)
-        
-        #  LEFT CONTAINER
-        # Configure the column weights for leftContainer
-        leftContainer.grid_columnconfigure(0, weight=1)
-        leftContainer.grid_columnconfigure(1, weight=1)
+    def table_button(self):
+        print("Table button clicked")
 
-        # Creating buttons
-        leftContainerButtonLogOut = tk.Button(leftContainer, text="Log out", fg='black', font=('inter', 15), height=4, width=10)
-        leftContainerButtonTables = tk.Button(leftContainer, text="Tables", fg='black', font=('inter', 15), height=4, width=10)
-        
-        # leftContainerTest = tk.Label(leftContainer, text="Test", fg='black', font=('inter', 15), height=3, width=10)
-        # leftContainerTest.pack(fill='x', pady=5)
 
-        # Positioning buttons at the top
-        leftContainerButtonLogOut.grid(row=0, column=0, sticky='nsew')
-        leftContainerButtonTables.grid(row=0, column=1, sticky='nsew')
-        
-        # RIGHT CONTAINER
-        rightContainerTitle = tk.Label(rightContainer, text="Horizon Restaurant", fg='white', bg="#2976E9", font=('inter', 20), height=2)
-        rightContainerUserDetails = tk.Label(rightContainer, text="User details", fg='white', bg="#2976E9", font=('inter', 15))
-        rightContainerSearch = tk.Entry(rightContainer, width=30, font=('inter', 15))
-        
-        rightContainerTitle.grid(row=0, column=0, sticky='nsew')
-        rightContainerUserDetails.grid(row=1, column=0, sticky='nsew')
-        rightContainerSearch.grid(row=0, column=1, rowspan=2, sticky='nsew')
 
-    def logout(self):
-        print("Logged out")
-    
-    def tables(self):
-        print("Tables")
+    def topbar(self, userName, userID):
+        topFrame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='#2976E9')
+        topFrame.pack(fill=tk.X)
+
+        label = tk.Label(topFrame, text="Horizon Restaurant", fg='white', bg='#2976E9', anchor='w', font=('Arial', 16), underline=True)
+        label.pack(fill=tk.BOTH, expand=True)
+
+        top_underline = tk.Canvas(topFrame, height=2, bg='#2976E9', highlightthickness=0)
+        top_underline.create_line(4, 2, 143, 2, width=2, fill='white')
+        top_underline.pack(fill=tk.X)
+
+        username = tk.Label(topFrame, text=f" User: {userName}", fg='white', bg='#2976E9', font=('Arial', 12))
+        username.pack(side=tk.RIGHT, anchor='e')
+        username.place(relx=1.0, rely=0.5, anchor='e', x=-170, y=4)
+
+        user_id = tk.Label(topFrame, text=f"ID: {userID}", fg='white', bg='#2976E9', font=('Arial', 12))
+        user_id.pack(side=tk.RIGHT, anchor='e')
+        user_id.place(relx=1.0, rely=0.5, anchor='e', x=-90, y=4)
+
+        # Home Button
+        refresh_button = tk.Button(topFrame, text='Home', command=self.home_action, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
+        refresh_button.place(relx=1.0, rely=0.5, anchor='e', x=3, y=4)
+
+
+    def Sidebar(self):
+        Sidebar = tk.Frame(self, width=300, height=478, bg='#F0FFFF')
+        Sidebar.pack(fill=tk.Y, side=tk.LEFT)
+
+        top_box = tk.Frame(Sidebar, bg='grey')
+        top_box.pack(anchor='nw', padx=10, pady=10)
+
+        Log_out_button = tk.Button(top_box, command=self.Log_out_button, text="Log Out", bg='white', padx=10, pady=0, borderwidth=0, highlightthickness=0,height=4,width=10)
+        Log_out_button.pack(side=tk.LEFT)  # Aligns the Log Out button to the left
+
+        table_button = tk.Button(top_box, command=self.table_button, text="Table", bg='white', padx=10, pady=0, borderwidth=0, highlightthickness=0,height=4,width=10)
+        table_button.pack(side=tk.LEFT)  # Aligns the Table button to the left next to Log Out button
+
+# To do list 
+
+        product_label = tk.Label
+
+        qty_label = tk.Label
+
+        total = tk.Label
+
+        Line_split1 = tk.Canvas
+
+        item = tk.Label
+
+        discount_dp = tk.Label
+
+        Line_split2 = tk.Canvas
+
+        total_dp = tk.Label
+
+        due_dpl = tk.Label
+
+        Line_split3 = tk.Canvas
+
+        reciept_btn = tk.Button
+
+        discount_btn = tk.Button
+
+        delete_btn = tk.Button
+
+        mod_btn = tk.Button
+
+        pay_btn = tk.Button
+
+
+    def bottombar(self):
+        bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')
+        bottomFrame.pack(fill=tk.X, side=tk.BOTTOM)
+        bottom_label = tk.Label(bottomFrame, text="", bg='#2976E9')
+        bottom_label.pack()
+
 
 if __name__ == "__main__":
     app = App()

@@ -42,7 +42,6 @@ class App(tk.Tk):
         loginButton.pack(pady=20)
 
     def login(self, username, password):
-
         print(f"Username: {username.get()}  Password: {password.get()}")
 
 if __name__ == "__main__":

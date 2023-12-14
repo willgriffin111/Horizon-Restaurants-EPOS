@@ -1,5 +1,5 @@
 '''
-Auther Will Griffin
+Auther Will Griffin, Jevhan Seechurn
 Date: 12/12/2023
 Version: 1.0
 '''
@@ -26,41 +26,46 @@ tableOrders = {
 }
 '''
 
-
-
 class App(tk.Tk):
     def __init__(self,orders):
         super().__init__()
         self.geometry("800x600")
         self.title('Horizon Restaurant')
         self.tableOrders = orders
-        # self.resizable(False, False)
+        self.resizable(False, False)
         self.create_widgets()
         
     def create_widgets(self):
 
-        # Header frame
-        topFrame = tk.Frame(self, bg='#2976E9', height=100)  
-        topFrame.pack(fill=tk.X, side=tk.TOP)
+        topFrame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='#2976E9')
+        topFrame.pack(fill=tk.X)
 
-        # User details frame within the header frame
-        userIdFrame = tk.Frame(topFrame, bg='#2976E9')
-        userIdFrame.pack(side=tk.LEFT, padx=10, pady=(10, 0))  
+        # The Label 'Horizon Restaurant'
+        label = tk.Label(topFrame, text="Horizon Restaurant", fg='white', bg='#2976E9', anchor='w', font=('Arial', 25), underline=True)
+        label.pack(fill=tk.BOTH, expand=True)
 
-        titleLabel = tk.Label(userIdFrame, text="Horizon Restaurant", font=("inter", 20), bg='#2976E9', fg='white')
-        titleLabel.pack()
-        
-        userNameLabel = tk.Label(userIdFrame, text="Gordon Ramsay", font=("inter", 12), bg='#2976E9', fg='white')
-        userNameLabel.pack(side=tk.TOP)
+        # Underlines the Label 
+        canvas = tk.Canvas(topFrame, height=2, bg='#2976E9', highlightthickness=0)
+        canvas.create_line(4, 2, 218, 2, width=2, fill='white')
+        canvas.pack(fill=tk.X)
 
-        userIdLabel = tk.Label(userIdFrame, text="ID: 01928312", font=("inter", 12), bg='#2976E9', fg='white')
-        userIdLabel.pack(side=tk.BOTTOM)
-        
-        homeButtonIcon = tk.Button(topFrame, text="⌂", bg='#2976E9', fg='black', font=("inter", 50),command=lambda: self.home())
-        homeButtonIcon.pack(side=tk.RIGHT, padx=(0, 10), pady=(10, 0))  
-        
-        orderTotal = tk.Label(topFrame, text=f"Total open orders:{len(tableOrders)}", font=("inter", 15), bg='#2976E9', fg='white')
-        orderTotal.pack(side=tk.LEFT, padx=(50, 0), pady=(10, 0))
+        # Username
+        username = tk.Label(topFrame, text=" User: Gordon ", fg='white', bg='#2976E9', font=('Arial', 14))
+        username.pack(side=tk.RIGHT, anchor='e')
+        username.place(relx=1.0, rely=0.5, anchor='e', x=-350, y=4)
+
+        # User ID
+        user_id = tk.Label(topFrame, text="ID: 193812", fg='white', bg='#2976E9', font=('Arial', 14))
+        user_id.pack(side=tk.RIGHT, anchor='e')
+        user_id.place(relx=1.0, rely=0.5, anchor='e', x=-260, y=4)
+
+        # Refresh Button
+        refresh_button = tk.Button(topFrame, text='Refresh', command=self.refreshGUI, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
+        refresh_button.place(relx=1.0, rely=0.5, anchor='e', x=-110, y=4)
+
+        # Home Button
+        refresh_button = tk.Button(topFrame, text='Home', command=self.home, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
+        refresh_button.place(relx=1.0, rely=0.5, anchor='e', x=-10, y=4)
         
         # Create the main frame for the table orders
         mainFrame = tk.Frame(self,bg='#1A58B5')
@@ -68,6 +73,11 @@ class App(tk.Tk):
 
         for tableNumber, orders in self.tableOrders.items():
             self.createTableFrame(mainFrame, orders, tableNumber)
+            
+        bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')
+        bottomFrame.pack(fill=tk.X, side=tk.BOTTOM)
+        bottom_label = tk.Label(bottomFrame, text="", bg='#2976E9')
+        bottom_label.pack()
 
     def createTableFrame(self, parentFrame, orders, tableNumber):
         
@@ -86,7 +96,6 @@ class App(tk.Tk):
         
         doneButton = tk.Button(tableFrame, text="Done", command=lambda: self.doneButton(tableNumber))
         doneButton.pack(anchor=tk.S, padx=5)
-
 
     def doneButton(self, tableNumber):
         tableOrders.pop(tableNumber)
