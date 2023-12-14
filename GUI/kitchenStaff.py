@@ -67,22 +67,38 @@ class App(tk.Tk):
         refresh_button = tk.Button(topFrame, text='Home', command=self.home, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
         refresh_button.place(relx=1.0, rely=0.5, anchor='e', x=-10, y=4)
         
-        # Create the main frame for the table orders
-        mainFrame = tk.Frame(self,bg='#1A58B5')
+        # # Create the main frame for the table orders
+        # mainFrame = tk.Frame(self,bg='#1A58B5')
+        # mainFrame.pack(fill=tk.BOTH, expand=True)
+
+        # for tableNumber, orders in self.tableOrders.items():
+        #     self.createTableFrame(mainFrame, orders, tableNumber)
+            
+        # bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')
+        # bottomFrame.pack(fill=tk.X, side=tk.BOTTOM)
+        # bottom_label = tk.Label(bottomFrame, text="", bg='#2976E9')
+        # bottom_label.pack()
+        
+        mainFrame = tk.Frame(self, bg='#1A58B5')
         mainFrame.pack(fill=tk.BOTH, expand=True)
 
+        # Grid configuration
+        row, col = 0, 0
         for tableNumber, orders in self.tableOrders.items():
-            self.createTableFrame(mainFrame, orders, tableNumber)
-            
-        bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')
-        bottomFrame.pack(fill=tk.X, side=tk.BOTTOM)
-        bottom_label = tk.Label(bottomFrame, text="", bg='#2976E9')
-        bottom_label.pack()
+            if col == 4:  # Move to the next row after every 4 tables
+                row += 1
+                col = 0
+            self.createTableFrame(mainFrame, orders, tableNumber, row, col)
+            col += 1
+        
 
-    def createTableFrame(self, parentFrame, orders, tableNumber):
+    def createTableFrame(self, parentFrame, orders, tableNumber, row, col):
         
         tableFrame = tk.Frame(parentFrame, borderwidth=2, relief=tk.GROOVE)
-        tableFrame.pack(side=tk.LEFT, expand=True, padx=10, pady=10)
+        tableFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
+        
+        # tableFrame = tk.Frame(parentFrame, borderwidth=2, relief=tk.GROOVE)
+        # tableFrame.pack(side=tk.LEFT, expand=True, padx=10, pady=10)
 
         tableNumberTitle = tk.Label(tableFrame, text=tableNumber, font=("inter", 12), bg="lightgrey")
         tableNumberTitle.pack(fill=tk.X)
