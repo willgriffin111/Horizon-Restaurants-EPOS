@@ -7,17 +7,21 @@ Version: 1.0
 import tkinter as tk
 from tkinter import PhotoImage
 
+userName = "Will Griffin"
+userId = "193812"
+
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.geometry("800x600")
         self.title('Horizon Restaurant')
         self.configure(bg='#1A58B5')
-        self.topbar()
+        self.topbar(userName=userName, userID=userId)
         self.main_menu()
         self.bottombar()
 
-    def topbar(self):
+    def topbar(self, userName, userID):
         topFrame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='#2976E9')
         topFrame.pack(fill=tk.X)
 
@@ -31,12 +35,12 @@ class App(tk.Tk):
         canvas.pack(fill=tk.X)
 
         # Username
-        username = tk.Label(topFrame, text=" User: Gordon ", fg='white', bg='#2976E9', font=('Arial', 14))
+        username = tk.Label(topFrame, text=f" User: {userName} ", fg='white', bg='#2976E9', font=('Arial', 14))
         username.pack(side=tk.RIGHT, anchor='e')
         username.place(relx=1.0, rely=0.5, anchor='e', x=-350, y=4)
 
         # User ID
-        user_id = tk.Label(topFrame, text="ID: 193812", fg='white', bg='#2976E9', font=('Arial', 14))
+        user_id = tk.Label(topFrame, text=f"ID: {userId}", fg='white', bg='#2976E9', font=('Arial', 14))
         user_id.pack(side=tk.RIGHT, anchor='e')
         user_id.place(relx=1.0, rely=0.5, anchor='e', x=-260, y=4)
     
