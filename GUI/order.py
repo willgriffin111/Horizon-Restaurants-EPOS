@@ -12,7 +12,7 @@ menuItems = {
 
 tables = ["Table 1", "Table 2", "Table 3"]  
 
-# FIRST ITEM IS THE ITEM NAME, SECOND IS THE QUANTITY
+# FIRST ITEM IS THE ITEM NAME, SECOND IS THE QUANTITY, THIRD IS PRICE
 order = {
             "Starter 1": (1, 6.50),
             "Main 3": (2, 10.00),
@@ -47,7 +47,7 @@ class App(Tk.Tk):
 
         self.selected_table = Tk.StringVar()
         self.selected_table.set(tables[0])  # Set the default value
-        
+        self.resizable(False, False)
         self.sidebar()
         self.topbar(userName=userName, userID=userId)
         self.createMenuCategories()
