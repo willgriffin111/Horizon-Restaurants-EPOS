@@ -7,7 +7,7 @@ menuItems = {
     "Starters": ["Starter1", "Starter2", "Starter3", "Starter4"],
     "Mains": ["Main1", "Main2", "Main3", "Main4"],
     "Desserts": ["Dessert1", "Dessert2", "Dessert3", "Dessert4"],
-    "Drinks": ["Drink1", "Drink2", "Drink3", "Drink4"]
+    "Drinks": ["Drink1", "Drink2", "Drink3", "Drink4", "Drink4", "Drink4"]
 }
 
 tables = ["Table 1", "Table 2", "Table 3"]  
@@ -50,6 +50,7 @@ class App(Tk.Tk):
         self.resizable(False, False)
         self.sidebar()
         self.topbar(userName=userName, userID=userId)
+        self.bottombar()
         self.createMenuCategories()
 
     # Jevs Button function
@@ -101,7 +102,7 @@ class App(Tk.Tk):
         
         tableMenu = Tk.OptionMenu(topBox, self.selected_table, *tables, command=self.getSelectedTable)
         tableMenu.config(bg="white", padx=10, pady=0, borderwidth=0, highlightthickness=0, height=4, width=5)
-        tableMenu["menu"].config(bg="black")
+        tableMenu["menu"].config(bg="white")
         tableMenu.pack(side=Tk.LEFT)  
         
         # Add a frame for the POS system interface
@@ -142,7 +143,7 @@ class App(Tk.Tk):
         # modifyButton = Tk.Button(buttonsFrame, text="Modify", bg="gray", fg="white")
         # modifyButton.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
 
-        payButton = Tk.Button(buttonsFrame, text="Pay", bg="green", fg="black")
+        payButton = Tk.Button(buttonsFrame, text="Pay", bg="green", fg="black", borderwidth=0)
         payButton.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
 
     
@@ -160,27 +161,30 @@ class App(Tk.Tk):
 
         self.categoryButtons = {}
 
+# Inside the createMenuCategories method
+
         # Starters Button
-        startersButton = Tk.Button(gridFrame, text="Starters", command=lambda: self.displayCategoryOptions("Starters"), width=13, height=5)
+        startersButton = Tk.Button(gridFrame, text="Starters", command=lambda: self.displayCategoryOptions("Starters"), width=10, height=5,borderwidth=0)
         startersButton.grid(row=0, column=0, padx=5, pady=5)
         self.categoryButtons["Starters"] = startersButton
 
         # Mains Button
-        mainsButton = Tk.Button(gridFrame, text="Mains", command=lambda: self.displayCategoryOptions("Mains"), width=13, height=5)
+        mainsButton = Tk.Button(gridFrame, text="Mains", command=lambda: self.displayCategoryOptions("Mains"), width=10, height=5,borderwidth=0, background="white")
         mainsButton.grid(row=0, column=1, padx=5, pady=5)
         self.categoryButtons["Mains"] = mainsButton
 
         # Desserts Button
-        dessertsButton = Tk.Button(gridFrame, text="Desserts", command=lambda: self.displayCategoryOptions("Desserts"), width=13, height=5)
+        dessertsButton = Tk.Button(gridFrame, text="Desserts", command=lambda: self.displayCategoryOptions("Desserts"), width=10, height=5,borderwidth=0)
         dessertsButton.grid(row=0, column=2, padx=5, pady=5)
         self.categoryButtons["Desserts"] = dessertsButton
 
         # Drinks Button
-        drinksButton = Tk.Button(gridFrame, text="Drinks", command=lambda: self.displayCategoryOptions("Drinks"), width=13, height=5)
+        drinksButton = Tk.Button(gridFrame, text="Drinks", command=lambda: self.displayCategoryOptions("Drinks"), width=10, height=5,borderwidth=0)
         drinksButton.grid(row=0, column=3, padx=5, pady=5)
-        self.categoryButtons["Drinks"] = drinksButton
+        self.categoryButtons["Drinks"] = drinksButton 
 
-        self.optionsFrame = Tk.Frame(self.menuFrame, bg="systemTransparent")
+
+        self.optionsFrame = Tk.Frame(self.menuFrame, bg="#1A58B5")
         self.optionsFrame.pack(fill=Tk.BOTH, expand=True)
 
     def displayCategoryOptions(self, category):
@@ -192,15 +196,16 @@ class App(Tk.Tk):
         options = menuItems.get(category, [])
 
         for index, option in enumerate(options):
-            row = index // 2  # Calculate the row number
-            col = index % 2  # Calculate the column number
+            row = index // 3  # Calculate the row number
+            col = index % 3  # Calculate the column number
 
-            optionButton = Tk.Button(self.optionsFrame, text=option, width=26, height=4, command=self.selectedCategoryOptions(category,option))
+            optionButton = Tk.Button(self.optionsFrame, text=option, width=26, height=7, command=self.selectedCategoryOptions(category,option),borderwidth=0)
             optionButton.grid(row=row, column=col, padx=10, pady=5)
 
         # Configure column weights to ensure buttons expand to fill the frame
-        for i in range(2):
+        for i in range(3):
             self.optionsFrame.grid_columnconfigure(i, weight=1)
+
 
     def selectedCategoryOptions(self, category, item):
         def inner():  
@@ -217,10 +222,15 @@ class App(Tk.Tk):
             WILL ALSO NEED A AUTO REFRESH FUNCTION TO UPDATE THE ORDER LIST
             '''
         return inner
-
+    
+        # Bottom bar 
+    def bottombar(self):
+        bottomFrame = Tk.Frame(self, borderwidth=7, relief=Tk.FLAT, bg='#2976E9')
+        bottomFrame.pack(fill=Tk.X, side=Tk.BOTTOM)
+        bottom_label = Tk.Label(bottomFrame, text="", bg='#2976E9')
+        bottom_label.pack()
 
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
-
