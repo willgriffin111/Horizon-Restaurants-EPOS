@@ -2,7 +2,7 @@ import mysql.connector, dbfunc
 from mysql.connector import errorcode
 
 conn = dbfunc.getConnection()   #connection to DB
-DB_NAME = 'Horizon_Resturant'             #DB Name
+DB_NAME = 'Horizon_Restaurant'             #DB Name
 TABLES = {}
 
 # Data types 
@@ -45,7 +45,7 @@ TABLES['EMPLOYEES'] = 'CREATE TABLE employee (\
   PRIMARY KEY (employee_id),\
   employee_name VARCHAR(64) NOT NULL,\
   employee_account_type VARCHAR(64) NOT NULL,\
-  employee_password VARCHAR(64) NOT NULL\
+  employee_password VARCHAR(256) NOT NULL\
 );'
 
 TABLES['TABLES'] = 'CREATE TABLE tables (\

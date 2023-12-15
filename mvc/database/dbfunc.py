@@ -1,3 +1,5 @@
+#Alex Rogers22018703
+
 import mysql.connector
 from mysql.connector import errorcode
  
@@ -15,11 +17,12 @@ elif name == "jev":
     username    = "root"
     passwd  = "minecraft"
     db = "Horizon_Restaurant"
+    
 elif name == "will":
     hostname    = "localhost"
     username    = "root"
     passwd  = "12345678"
-    db = "HorizonRestaurant"
+    db = "Horizon_Restaurant"
     
 else:
     hostname    = "localhost"
