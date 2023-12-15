@@ -6,6 +6,7 @@ Version: 1.0
 
 import tkinter as tk
 from tkinter import PhotoImage
+from sys import platform
 
 
 class HomeView(tk.Frame):
@@ -38,8 +39,18 @@ class HomeView(tk.Frame):
         self.menuFrame = tk.Frame(self, bg='#1A58B5')
         self.menuFrame.place(relx=0.5, rely=0.5, anchor='center')
         
-        self.buttonHeight = 10
-        self.buttonWidth = 25
+        #changes button size based off of platform
+        if platform == "win32":
+            # Windows
+            self.buttonHeight = 7
+            self.buttonWidth = 15
+        elif platform == "darwin":
+            self.buttonHeight = 10
+            self.buttonWidth = 25
+        else:
+            self.buttonHeight = 10
+            self.buttonWidth = 25
+            
         self.backgorundColor = "#B0B0B0"
         # backgorundColor = "black"
         self.fontColor = "black"

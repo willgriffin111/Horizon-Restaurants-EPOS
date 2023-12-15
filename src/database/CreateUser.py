@@ -19,6 +19,7 @@ if conn != None:    #Checking if connection is None
         dbcursor.execute("INSERT INTO employee (employee_id, employee_name, employee_account_type, \
                                  employee_password) VALUES (%s, %s, %s, %s)", (staffId, staffName, staffType, staffPassword))     
         conn.commit() 
+        print("User created sucsesfully")
         dbcursor.close()       
         conn.close() #Connection must be closed
     else:
