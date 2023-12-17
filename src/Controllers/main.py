@@ -4,6 +4,7 @@ from Views.main import View
 
 from .home import HomeController
 from .login import LoginController
+from .order import OrderController
 
 
 
@@ -13,6 +14,7 @@ class Controller:
         self.model = model
         self.signin_controller = LoginController(model, view)
         self.home_controller = HomeController(model, view)
+        self.order_controller = OrderController(model, view)
 
         self.model.auth.add_event_listener("auth_changed", self.auth_state_listener)
 

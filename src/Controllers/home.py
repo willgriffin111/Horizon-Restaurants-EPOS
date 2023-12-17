@@ -24,6 +24,7 @@ class HomeController:
         
     def createOrder(self) -> None:   
         print("Take Order button clicked")
+        self.view.switch("order")
         
     def viewOrders(self) -> None:
         print("View Orders button clicked")
