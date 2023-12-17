@@ -3,6 +3,7 @@ from typing import TypedDict
 from .root import Root
 from .home import HomeView
 from .login import LoginView
+from .order import OrderView
 
 
 
@@ -18,6 +19,7 @@ class View:
 
         self._add_frame(LoginView, "login")
         self._add_frame(HomeView, "home")
+        self._add_frame(OrderView, "order")
 
     def _add_frame(self, Frame, name: str) -> None:
         self.frames[name] = Frame(self.root)
