@@ -3,7 +3,7 @@ from typing import TypedDict
 from .root_v import Root
 from .home_v import HomeView
 from .login_v import LoginView
-from .order import OrderView
+from .order_v import OrderView
 from .admin_v import AdminView
 
 

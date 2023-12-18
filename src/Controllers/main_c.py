@@ -4,7 +4,7 @@ from Views.main_v import View
 
 from .home_c import HomeController
 from .login_c import LoginController
-from .order import OrderController
+from .order_c import OrderController
 from .admin_c import AdminController
 
 
