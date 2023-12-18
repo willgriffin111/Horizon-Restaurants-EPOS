@@ -9,7 +9,8 @@ menuItems = {
     "Starters": ["Starter1", "Starter2", "Starter3", "Starter4"],
     "Mains": ["Main1", "Main2", "Main3", "Main4"],
     "Desserts": ["Dessert1", "Dessert2", "Dessert3", "Dessert4"],
-    "Drinks": ["Drink1", "Drink2", "Drink3", "Drink4", "Drink5", "Drink6"]
+    "Drinks": ["Drink1", "Drink2", "Drink3", "Drink4", "Drink5"],
+    "LOLOLOL": ["asodasda", "sadasdas"]
 }
 
 tables = ["Table 1", "Table 2", "Table 3"]  
@@ -51,8 +52,10 @@ class OrderView(Frame):
         self.sidebar()
         self.topbar(userName=userName, userID=userId)
         self.bottombar()
-        self.createMenuCategories()
         self.discount_window = None
+        self.categories = ['starter']
+        self.categoryButtons = {}
+        self.createMenuCategories()
 
     # Jevs Button function -----------------------------------------------------------------------------------------------------------------------------------|
 
@@ -244,7 +247,9 @@ class OrderView(Frame):
         print(selectedValue)
 
         
-    def createMenuCategories(self):
+    def createMenuCategories(self, categories=None):
+        self.categories = categories or []
+        print(f"Categories in createMenuCategories: {categories}")  # Debugging line
         self.menuFrame = Tk.Frame(self, bg="#1A58B5")
         self.menuFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
 
@@ -252,47 +257,29 @@ class OrderView(Frame):
         gridFrame = Tk.Frame(self.menuFrame, bg="#1A58B5")
         gridFrame.pack(pady=10)
 
-        self.categoryButtons = {}
-
 # Inside the createMenuCategories method --------------------------------------------------------------------------------------------------------------------------|
-
-        # Starters Button
-        startersButton = Tk.Button(gridFrame, text="Starters", command=lambda: self.displayCategoryOptions("Starters"), width=10, height=5,borderwidth=0)
-        startersButton.grid(row=0, column=0, padx=5, pady=5)
-        self.categoryButtons["Starters"] = startersButton
-
-        # Mains Button
-        mainsButton = Tk.Button(gridFrame, text="Mains", command=lambda: self.displayCategoryOptions("Mains"), width=10, height=5,borderwidth=0, background="white")
-        mainsButton.grid(row=0, column=1, padx=5, pady=5)
-        self.categoryButtons["Mains"] = mainsButton
-
-        # Desserts Button
-        dessertsButton = Tk.Button(gridFrame, text="Desserts", command=lambda: self.displayCategoryOptions("Desserts"), width=10, height=5,borderwidth=0)
-        dessertsButton.grid(row=0, column=2, padx=5, pady=5)
-        self.categoryButtons["Desserts"] = dessertsButton
-
-        # Drinks Button
-        drinksButton = Tk.Button(gridFrame, text="Drinks", command=lambda: self.displayCategoryOptions("Drinks"), width=10, height=5,borderwidth=0)
-        drinksButton.grid(row=0, column=3, padx=5, pady=5)
-        self.categoryButtons["Drinks"] = drinksButton 
+        
+        print(f"view: {self.categories}")
+         # Loop through categories and create buttons
+        for col, category in enumerate(self.categories):
+            category_button = Tk.Button(gridFrame, text=category, width=10, height=5, borderwidth=0)
+            category_button.grid(row=0, column=col, padx=5, pady=5, sticky='w')
+            self.categoryButtons[category] = category_button
 
 
         self.optionsFrame = Tk.Frame(self.menuFrame, bg="#1A58B5")
         self.optionsFrame.pack(fill=Tk.BOTH, expand=True)
 
-    def displayCategoryOptions(self, category):
+    def displayCategoryOptions(self, category, options):
         # Clear previous options
         for widget in self.optionsFrame.winfo_children():
             widget.destroy()
-
-        # Fetch options for the selected category
-        options = menuItems.get(category, [])
 
         for index, option in enumerate(options):
             row = index // 3  # Calculate the row number
             col = index % 3  # Calculate the column number
 
-            optionButton = Tk.Button(self.optionsFrame, text=option, width=26, height=7, command=self.selectedCategoryOptions(category,option),borderwidth=0)
+            optionButton = Tk.Button(self.optionsFrame, text=option, width=26, height=7,borderwidth=0)
             optionButton.grid(row=row, column=col, padx=10, pady=5)
 
         # Configure column weights to ensure buttons expand to fill the frame
@@ -300,21 +287,21 @@ class OrderView(Frame):
             self.optionsFrame.grid_columnconfigure(i, weight=1)
 
 
-    def selectedCategoryOptions(self, category, item):
-        def inner():  
-            print(f"Selected Item: {item} in Category: {category} for Table: {self.selected_table.get()}")
-            ''' 
-            HERE IS WHERE WE WILL ADD THE ITEM TO THE ORDER IN THE DATABASE
-            WE ENTER TABLE NUMBER, ITEM, QUANTITY
-            USING THE VARIABLES
+    # def selectedCategoryOptions(self, category, item):
+    #     def inner():  
+    #         print(f"Selected Item: {item} in Category: {category} for Table: {self.selected_table.get()}")
+    #         ''' 
+    #         HERE IS WHERE WE WILL ADD THE ITEM TO THE ORDER IN THE DATABASE
+    #         WE ENTER TABLE NUMBER, ITEM, QUANTITY
+    #         USING THE VARIABLES
             
-            self.selected_table.get() = TABLE NUMBER
-            item = ITEM
-            quantity = 1, as pressed once. If pressed twise the item will be added again under the same table number and will be shown the left x2
+    #         self.selected_table.get() = TABLE NUMBER
+    #         item = ITEM
+    #         quantity = 1, as pressed once. If pressed twise the item will be added again under the same table number and will be shown the left x2
             
-            WILL ALSO NEED A AUTO REFRESH FUNCTION TO UPDATE THE ORDER LIST
-            '''
-        return inner
+    #         WILL ALSO NEED A AUTO REFRESH FUNCTION TO UPDATE THE ORDER LIST
+    #         '''
+    #     return inner
     
         # Bottom bar -----------------------------------------------------------------------------------------------------------------------------------------|
     def bottombar(self):
