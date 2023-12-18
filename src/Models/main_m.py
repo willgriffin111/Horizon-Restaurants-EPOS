@@ -17,7 +17,7 @@ class Model:
 
         # Adding mock menu items
         # For the "Starter" category
-        starter_category = self.menu.categories[0]
+        starter_category = self.menu.categories[0] 
         starter_category.addItem("Starter 1", "Description 1", 9.99, ["Ingredient 1", "Ingredient 2"], True)
         starter_category.addItem("Starter 2", "Description 2", 12.99, ["Ingredient 3", "Ingredient 4"], True)
 
