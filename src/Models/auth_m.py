@@ -1,5 +1,11 @@
+'''
+Author: Alex Rogers
+Date: 18/12/2023
+Version: 1.1
+'''
+
 from typing import TypedDict, Union
-from .base import ObservableModel
+from .base_m import ObservableModel
 from passlib.hash import sha256_crypt
 from Class.EmployeeClass import EmployeeAccount
 from database import dbfunc
@@ -15,7 +21,7 @@ class Auth(ObservableModel):
     def login(self, staffId, password) -> None:
         error = "" #reseting error   
         print('login start 1.1')
-        if staffId != None and password != None:  #check if em or pw is none          
+        if len(staffId) > 0 and len(password) > 0:  #check if em or pw is none          
             conn = dbfunc.getConnection() 
             if conn != None:    #Checking if connection is None                  
                 if conn.is_connected(): #Checking if connection is established                        
@@ -47,6 +53,9 @@ class Auth(ObservableModel):
                             error = "Invalid credentials username/password, try again."
                             dbcursor.close()
                             conn.close()
+        else:
+            error = "No username/password entered"
+            
         if(error != ""):
             print(error)
 

@@ -1,5 +1,11 @@
-from Models.main import Model
-from Views.main import View
+'''
+Author: Alex Rogers
+Date: 18/12/2023
+Version: 1.0
+'''
+
+from Models.main_m import Model
+from Views.main_v import View
 
 
 class HomeController:
@@ -34,6 +40,7 @@ class HomeController:
         
     def adminFeatures(self) -> None:
         print("Admin Features button clicked")
+        self.view.switch("admin")
         
     def reports(self) -> None:
         print("Reports button clicked")

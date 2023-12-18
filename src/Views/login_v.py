@@ -1,5 +1,5 @@
 '''
-Auther Will Griffin & Alex Rogers
+Author: Will Griffin, Alex Rogers
 Date: 14/12/2023
 Version: 1.1
 '''

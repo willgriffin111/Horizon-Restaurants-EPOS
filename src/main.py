@@ -1,6 +1,6 @@
-from Models.main import Model
-from Views.main import View
-from Controllers.main import Controller
+from Models.main_m import Model
+from Views.main_v import View
+from Controllers.main_c import Controller
 
 
 def main():

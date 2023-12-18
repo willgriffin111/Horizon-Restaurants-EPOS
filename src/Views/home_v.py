@@ -1,7 +1,7 @@
 '''
-Auther Jevhan Seechurn, Will Griffin
-Date: 13/12/2023 3am lmao
-Version: 1.0
+Author: Jevhan Seechurn, Will Griffin, Alex Rogers
+Date: 13/12/2023
+Version: 1.1
 '''
 
 import tkinter as tk
