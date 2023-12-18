@@ -1,3 +1,9 @@
+"""
+File name: order_c.py
+Author: Shahbaz
+Date created: 17/12/2023
+"""
+
 from Models.main_m import Model
 from Views.main_v import View
 
@@ -6,14 +12,29 @@ class OrderController:
         self.model = model
         self.view = view
         self.frame = self.view.frames["order"]
+        self.updateCategories()
         self._bind()
 
     def _bind(self) -> None:
         """Binds controller functions with respective buttons in the view"""
         self.frame.homeButton.config(command=self.home)
 
+        # Bind categoryButtons to displayCategoryOptions function
+        for category, button in self.frame.categoryButtons.items():
+            button.config(command=lambda c=category: self.displayCategoryOptions(c)) 
+
+    def updateCategories(self):
+        categories = [category.name for category in self.model.menu.categories] # getting the latest menu categories
+        print(f"controller: {categories}")
+        self.frame.createMenuCategories(categories) # running this view function again to load it with the updated category list
+
     def home(self) -> None:
         self.view.switch("home")
+    
+    def displayCategoryOptions(self, category):
+        print(f"Displaying options for category: {category}")
+        options = self.model.menu.getMenuItemsForCategory(category)
+        self.frame.displayCategoryOptions(category, options)
 
     # def login(self) -> None:
     #     staffId = self.frame.staffId_entry.get() #getting staffID
