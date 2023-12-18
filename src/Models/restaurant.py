@@ -19,7 +19,7 @@ class PaymentStatus(Enum):
 class ReservationStatus(Enum):
     PENDING = "Pending"
     CONFIRMED = "Confirmed"
-    CANCELLED = "Cancelled"
+    
 
 
 # ------------------MENU ---------------------------

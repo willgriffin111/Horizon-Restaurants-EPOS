@@ -6,9 +6,9 @@ conn = dbfunc.getConnection()   #connection to DB
 # DB_NAME = 'horizon_resturant'    #DB Name
 # DB_NAME = 'horizonResturant'    #DB Name  MISPELLED
 DB_NAME = 'Horizon_Restaurant'
-staffId = 12345678
+staffId = 2
 staffName = 'admin'
-staffType = 'ADMIN'
+staffType = 'FOH'
 staffPassword = sha256_crypt.hash('password')  #password goes in brackets default password
 
 if conn != None:    #Checking if connection is None
