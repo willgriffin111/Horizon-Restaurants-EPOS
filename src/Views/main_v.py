@@ -1,15 +1,17 @@
 from typing import TypedDict
 
-from .root import Root
-from .home import HomeView
-from .login import LoginView
-from .order import OrderView
+from .root_v import Root
+from .home_v import HomeView
+from .login_v import LoginView
+from .order_v import OrderView
+from .admin_v import AdminView
 
 
 
 class Frames(TypedDict):
     signin: LoginView
     home: HomeView
+    admin: AdminView
 
 
 class View:
@@ -20,6 +22,7 @@ class View:
         self._add_frame(LoginView, "login")
         self._add_frame(HomeView, "home")
         self._add_frame(OrderView, "order")
+        self._add_frame(AdminView, "admin")
 
     def _add_frame(self, Frame, name: str) -> None:
         self.frames[name] = Frame(self.root)

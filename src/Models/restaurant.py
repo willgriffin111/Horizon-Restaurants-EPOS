@@ -19,7 +19,7 @@ class PaymentStatus(Enum):
 class ReservationStatus(Enum):
     PENDING = "Pending"
     CONFIRMED = "Confirmed"
-    
+    CANCELLED = "Cancelled"
 
 
 # ------------------MENU ---------------------------
@@ -102,7 +102,7 @@ class Reservation:
 
 #---------------------------RESTAURANT------------------------------
 class Restaurant:
-    def __init__(self, name, menu):
+    def __init__(self, restaurantID, name, menu):
         self.restaurantID = None
         self.name = name
         self.menu = menu

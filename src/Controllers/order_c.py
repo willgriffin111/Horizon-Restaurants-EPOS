@@ -1,5 +1,5 @@
-from Models.main import Model
-from Views.main import View
+from Models.main_m import Model
+from Views.main_v import View
 
 class OrderController:
     def __init__(self, model: Model, view: View) -> None:
