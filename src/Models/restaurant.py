@@ -102,7 +102,7 @@ class Reservation:
 
 #---------------------------RESTAURANT------------------------------
 class Restaurant:
-    def __init__(self, restaurantID, name, menu):
+    def __init__(self, name, menu):
         self.restaurantID = None
         self.name = name
         self.menu = menu
