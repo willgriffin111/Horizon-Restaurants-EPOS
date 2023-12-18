@@ -23,6 +23,12 @@ elif name == "will":
     username    = "root"
     passwd  = "12345678"
     db = "Horizon_Restaurant"
+
+elif name=="shahbaz":
+    hostname    = "localhost"
+    username    = "root"
+    passwd  = "1234"
+    db = "Horizon_Restaurant"
     
 elif name == "shahbaz":
     hostname    = "localhost"
