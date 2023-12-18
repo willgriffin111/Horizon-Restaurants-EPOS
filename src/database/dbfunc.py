@@ -4,7 +4,7 @@ import mysql.connector
 from mysql.connector import errorcode
  
 # MYSQL CONFIG VARIABLES
-name = "alex"
+name = "shahbaz"
 if name == "alex":
     #idk why this isnt working man
     hostname    = "localhost"
@@ -22,6 +22,12 @@ elif name == "will":
     hostname    = "localhost"
     username    = "root"
     passwd  = "12345678"
+    db = "Horizon_Restaurant"
+
+elif name=="shahbaz":
+    hostname    = "localhost"
+    username    = "root"
+    passwd  = "1234"
     db = "Horizon_Restaurant"
     
 elif name == "shahbaz":

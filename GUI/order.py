@@ -48,7 +48,7 @@ class App(Tk.Tk):
         self.configure(bg="#1A58B5")
         self.selected_table = Tk.StringVar()
         self.selected_table.set(tables[0])  # Set the default value
-        self.resizable(False, False)
+        #self.resizable(False, False)
         self.sidebar()
         self.topbar(userName=userName, userID=userId)
         self.bottombar()
