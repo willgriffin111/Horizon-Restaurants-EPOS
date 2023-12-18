@@ -7,5 +7,5 @@ class Model:
     def __init__(self):
         self.auth = Auth()
         self.admin = Admin()
-        self.menu = Menu(menuID, menuName, menuDesc, menuCategories, restaurantName)
-        self.restaurant = Restaurant(restaurantName, self.menu) 
+        #self.menu = Menu(menuID, menuName, menuDesc, menuCategories, restaurantName)
+        #self.restaurant = Restaurant(restaurantName, self.menu) 
