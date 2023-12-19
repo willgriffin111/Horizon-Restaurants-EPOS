@@ -34,12 +34,12 @@ class MenuItem:
        self.isAvailable = isAvailable
 
 class MenuCategory:
-    def __init__(self, ID, name, items) -> None:
+    def __init__(self, ID, name) -> None:
         self.categoryID = ID
         self.name = name
-        self.menuItems = items
+        self.menuItems = []
     
-    def addItem(self, ID, name, desc, price, ingredients, isAvailable):
+    def addItem(self, name, desc, price, ingredients, isAvailable):
         menuItemID = len(self.menuItems) + 1
         newItem = MenuItem(menuItemID, self.categoryID, name, desc, price, ingredients, isAvailable)
         self.menuItems.append(newItem)
@@ -53,16 +53,17 @@ class MenuCategory:
         else:
             return None
         
+        
 class Menu:
-    def __init__(self, ID, name, desc, categories) -> None:
-        self.menuID = ID
-        self.name = name
-        self.description = desc
-        self.categories = categories
+    def __init__(self) -> None:
+        self.menuID = None
+        self.name = None
+        self.description = None
+        self.categories = []
     
     def addCategory(self, name):
         categoryID = len(self.categories) + 1
-        newCategory = MenuCategory(categoryID, name, [])
+        newCategory = MenuCategory(categoryID, name)
         self.categories.append(newCategory)
         return newCategory
 
@@ -73,6 +74,14 @@ class Menu:
             return categoryToRemove
         else:
             return None
+    
+    def getMenuItemsForCategory(self, categoryName):
+        category = next((cat for cat in self.categories if cat.name == categoryName), None)
+        if category:
+            return [item.name for item in category.menuItems]
+        else:
+            return []
+    
 
 # --------------------ORDER-----------------------
 class Order:
@@ -104,8 +113,7 @@ class Reservation:
 class Restaurant:
     def __init__(self, name, menu):
         self.restaurantID = None
-        self.name = name
-        self.menu = menu
+        self.name = None
         self.capacity = None
         self.numStaff = None
         self.managerName = None
