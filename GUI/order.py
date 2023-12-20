@@ -10,7 +10,7 @@ menuItems = {
     "Mains": ["Main1", "Main2", "Main3", "Main4"],
     "Desserts": ["Dessert1", "Dessert2", "Dessert3", "Dessert4"],
     "Drinks": ["Drink1", "Drink2", "Drink3", "Drink4", "Drink5", "Drink6"]
-}
+    }
 
 tables = ["Table 1", "Table 2", "Table 3"]  
 
@@ -238,7 +238,10 @@ class App(Tk.Tk):
 
 # Inside the createMenuCategories method --------------------------------------------------------------------------------------------------------------------------|
 
+        categories = ["Starters", "Mains", "Desserts", "Drinks"]
         # Starters Button
+
+
         startersButton = Tk.Button(gridFrame, text="Starters", command=lambda: self.displayCategoryOptions("Starters"), width=10, height=5,borderwidth=0)
         startersButton.grid(row=0, column=0, padx=5, pady=5)
         self.categoryButtons["Starters"] = startersButton

@@ -18,23 +18,34 @@ class OrderController:
     def _bind(self) -> None:
         """Binds controller functions with respective buttons in the view"""
         self.frame.homeButton.config(command=self.home)
+        self.frame.modify.config(command=self.modify)
 
         # Bind categoryButtons to displayCategoryOptions function
-        for category, button in self.frame.categoryButtons.items():
-            button.config(command=lambda c=category: self.displayCategoryOptions(c)) 
+        # for category, button in self.frame.categoryButtons.items():
+        #     button.config(command=lambda c=category: self.displayCategoryOptions(c)) 
+        
 
     def updateCategories(self):
-        categories = [category.name for category in self.model.menu.categories] # getting the latest menu categories
-        print(f"controller: {categories}")
-        self.frame.createMenuCategories(categories) # running this view function again to load it with the updated category list
+        menu = self.model.menu.getMenu()
+        self.frame.createMenuCategories(menu) # running this view function again to load it with the updated category list
 
     def home(self) -> None:
         self.view.switch("home")
     
-    def displayCategoryOptions(self, category):
-        print(f"Displaying options for category: {category}")
-        options = self.model.menu.getMenuItemsForCategory(category)
-        self.frame.displayCategoryOptions(category, options)
+    def modify(self):
+        order = self.frame.order
+        self.model.order.saveOrder(order)
+        self.view.switch("order-modify")
+    
+    def updateOrder(self):
+        order = self.model.order.getSavedOrder()
+        self.frame.setOrder(order)
+        self.frame.updateOrderSummary()
+
+    # def displayCategoryOptions(self, category):
+    #     print(f"Displaying options for category: {category}")
+    #     options = self.model.menu.getMenuItemsForCategory(category)
+    #     self.frame.displayCategoryOptions(category, options)
 
     # def login(self) -> None:
     #     staffId = self.frame.staffId_entry.get() #getting staffID
