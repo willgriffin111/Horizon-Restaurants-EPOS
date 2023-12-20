@@ -4,8 +4,8 @@ from .root_v import Root
 from .home_v import HomeView
 from .login_v import LoginView
 from .order_v import OrderView
+from .order_modify_v import OrderModifyView
 from .admin_v import AdminView
-
 
 
 class Frames(TypedDict):
@@ -22,13 +22,14 @@ class View:
         self._add_frame(LoginView, "login")
         self._add_frame(HomeView, "home")
         self._add_frame(OrderView, "order")
+        self._add_frame(OrderModifyView, "order-modify")
         self._add_frame(AdminView, "admin")
 
     def _add_frame(self, Frame, name: str) -> None:
         self.frames[name] = Frame(self.root)
         self.frames[name].grid(row=0, column=0, sticky="nsew")
 
-    def switch(self, name: str) -> None:
+    def switch(self, name: str, data=None) -> None:
         frame = self.frames[name]
         frame.tkraise()
 

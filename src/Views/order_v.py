@@ -60,6 +60,10 @@ class OrderView(Frame):
         self.discount_window = None
         self.createMenuCategories()
 
+    def setOrder(self, order):
+        self.order = order
+        
+
     # Jevs Button function -----------------------------------------------------------------------------------------------------------------------------------|
 
     def homeAction(self):
@@ -159,6 +163,8 @@ class OrderView(Frame):
 
     # Side bar update for discount ----------------------------------------------------------------------------------------------------------------------------------------|
     def updateOrderSummary(self, category=None, menuItem=None, table=None):
+        print("updated order summary")
+        
         category = category or ""
         menuItem=menuItem or {}
         table = table or ""
@@ -166,18 +172,21 @@ class OrderView(Frame):
         totalPrice = 0.0
         defaultQuantity = 1
 
-        key = menuItem.get('name', None)
-        if key is None:     # menuItem is initially set to {} so everything below will break the program, so we just hop out the functoin at this point
-            return
-
-        # If the menuItem is already in the order, update the quantity, otherwise just set the default quantity of 1
-        if key in self.order:
-            self.order[key]['quantity'] += defaultQuantity
-        else:
-            newMenuItem = copy.deepcopy(menuItem)
-            newMenuItem['quantity'] = defaultQuantity
-            self.order[key] = newMenuItem
+        print(f"Order Page, order = {self.order}\n")
+        if menuItem:
+            key = menuItem.get('name', None)
+            if key is not None:
+                # If the menuItem is already in the order, update the quantity, otherwise just set the default quantity of 1
+                if key in self.order:
+                    self.order[key]['quantity'] += defaultQuantity
+                else:
+                    newMenuItem = copy.deepcopy(menuItem)
+                    newMenuItem['quantity'] = defaultQuantity
+                    self.order[key] = newMenuItem
         
+        self.updateWidgets()
+
+    def updateWidgets(self):
         # Calculate total items and price
         totalItems = sum(item['quantity'] for item in self.order.values())
         totalPrice = sum(item['price'] * item['quantity'] for item in self.order.values())
@@ -197,7 +206,6 @@ class OrderView(Frame):
 
         Tk.Label(self.summaryFrame, text=f"Items: {totalItems}", fg='black', bg="#F0FFFF").pack(side=Tk.LEFT)
         Tk.Label(self.summaryFrame, text=f"Total: £{totalPrice:.2f}", fg='black', bg="#F0FFFF").pack(side=Tk.RIGHT)
-
     # Window Side bar ----------------------------------------------------------------------------------------------------------------------------------------|
     def sidebar(self):
         self.sidebar = Tk.Frame(self, width=300, height=478, bg="#F0FFFF")
@@ -250,8 +258,8 @@ class OrderView(Frame):
         discount = Tk.Button(self.buttonFrame, text="Discount", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3, command=self.discount_btn)
         discount.grid(row=0, column=1,sticky='new')
 
-        modify = Tk.Button(self.buttonFrame, text="Modify", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
-        modify.grid(row=0, column=2,sticky='new')
+        self.modify = Tk.Button(self.buttonFrame, text="Modify", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
+        self.modify.grid(row=0, column=2,sticky='new')
     
     def selectedTableChanged(self, selectedValue):
         '''
