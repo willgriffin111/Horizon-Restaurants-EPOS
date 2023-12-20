@@ -1,5 +1,6 @@
 import tkinter as Tk
 from tkinter import Toplevel, Frame
+import copy
 
 
 userName = "Will Griffin"
@@ -47,14 +48,16 @@ class OrderView(Frame):
         #self.geometry("800x600")
         #self.title("Order Page")
         self.configure(bg="#1A58B5")
+        self.menu = {}
+        self.order = {}
+        self.categoryButtons = {}
+        self.totalDiscount = 0
         self.selected_table = Tk.StringVar()
         self.selected_table.set(tables[0])  # Set the default value
         self.sidebar()
         self.topbar(userName=userName, userID=userId)
         self.bottombar()
         self.discount_window = None
-        self.categories = ['starter']
-        self.categoryButtons = {}
         self.createMenuCategories()
 
     # Jevs Button function -----------------------------------------------------------------------------------------------------------------------------------|
@@ -111,21 +114,18 @@ class OrderView(Frame):
     
     
     def staff_disc(self):
-        global totalDiscount
         print('Staff discount applied')
         self.totalDiscount = 25
         self.updateOrderSummary()
         self.discount_window.destroy()
         
     def christmass_disc(self):
-        global totalDiscount
         print('Christmas discount applied')
         self.totalDiscount = 10
         self.updateOrderSummary()
         self.discount_window.destroy()
 
     def remove_disc(self):
-        global totalDiscount
         print('Discount removed')
         self.totalDiscount = 0
         self.updateOrderSummary()
@@ -158,24 +158,37 @@ class OrderView(Frame):
         self.homeButton.place(relx=1.0, rely=0.5, anchor="e", x=3, y=4)
 
     # Side bar update for discount ----------------------------------------------------------------------------------------------------------------------------------------|
-    def updateOrderSummary(self):
-        global totalDiscount
+    def updateOrderSummary(self, category=None, menuItem=None, table=None):
+        category = category or ""
+        menuItem=menuItem or {}
+        table = table or ""
         totalItems = 0
         totalPrice = 0.0
+        defaultQuantity = 1
 
+        key = menuItem.get('name', None)
+        if key is None:     # menuItem is initially set to {} so everything below will break the program, so we just hop out the functoin at this point
+            return
+
+        # If the menuItem is already in the order, update the quantity, otherwise just set the default quantity of 1
+        if key in self.order:
+            self.order[key]['quantity'] += defaultQuantity
+        else:
+            newMenuItem = copy.deepcopy(menuItem)
+            newMenuItem['quantity'] = defaultQuantity
+            self.order[key] = newMenuItem
+        
         # Calculate total items and price
-        for item, details in order.items():
-            quantity, pricePerItem = details
-            totalItems += quantity
-            totalPrice += quantity * pricePerItem
+        totalItems = sum(item['quantity'] for item in self.order.values())
+        totalPrice = sum(item['price'] * item['quantity'] for item in self.order.values())
 
         # Apply discount
-        totalPrice *= (1 - totalDiscount / 100)
+        totalPrice *= (1 - self.totalDiscount / 100)
 
         # Update the itemList and Summary in the sidebar
         self.itemList.delete(0, Tk.END)
-        for item, (quantity, price) in order.items():
-            entry = f"{item} x {quantity} - £{price * quantity}"
+        for item in self.order.values():
+            entry = f"{item['name']} x {item['quantity']} - £{item['price'] * item['quantity']:.2f}"
             self.itemList.insert(Tk.END, entry)
 
         # Clear and update the Summary Frame
@@ -244,12 +257,11 @@ class OrderView(Frame):
         '''
         THE updateOrderSummary FUNCTION WILL NEED TO BE CALLED HERE TO UPDATE THE ORDER LIST FOR THE NEW TABLE
         '''
-        print(selectedValue)
+        self.updateOrderSummary(table=selectedValue) # thank you Will that comment is a life saver
 
         
-    def createMenuCategories(self, categories=None):
-        self.categories = categories or []
-        print(f"Categories in createMenuCategories: {categories}")  # Debugging line
+    def createMenuCategories(self, menu=None):
+        self.menu = menu or {}
         self.menuFrame = Tk.Frame(self, bg="#1A58B5")
         self.menuFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
 
@@ -258,33 +270,36 @@ class OrderView(Frame):
         gridFrame.pack(pady=10)
 
 # Inside the createMenuCategories method --------------------------------------------------------------------------------------------------------------------------|
-        
-        print(f"view: {self.categories}")
-         # Loop through categories and create buttons
-        for col, category in enumerate(self.categories):
-            category_button = Tk.Button(gridFrame, text=category, width=10, height=5, borderwidth=0)
+                 # Loop through categories and create buttons
+        for col, (category, menuItems) in enumerate(self.menu.items()):
+            category_button = Tk.Button(gridFrame, text=category, width=10, height=5, borderwidth=0, command=lambda c=category, m=menuItems: self.displayCategoryOptions(c, m))
             category_button.grid(row=0, column=col, padx=5, pady=5, sticky='w')
-            self.categoryButtons[category] = category_button
+            # self.categoryButtons[category] = category_button
 
 
         self.optionsFrame = Tk.Frame(self.menuFrame, bg="#1A58B5")
         self.optionsFrame.pack(fill=Tk.BOTH, expand=True)
 
-    def displayCategoryOptions(self, category, options):
+    def displayCategoryOptions(self, category, menuItems):
         # Clear previous options
+        print(f"\nDisplaying options for category: {category}")
+        print("Menu items:", menuItems)
+
         for widget in self.optionsFrame.winfo_children():
             widget.destroy()
-
-        for index, option in enumerate(options):
+        for index, option in enumerate(menuItems):
             row = index // 3  # Calculate the row number
             col = index % 3  # Calculate the column number
-
-            optionButton = Tk.Button(self.optionsFrame, text=option, width=26, height=7,borderwidth=0)
+            optionButton = Tk.Button(self.optionsFrame, text=option['name'], width=26, height=7,borderwidth=0, command=lambda o=option: self.updateOrderSummary(category=category, menuItem=o))
             optionButton.grid(row=row, column=col, padx=10, pady=5)
+
 
         # Configure column weights to ensure buttons expand to fill the frame
         for i in range(3):
             self.optionsFrame.grid_columnconfigure(i, weight=1)
+    
+    def optionSelected(self, category, option):
+        print(f"Option selected: Category={category}, Option={option}")
 
 
     # def selectedCategoryOptions(self, category, item):

@@ -75,12 +75,39 @@ class Menu:
         else:
             return None
     
+    def getMenu(self):
+        menu = {}
+
+        for category in self.categories:
+            categoryName = category.name
+            categoryItems = []
+        
+            for item in category.menuItems:
+                itemDetails = {
+                    'name': item.name,
+                    'description': item.desc,
+                    'price': item.price,
+                    'ingredients': item.ingredients,
+                    'isAvailable': item.isAvailable
+                }
+                categoryItems.append(itemDetails)
+
+            menu[categoryName] = categoryItems
+        
+        return menu
+
+    def getCategories(self):
+        return [category.name for category in self.categories]
+    
     def getMenuItemsForCategory(self, categoryName):
         category = next((cat for cat in self.categories if cat.name == categoryName), None)
         if category:
             return [item.name for item in category.menuItems]
         else:
             return []
+
+    def getMenuItemDetails(self, menuItem):
+        pass
     
 
 # --------------------ORDER-----------------------
