@@ -8,6 +8,7 @@ from .login_c import LoginController
 from .order_c import OrderController
 from .order_modify_c import OrderModifyController
 from .admin_c import AdminController
+from .order_view_c import OrderViewController
 
 
 
@@ -20,6 +21,7 @@ class Controller:
         self.order_controller = OrderController(model, view)
         self.order_modify_controller = OrderModifyController(model, view)
         self.admin_controller = AdminController(model, view)
+        self.order_view_controller = OrderViewController(model, view)
 
         self.model.auth.add_event_listener("auth_changed", self.auth_state_listener)
         self.model.order.add_event_listener("order_saved", self.update_order_in_modify_page)

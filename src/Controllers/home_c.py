@@ -34,6 +34,7 @@ class HomeController:
         
     def viewOrders(self) -> None:
         print("View Orders button clicked")
+        self.view.switch("orderView")
         
     def modifyOrders(self) -> None:
         print("Modify Orders button clicked")
