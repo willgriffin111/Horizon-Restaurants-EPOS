@@ -51,40 +51,60 @@ class AdminView(tk.Frame):
     # Add Staff Window ------------------------------------------------------------------------------------------------------------------------------------------------|
 
     def add_staff_pop(self):
-        def destroy_window():
-            self.staff_window.destroy()
     
-        self.staff_window = Toplevel(self)
-        self.staff_window.title("Staff add")
-        self.staff_window.geometry('250x340')
-        self.staff_window.configure(bg='white')
-        self.staff_window.resizable(False, False)
+        self.add_staff_window = Toplevel(self)
+        self.add_staff_window.title("Staff add")
+        self.add_staff_window.geometry('250x340')
+        self.add_staff_window.configure(bg='white')
+        self.add_staff_window.resizable(False, False)
     
-        self.add_title = tk.Label(self.staff_window, text='Add Staff', fg='black', bg='white', font=("Arial", 18))
+        self.add_title = tk.Label(self.add_staff_window, text='Add Staff', fg='black', bg='white', font=("Arial", 18))
         self.add_title.pack(pady=10)
     
-        self.add_name = tk.Label(self.staff_window, text='Full name:', fg='black', bg='white', font=("Arial", 14))
+        self.add_name = tk.Label(self.add_staff_window, text='Full name:', fg='black', bg='white', font=("Arial", 14))
         self.add_name.pack(pady=10)
     
-        self.name_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0, border=None)
+        self.name_box = tk.Entry(self.add_staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0, border=None)
         self.name_box.pack()
     
-        self.add_role = tk.Label(self.staff_window, text='Role:', fg='black', bg='white', font=("Arial", 14))
+        self.add_role = tk.Label(self.add_staff_window, text='Role:', fg='black', bg='white', font=("Arial", 14))
         self.add_role.pack(pady=10)
     
-        self.role_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
+        self.role_box = tk.Entry(self.add_staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
         self.role_box.pack()
     
-        self.add_password = tk.Label(self.staff_window, text='Password:', fg='black', bg='white', font=("Arial", 14))
+        self.add_password = tk.Label(self.add_staff_window, text='Password:', fg='black', bg='white', font=("Arial", 14))
         self.add_password.pack(pady=10)
     
-        self.password_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
+        self.password_box = tk.Entry(self.add_staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
         self.password_box.pack()
     
         # Function to close the current window when the 'Add Staff' button is clicked
-        self.submit = tk.Button(self.staff_window, width=4, height=2, text='Submit', borderwidth=0,
-                           command=lambda: [self.add_staff_record(self.name_box, self.role_box, self.password_box), destroy_window()])
-        self.submit.pack(pady=20)
+        self.add_submit_btn = tk.Button(self.add_staff_window, width=4, height=2, text='Submit', borderwidth=0)
+        self.add_submit_btn.pack(pady=20)
+        
+    # Remove Staff Window ------------------------------------------------------------------------------------------------------------------------------------------------|
+
+    def remove_staff_pop(self):
+    
+        self.remove_staff_window = Toplevel(self)
+        self.remove_staff_window.title("Staff Remove")
+        self.remove_staff_window.geometry('250x340')
+        self.remove_staff_window.configure(bg='white')
+        self.remove_staff_window.resizable(False, False)
+    
+        self.remove_title = tk.Label(self.remove_staff_window, text='Remove Staff', fg='black', bg='white', font=("Arial", 18))
+        self.remove_title.pack(pady=10)
+    
+        self.remove_id = tk.Label(self.remove_staff_window, text='Staff ID:', fg='black', bg='white', font=("Arial", 14))
+        self.remove_id.pack(pady=10)
+    
+        self.id_entry = tk.Entry(self.remove_staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0, border=None)
+        self.id_entry.pack()
+    
+        # Function to close the current window when the 'Add Staff' button is clicked
+        self.remove_submit_btn = tk.Button(self.remove_staff_window, width=4, height=2, text='Submit', borderwidth=0)
+        self.remove_submit_btn.pack(pady=20)
         
 
     # Top bar ---------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -131,7 +151,7 @@ class AdminView(tk.Frame):
         self.button_Frame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='white',height=120,width=480)
         self.button_Frame.pack(pady=10)
 
-        self.add_staff_btn = tk.Button(self.button_Frame, text='Add', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5,command=self.add_staff_pop)
+        self.add_staff_btn = tk.Button(self.button_Frame, text='Add', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
         self.add_staff_btn.pack(side=tk.LEFT,padx=6)
 
         self.remove_staff_btn = tk.Button(self.button_Frame, text='Delete', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
@@ -156,7 +176,7 @@ class AdminView(tk.Frame):
         self.mid_frame.pack(pady=10,)
         self.edit_staff_table()
         
-    def edit_staff_table(self, data = None):
+    def edit_staff_table(self):
         self.staff_tree = ttk.Treeview(self.mid_frame,height=15)
         self.staff_tree['columns'] = ("ID", "Name", "Role", "Password")
         self.column_width = 130
@@ -177,7 +197,10 @@ class AdminView(tk.Frame):
         # Add tag configurations for odd and even rows
         self.staff_tree.tag_configure('oddrow', background='white', foreground='black')
         self.staff_tree.tag_configure('evenrow', background='lightgray', foreground='black')
+        
+        self.staff_tree.pack(pady=10)
 
+    def insert_data(self, data = None):
         # For loop to generate the values in the database 
         if data != None:
             count = 0
@@ -186,7 +209,11 @@ class AdminView(tk.Frame):
                 self.staff_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3]), tags=(tag,))
                 count += 1
 
-        self.staff_tree.pack(pady=10)
+
+    
+    def clear_table(self):
+        for record in self.staff_tree.get_children():
+            self.staff_tree.delete(record)
 
     # bottom bar -----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
     def bottombar(self):
