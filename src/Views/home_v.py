@@ -65,7 +65,7 @@ class HomeView(tk.Frame):
         self.viewOrders_btn = tk.Button(self.menuFrame, text='View Orders', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
         self.viewOrders_btn.grid(row=0, column=2, padx=10, pady=10)
         
-        self.modifyOrders_btn = tk.Button(self.menuFrame, text='Modify Orders', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
+        self.modifyOrders_btn = tk.Button(self.menuFrame, text='Inventory', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
         self.modifyOrders_btn.grid(row=1, column=0, padx=10, pady=10)
 
         self.adminFeatures_btn = tk.Button(self.menuFrame, text='Admin Features', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)

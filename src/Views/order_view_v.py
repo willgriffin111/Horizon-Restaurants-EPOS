@@ -26,13 +26,13 @@ tableOrders = {
 }
 '''
 
-class ViewOrdersView(tk.Frame):
+class OrdersView(tk.Frame):
     def __init__(self,orders):
         super().__init__()
-        self.geometry("800x600")
-        self.title('Horizon Restaurant')
+        # self.geometry("800x600")
+        # self.title('Horizon Restaurant')
         self.tableOrders = orders
-        self.resizable(False, False)
+        # self.resizable(False, False)
         self.create_widgets()
         
     def create_widgets(self):
@@ -64,8 +64,8 @@ class ViewOrdersView(tk.Frame):
         refresh_button.place(relx=1.0, rely=0.5, anchor='e', x=-110, y=4)
 
         # Home Button
-        refresh_button = tk.Button(topFrame, text='Home', command=self.home, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
-        refresh_button.place(relx=1.0, rely=0.5, anchor='e', x=-10, y=4)
+        self.homeButton = tk.Button(topFrame, text='Home', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
+        self.homeButton.place(relx=1.0, rely=0.5, anchor='e', x=-10, y=4)
         
         # # Create the main frame for the table orders
         # mainFrame = tk.Frame(self,bg='#1A58B5')
@@ -84,7 +84,7 @@ class ViewOrdersView(tk.Frame):
 
         # Grid configuration
         row, col = 0, 0
-        for tableNumber, orders in self.tableOrders.items():
+        for tableNumber, orders in tableOrders.items():
             if col == 4:  # Move to the next row after every 4 tables
                 row += 1
                 col = 0
@@ -123,13 +123,8 @@ class ViewOrdersView(tk.Frame):
                 widget.destroy()
         self.create_widgets()
 
+
     
-    def home(self):
-        print("Home")
-
-        
-        
-
 if __name__ == "__main__":
-    app = ViewOrdersView(tableOrders)
+    app = OrdersView(tableOrders)
     app.mainloop()
