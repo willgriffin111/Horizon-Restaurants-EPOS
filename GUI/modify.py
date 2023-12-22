@@ -1,6 +1,6 @@
 '''
 FILE NAME: modify.py
-AUTHOR: Will Griffin
+AUTHOR: Will Griffin, Jevhan Seechurn
 DATE: 19/12/2023
 VERSION: 1.0
 '''
