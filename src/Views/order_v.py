@@ -14,7 +14,7 @@ menuItems = {
     "LOLOLOL": ["asodasda", "sadasdas"]
 }
 
-tables = ["Table 1", "Table 2", "Table 3"]  
+tables = ["Select Table", "Table 1", "Table 2", "Table 3"]  
 
 # FIRST ITEM IS THE ITEM NAME, SECOND IS THE QUANTITY, THIRD IS PRICE
 order = {
@@ -197,8 +197,18 @@ class OrderView(Frame):
         # Update the itemList and Summary in the sidebar
         self.itemList.delete(0, Tk.END)
         for item in self.order.values():
-            entry = f"{item['name']} x {item['quantity']} - £{item['price'] * item['quantity']:.2f}"
-            self.itemList.insert(Tk.END, entry)
+            if item['description'] is not None and item['description'] != '':
+                entry = f"{item['name']} x {item['quantity']} - £{item['price'] * item['quantity']:.2f} <-desc"
+                self.itemList.insert(Tk.END, entry)
+            else:
+                entry = f"{item['name']} x {item['quantity']} - £{item['price'] * item['quantity']:.2f}"
+                self.itemList.insert(Tk.END, entry)
+
+            # Check if there is a description for the item
+            # if 'description' in item:
+            #     descriptionLabel = Tk.Label(self.itemList, text=f"  Description: {item['description']}", fg='black', bg="#F0FFFF")
+            #     descriptionLabel.pack()
+
 
         # Clear and update the Summary Frame
         for widget in self.summaryFrame.winfo_children():
