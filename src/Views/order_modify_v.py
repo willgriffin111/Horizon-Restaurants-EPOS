@@ -44,32 +44,74 @@ class OrderModifyView(Frame):
     # Note Window ------------------------------------------------------------------------------------------------------------------------------------------------|
 
     def display_notes(self):
-        self.discount_window = Toplevel(self)
-        self.discount_window.title("Notes")
-        self.discount_window.geometry('400x200')
-        self.discount_window.configure(bg='#1A58B5')
-        self.discount_window.resizable(False, False)
+        selected_item = self.get_selected_item()
+        if selected_item:
+            self.discount_window = Toplevel(self)
+            self.discount_window.title("Notes")
+            self.discount_window.geometry('400x200')
+            self.discount_window.configure(bg='#1A58B5')
+            self.discount_window.resizable(False, False)
+            self.discount_window.columnconfigure((0,1,2), weight=1)
+            self.discount_window.rowconfigure((0,2), weight=1)
+            self.discount_window.rowconfigure(1, weight=5)
 
-        notes_label = Tk.Label(self.discount_window, text="Enter notes:", fg="white", bg="#1A58B5", font=("Arial", 16))
-        notes_label.pack(pady=15)
-        
-        self.notes_text = Tk.Text(self.discount_window, height=2, width=40, font=("Arial", 15))
-        self.notes_text.pack(pady=15)
-        
-        cancel_btn = Tk.Button(self.discount_window, text="Cancel", command=self.discount_window.destroy, height=2, width=10)
-        cancel_btn.pack(side=Tk.LEFT, padx=10, pady=10)
+            notes_label = Tk.Label(self.discount_window, text="Enter notes:", fg="white", bg="#1A58B5", font=("Arial", 16))
+            notes_label.grid(column=0, row=0, sticky='ew')
+            
+            initial_notes = self.order[selected_item].get('description', '')
+            self.notes_text = Tk.Text(self.discount_window, height=2, width=40, font=("Arial", 15))
+            self.notes_text.insert(Tk.END, initial_notes)
+            self.notes_text.grid(column=0, sticky='ew',row=1, pady=15)
 
-        continue_btn = Tk.Button(self.discount_window, text="Continue", command=self.Continue, height=2, width=10)
-        continue_btn.pack(side=Tk.RIGHT, padx=10, pady=10)
+            button_frame = Tk.Frame(self.discount_window)
+            button_frame.configure(bg='#1A58B5')
+            button_frame.grid(column=0, row=2, sticky='we')
+            button_frame.columnconfigure((0,1,2), weight=1)
+            button_frame.rowconfigure(0, weight=1)
+
+            cancel_btn = Tk.Button(button_frame, text="Cancel", command=self.discount_window.destroy, height=2, width=10)
+            cancel_btn.grid(column=0, row=0)
+
+            clear_btn = Tk.Button(button_frame, text="Clear",command=lambda: self.clear_notes(selected_item=selected_item), height=2, width=10)
+            clear_btn.grid(column=1, row=0)
+
+            continue_btn = Tk.Button(button_frame, text="Continue", command=lambda: self.accept_note(selected_item=selected_item), height=2, width=10)
+            continue_btn.grid(column=2, row=0)
+
+            # notes_label = Tk.Label(self.discount_window, text="Enter notes:", fg="white", bg="#1A58B5", font=("Arial", 16))
+            # notes_label.pack(pady=15)
+            
+            # initial_notes = self.order[selected_item].get('description', '')
+            # self.notes_text = Tk.Text(self.discount_window, height=2, width=40, font=("Arial", 15))
+            # self.notes_text.insert(Tk.END, initial_notes)
+            # self.notes_text.pack(pady=15)
+            
+            # cancel_btn = Tk.Button(self.discount_window, text="Cancel", command=self.discount_window.destroy, height=2, width=10)
+            # cancel_btn.pack(side=Tk.LEFT, padx=10, pady=10)
+
+            # clear_btn = Tk.Button(self.discount_window, text="Clear", command=self.clear_notes, height=2, width=10)
+            # clear_btn.pack(padx=10, pady=10)
+
+            # continue_btn = Tk.Button(self.discount_window, text="Continue", command=lambda: self.Continue(selected_item=selected_item), height=2, width=10)
+            # continue_btn.pack(side=Tk.RIGHT, padx=10, pady=10)
 
 
-    def Continue(self):
-        notes = self.notes_text.get("1.0", Tk.END)
+    def accept_note(self, selected_item):
+        notes = self.notes_text.get("1.0", Tk.END).strip()
+        self.order[selected_item]['description'] = notes
+        self.updateItemList()
         '''
         USE NOTES VAR AND INSERT INTO DB
         '''
-        print("Notes:", notes)  
+        print("Notes:", notes)
+        print(self.order)
+          
         self.discount_window.destroy()
+    
+    def clear_notes(self, selected_item):
+        self.notes_text.delete("1.0", Tk.END)
+    
+        print(self.order)
 
 
     def setOrder(self, order):
@@ -143,9 +185,14 @@ class OrderModifyView(Frame):
         # for item, (quantity, price) in order.items():
         #     entry = f"{item} x {quantity} - £{price * quantity}"
         #     self.itemList.insert(Tk.END, entry)
-        for item, details in self.order.items():
-            entry = f"{details['name']} x {details['quantity']} - £{details['price'] * details['quantity']}"
-            self.itemList.insert(Tk.END, entry)
+
+        for item in self.order.values():
+            if item['description'] is not None and item['description'] != '':
+                entry = f"{item['name']} x {item['quantity']} - £{item['price'] * item['quantity']:.2f} <-desc"
+                self.itemList.insert(Tk.END, entry)
+            else:
+                entry = f"{item['name']} x {item['quantity']} - £{item['price'] * item['quantity']:.2f}"
+                self.itemList.insert(Tk.END, entry)
 
         
     def mainButtons(self):
