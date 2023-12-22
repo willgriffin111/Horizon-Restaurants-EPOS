@@ -19,7 +19,5 @@ class LoginController:
         self.frame.login_btn.config(command=self.login)
 
     def login(self) -> None:
-        staffId = self.frame.staffId_entry.get() #getting staffID
-        password = self.frame.password_entry.get() # getting Password
-        self.frame.password_entry.delete(0, last=len(password))
-        self.model.auth.login(staffId,password)
+        self.model.auth.login(self.frame.staffId_entry.get(),self.frame.password_entry.get())
+        self.frame.password_entry.delete(0, last=len(self.frame.password_entry.get()))
