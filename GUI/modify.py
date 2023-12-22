@@ -46,18 +46,42 @@ class App(Tk.Tk):
         self.discount_window.geometry('400x200')
         self.discount_window.configure(bg='#1A58B5')
         self.discount_window.resizable(False, False)
+        self.discount_window.columnconfigure((0,1,2), weight=1)
+        self.discount_window.rowconfigure((0,2), weight=1)
+        self.discount_window.rowconfigure(1, weight=5)
 
         notes_label = Tk.Label(self.discount_window, text="Enter notes:", fg="white", bg="#1A58B5", font=("Arial", 16))
-        notes_label.pack(pady=15)
-        
-        self.notes_text = Tk.Text(self.discount_window, height=2, width=40, font=("Arial", 15))
-        self.notes_text.pack(pady=15)
-        
-        cancel_btn = Tk.Button(self.discount_window, text="Cancel", command=self.discount_window.destroy, height=2, width=10)
-        cancel_btn.pack(side=Tk.LEFT, padx=10, pady=10)
+        notes_label.grid(column=0, row=0, sticky='ew')
 
-        continue_btn = Tk.Button(self.discount_window, text="Continue", command=self.Continue, height=2, width=10)
-        continue_btn.pack(side=Tk.RIGHT, padx=10, pady=10)
+        self.notes_text = Tk.Text(self.discount_window, height=2, width=40, font=("Arial", 15))
+        self.notes_text.grid(column=0, sticky='ew',row=1, pady=15)
+
+        button_frame = Tk.Frame(self.discount_window)
+        button_frame.configure(bg='#1A58B5')
+        button_frame.grid(column=0, row=2, sticky='we')
+        button_frame.columnconfigure((0,1,2), weight=1)
+        button_frame.rowconfigure(0, weight=1)
+
+        cancel_btn = Tk.Button(button_frame, text="Cancel", command=self.discount_window.destroy, height=2, width=10)
+        cancel_btn.grid(column=0, row=0)
+
+        clear_btn = Tk.Button(button_frame, text="Clear", height=2, width=10)
+        clear_btn.grid(column=1, row=0)
+
+        continue_btn = Tk.Button(button_frame, text="Continue", command=self.Continue, height=2, width=10)
+        continue_btn.grid(column=2, row=0)
+
+        # notes_label = Tk.Label(self.discount_window, text="Enter notes:", fg="white", bg="#1A58B5", font=("Arial", 16))
+        # notes_label.pack(pady=15)
+        
+        # self.notes_text = Tk.Text(self.discount_window, height=2, width=40, font=("Arial", 15))
+        # self.notes_text.pack(pady=15)
+        
+        # cancel_btn = Tk.Button(self.discount_window, text="Cancel", command=self.discount_window.destroy, height=2, width=10)
+        # cancel_btn.pack(side=Tk.LEFT, padx=10, pady=10)
+
+        # continue_btn = Tk.Button(self.discount_window, text="Continue", command=self.Continue, height=2, width=10)
+        # continue_btn.pack(side=Tk.RIGHT, padx=10, pady=10)
 
 
     def Continue(self):
