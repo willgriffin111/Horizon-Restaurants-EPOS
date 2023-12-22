@@ -24,6 +24,8 @@ class AdminController:
         self.frame.add_staff_btn.config(command=self.add_staff_pop)
         self.frame.remove_staff_btn.config(command=self.remove_staff_pop)
         self.frame.edit_staff_btn.config(command=self.edit_staff_pop)
+        
+        #pop out buttons
 
 
     # button functions
@@ -32,21 +34,30 @@ class AdminController:
 
     def menu_edit(self):
         print("menu edit button clicked")
-        self.clear_edit_staff()
-        employeeList = self.model.admin.get_employee_list()
-        print(employeeList)
-        self.frame.mid_frame = self.frame.edit_staff_table(data = employeeList)
 
     def home_btn(self) -> None:
-        print("home button clicked")
         self.view.switch("home")
         
     def add_staff_pop(self) -> None:
         self.frame.add_staff_pop()
-        print("button pressed")
+        self.frame.add_submit_btn.config(command=self.add_staff)
+        
+    def add_staff(self):
+        self.model.admin.add_new_staff(self.frame.name_box.get(),self.frame.role_box.get(),self.frame.password_box.get())
+        self.frame.add_staff_window.destroy()
+        self.frame.clear_table()
+        self.frame.insert_data(data = self.model.admin.get_employee_list())
+        print("pressed")
     
     def remove_staff_pop(self) -> None:
-        print("button")
+        self.frame.remove_staff_pop()
+        self.frame.remove_submit_btn.config(command=self.remove_staff)
+        
+    def remove_staff(self) -> None:
+        self.model.admin.remove_staff(self.frame.id_entry.get())
+        self.frame.remove_staff_window.destroy()
+        self.frame.clear_table()
+        self.frame.insert_data(data = self.model.admin.get_employee_list())
         
     def edit_staff_pop(self) -> None:
         print("bttons pressed")
@@ -56,12 +67,11 @@ class AdminController:
     #update view
     def update_view(self) -> None:
         current_user = self.model.auth.current_user
-        self.clear_edit_staff()
+        self.frame.clear_table()
         if current_user:
             self.frame.username.config(text=f" User: {current_user.getName()} ")
             self.frame.user_id.config(text=f" ID: {current_user.getStaffId()} ")
-            employeeList = self.model.admin.get_employee_list()
-            self.frame.mid_frame = self.frame.edit_staff_table(data = employeeList)
+            self.frame.insert_data(data = self.model.admin.get_employee_list())
         else:
             self.frame.username.config(text=f" User: Name ")
             self.frame.user_id.config(text=f" ID: 12345678 ")
