@@ -1,3 +1,8 @@
+'''
+Author: Will Griffin
+Date Created: 22/12/2023
+'''
+
 import tkinter as Tk
 from tkinter import Toplevel, ttk, messagebox
 import random
@@ -60,7 +65,7 @@ class App(Tk.Tk):
         homeButton = Tk.Button(topFrame, text="Home", command=self.home_btn, bd=0, highlightthickness=0, highlightbackground="#2976E9", pady=10, border=None)
         homeButton.place(relx=1.0, rely=0.5, anchor="e", x=3, y=4)
 
-    
+    # Side bar  --------------------------------------------------------------------------------------------------------------------------------------|
     def sidebar(self):
         self.sidebar = Tk.Frame(self, width=300, height=478, bg="#F0FFFF")
         self.sidebar.pack(fill=Tk.Y, side=Tk.LEFT)
@@ -70,7 +75,8 @@ class App(Tk.Tk):
 
         delete_button = Tk.Button(self.sidebar, text="Delete reservation", command=self.deleteReservation, bg="white", width=25, height=5)
         delete_button.pack(pady=30)
-
+        
+    # Create window popup --------------------------------------------------------------------------------------------------------------------------------------|
     def createReservations(self):
         
         self.reservationsPopUp = Toplevel(self)
@@ -78,11 +84,10 @@ class App(Tk.Tk):
         self.reservationsPopUp.geometry("300x500")  
         self.reservationsPopUp.configure(bg="#FFFFFF")  
 
-
-        # List of restaurant names for the dropdown
+        # List of restaurant names for the dropdown (this will dynamicaly load from db)
         restaurantNames = ("Birmingham 1", "Birmingham 2", "Bristol 1","Bristol 2", "Cardiff 1", "Cardiff 2", "Glasgow 1", "Glasgow 2" , "Manchester 1", "Manchester 2", "Nottingham 1", "Nottingham 2", "London 1", "London 2")  # Add your restaurant names here
 
-        # This will dynamicaly load from db
+       
         Tk.Label(self.reservationsPopUp, text="Restaurant name", bg="white").pack(pady=(20, 5))
         self.restaurantNameDropDown = ttk.Combobox(self.reservationsPopUp, values=restaurantNames)
         self.restaurantNameDropDown.pack(pady=(0, 20), padx=20)
@@ -100,11 +105,9 @@ class App(Tk.Tk):
         self.partySizeUI = Tk.Entry(self.reservationsPopUp)
         self.partySizeUI.pack(pady=(0, 10))
 
-        # Frame for date and time entries
         datetimeframe = Tk.Frame(self.reservationsPopUp, bg="white")
         datetimeframe.pack(fill=Tk.X, pady=20)
 
-        # Date Entry
         dateFrame = Tk.Frame(datetimeframe, bg="white")
         dateFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
 
@@ -112,7 +115,6 @@ class App(Tk.Tk):
         self.dateUI = Tk.Entry(dateFrame)
         self.dateUI.pack()
 
-        # Time Entry
         timeframe = Tk.Frame(datetimeframe, bg="white" , width=5)
         timeframe.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
 
@@ -152,13 +154,12 @@ class App(Tk.Tk):
 
         self.reservationsPopUp.destroy()
 
-
-
+    # Modifying value in the table --------------------------------------------------------------------------------------------------------------------------------------|
     def onDoubleClick(self, event):
-        row_id = self.tree.identify_row(event.y)
-        column_id = self.tree.identify_column(event.x)
-        if row_id and column_id:
-            self.editWindowPopup(row_id, column_id)
+        rowId = self.tree.identify_row(event.y)
+        columnId = self.tree.identify_column(event.x)
+        if rowId and columnId:
+            self.editWindowPopup(rowId, columnId)
 
     def editWindowPopup(self, row_id, column_id):
         editWindow = Toplevel(self)
@@ -169,12 +170,10 @@ class App(Tk.Tk):
         column_index = int(column_id[1:]) - 1
         current_value = self.tree.item(row_id, 'values')[column_index]
 
-        # Entry widget for new value
         newValueUI = Tk.Entry(editWindow)
         newValueUI.pack(pady=10)
         newValueUI.insert(0, current_value)
-
-        # Save button
+        
         saveButton = Tk.Button(editWindow, text="Save", command=lambda: self.saveNewValue(row_id, column_index, newValueUI.get(), editWindow))
         saveButton.pack()
 
@@ -191,7 +190,11 @@ class App(Tk.Tk):
         print("Reservations updated:", bookings)
         
 
+    # Displaying table  --------------------------------------------------------------------------------------------------------------------------------------|
     def showBookings(self):
+        
+        if hasattr(self, 'tree'):
+            self.tree.destroy()
         
         columns = ("Reservation ID", "Customer name", "Customer number", "Restaurant name", "Date", "Time")
         self.tree = ttk.Treeview(self, columns=columns, show='headings', selectmode='browse')
@@ -212,10 +215,11 @@ class App(Tk.Tk):
         self.tree.configure(yscroll=scrollbar.set)
         scrollbar.pack(side='right', fill='y')
         
+    # Deleting reservations --------------------------------------------------------------------------------------------------------------------------------------|
     def deleteReservation(self):
         selectedItem = self.tree.selection() 
         if selectedItem:
-            selectedReservationId = self.tree.item(selectedItem)['values'][0]  # Assuming reservation ID is the first value
+            selectedReservationId = self.tree.item(selectedItem)['values'][0]  
             for i, booking in enumerate(bookings):
                 if booking[0] == selectedReservationId:
                     del bookings[i]
@@ -224,13 +228,15 @@ class App(Tk.Tk):
             print(f"Reservation {selectedReservationId} deleted")
         else:
             messagebox.showerror("Error", "No item selected")
-
+            
+    # Bottom bar --------------------------------------------------------------------------------------------------------------------------------------|
     def bottombar(self):
         bottomFrame = Tk.Frame(self, borderwidth=7, relief=Tk.FLAT, bg='#2976E9')
         bottomFrame.pack(fill=Tk.X, side=Tk.BOTTOM)
         bottom_label = Tk.Label(bottomFrame, text="", bg='#2976E9')
         bottom_label.pack()
 
+    
     def home_btn(self):
         print("home button clicked")
         
