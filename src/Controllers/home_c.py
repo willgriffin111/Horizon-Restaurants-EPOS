@@ -26,7 +26,8 @@ class HomeController:
 
     #button functions
     def createReservation(self) -> None:
-        print("Reservation button clicked")#
+        print("Reservation button clicked")
+        self.view.switch("reservations")
         
     def createOrder(self) -> None:   
         print("Take Order button clicked")

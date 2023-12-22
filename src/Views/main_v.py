@@ -7,6 +7,7 @@ from .order_v import OrderCreate
 from .order_modify_v import OrderModifyView
 from .admin_v import AdminView
 from .order_view_v import OrdersView
+from .reservations_v import ReservationsView
 
 
 class Frames(TypedDict):
@@ -22,6 +23,7 @@ class View:
 
         self._add_frame(LoginView, "login")
         self._add_frame(HomeView, "home")
+        self._add_frame(ReservationsView, "reservations")
         self._add_frame(OrdersView, "orderView")
         self._add_frame(OrderCreate, "order")
         self._add_frame(OrderModifyView, "order-modify")
