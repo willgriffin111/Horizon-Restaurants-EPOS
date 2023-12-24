@@ -42,7 +42,7 @@ order = {
     
 '''
 
-class OrderView(Frame):
+class OrderCreate(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         #self.geometry("800x600")
@@ -345,5 +345,5 @@ class OrderView(Frame):
 
 
 if __name__ == "__main__":
-    app = OrderView()
+    app = OrderCreate()
     app.mainloop()
