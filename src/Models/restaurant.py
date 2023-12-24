@@ -35,10 +35,13 @@ class MenuItem:
 
 class MenuCategory:
     def __init__(self, ID, name) -> None:
+    def __init__(self, ID, name) -> None:
         self.categoryID = ID
         self.name = name
         self.menuItems = []
+        self.menuItems = []
     
+    def addItem(self, name, desc, price, ingredients, isAvailable):
     def addItem(self, name, desc, price, ingredients, isAvailable):
         menuItemID = len(self.menuItems) + 1
         newItem = MenuItem(menuItemID, self.categoryID, name, desc, price, ingredients, isAvailable)
@@ -54,7 +57,13 @@ class MenuCategory:
             return None
         
         
+        
 class Menu:
+    def __init__(self) -> None:
+        self.menuID = None
+        self.name = None
+        self.description = None
+        self.categories = []
     def __init__(self) -> None:
         self.menuID = None
         self.name = None
@@ -63,6 +72,7 @@ class Menu:
     
     def addCategory(self, name):
         categoryID = len(self.categories) + 1
+        newCategory = MenuCategory(categoryID, name)
         newCategory = MenuCategory(categoryID, name)
         self.categories.append(newCategory)
         return newCategory
@@ -74,6 +84,41 @@ class Menu:
             return categoryToRemove
         else:
             return None
+    
+    def getMenu(self):
+        menu = {}
+
+        for category in self.categories:
+            categoryName = category.name
+            categoryItems = []
+        
+            for item in category.menuItems:
+                itemDetails = {
+                    'name': item.name,
+                    'description': item.desc,
+                    'price': item.price,
+                    'ingredients': item.ingredients,
+                    'isAvailable': item.isAvailable
+                }
+                categoryItems.append(itemDetails)
+
+            menu[categoryName] = categoryItems
+        
+        return menu
+
+    def getCategories(self):
+        return [category.name for category in self.categories]
+    
+    def getMenuItemsForCategory(self, categoryName):
+        category = next((cat for cat in self.categories if cat.name == categoryName), None)
+        if category:
+            return [item.name for item in category.menuItems]
+        else:
+            return []
+
+    def getMenuItemDetails(self, menuItem):
+        pass
+    
     
     def getMenu(self):
         menu = {}
@@ -139,7 +184,10 @@ class Reservation:
 #---------------------------RESTAURANT------------------------------
 class Restaurant:
     def __init__(self, name, menu):
+    def __init__(self, menu):
+        self.menu = menu
         self.restaurantID = None
+        self.name = None
         self.name = None
         self.capacity = None
         self.numStaff = None
