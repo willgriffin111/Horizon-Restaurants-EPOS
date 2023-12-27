@@ -1,9 +1,13 @@
 """
 file name: Restaurant.py
-Author: Shahbaz 
-Date Created: 18/12/2022
+Author: Shahbaz, Alex Rogers 
+Date Created: 27/12/2022
 """
+
+import datetime
+from database import dbfunc
 from enum import Enum
+
 
 class OrderStatus(Enum):
     PENDING = "Pending"
@@ -34,14 +38,13 @@ class MenuItem:
        self.isAvailable = isAvailable
 
 class MenuCategory:
-    def __init__(self, ID, name) -> None:
+
     def __init__(self, ID, name) -> None:
         self.categoryID = ID
         self.name = name
         self.menuItems = []
         self.menuItems = []
     
-    def addItem(self, name, desc, price, ingredients, isAvailable):
     def addItem(self, name, desc, price, ingredients, isAvailable):
         menuItemID = len(self.menuItems) + 1
         newItem = MenuItem(menuItemID, self.categoryID, name, desc, price, ingredients, isAvailable)
@@ -168,11 +171,12 @@ class Order:
 
 #-----------------------RESERVATION-----------------------
 class Reservation:
-    def __init__(self, ID, restaurantID, customerName, customerPhone, reservationTime, partySize, tableNum, reservationStatus:ReservationStatus, createdBy, createdAt, specialRequests=None) -> None:
+    def __init__(self, ID, restaurantID, customerName, customerPhone, partySize, tableNum , createdBy, createdAt, reservationDate, reservationTime,reservationStatus:ReservationStatus, specialRequests=None) -> None:
         self.reservationID = ID
         self.restaurantID = restaurantID
         self.customerName = customerName
         self.customerPhone = customerPhone
+        self.reservationDate = reservationDate
         self.reservationTime = reservationTime
         self.specialRequests = specialRequests
         self.partySize = partySize
@@ -180,10 +184,80 @@ class Reservation:
         self.reservationStatus = reservationStatus
         self.createdBy = createdBy
         self.createdAt = createdAt
+        
+    def cancelReservation():
+        print("")
+        
+    def updateReservation(self, column_index, newValueUI):
+        print("")
+        self.columnName == ""
+        if column_index == 1:
+            self.columnName == "reservation_customer_name"
+        elif column_index == 2:
+            self.columnName == "reservation_customer_phone"
+        elif column_index == 4:
+            self.columnName == "reservation_date"
+        elif column_index == 5:
+            self.columnName == "reservation_time"
+        conn = dbfunc.getConnection() 
+        if conn != None:    #Checking if connection is None                    
+            if conn.is_connected(): #Checking if connection is established  
+                dbcursor = conn.cursor()    #Creating cursor object                                                 
+                dbcursor.execute("UPDATE reservation SET %s = %s WHERE reservation_id = %s;", (self.columnName,newValueUI,self.reservationID)) 
+                conn.commit()
+                dbcursor.close()
+                conn.close() 
+                
+    def checkAvailability(self):
+        # Calculate the start and end times
+        self.beforeReservationTime = self.reservationTime - datetime.timedelta(hours=3)
+        self.afterReservationTime = self.reservationTime + datetime.timedelta(hours=3)
+
+        # Format the times as strings in the format MySQL expects
+        self.beforeReservationTime = self.beforeReservationTime.strftime("%H:%M:%S")
+        self.afterReservationTime = self.afterReservationTime.strftime("%H:%M:%S")
+        conn = dbfunc.getConnection() 
+        if conn != None:    #Checking if connection is None                    
+            if conn.is_connected(): #Checking if connection is established  
+                dbcursor = conn.cursor()    #Creating cursor object                                                 
+                dbcursor.execute("SELECT * FROM reservation WHERE reservation_date = %s \
+                AND reservation_time BETWEEN (%s) AND (%s);", (self.reservationDate,self.beforeReservationTime,self.afterReservationTime))
+                if(dbcursor.rowcount > 0):
+                    dbcursor.close()
+                    conn.close() 
+                    return False
+                else:
+                    dbcursor.close()
+                    conn.close() 
+                    return True
+                
+        
+    def getReservationDetails():
+        print("")
+        
+    def reservationToJSON():
+        print("")
+    
+    # def insertToDB(self):
+    #     print('Adding New Reservation')          
+    #     conn = dbfunc.getConnection() 
+    #     if conn != None:    #Checking if connection is None                  
+    #         if conn.is_connected(): #Checking if connection is established                        
+    #             print('MySQL Connection is established')                          
+    #             dbcursor = conn.cursor()    #Creating cursor object                                                 
+    #             dbcursor.execute("INSERT INTO employee (employee_name, employee_account_type, \
+    #                              employee_password) VALUES (%s, %s, %s)", (staffName, staffType, staffPass))                                        
+    #             conn.commit() 
+    #             print("User created sucsesfully")
+    #             dbcursor.close()       
+    #             conn.close()
+    #     print("")
+    
+    def removeFromDB():
+        print("")
 
 #---------------------------RESTAURANT------------------------------
 class Restaurant:
-    def __init__(self, name, menu):
     def __init__(self, menu):
         self.menu = menu
         self.restaurantID = None
