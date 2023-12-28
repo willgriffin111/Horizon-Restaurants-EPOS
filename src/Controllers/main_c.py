@@ -31,6 +31,7 @@ class Controller:
         if data.is_logged_in:
             self.home_controller.update_view()
             self.admin_controller.update_view()
+            self.reservation_controller.update_view()
             self.view.switch("home")
         else:
             self.view.switch("login")

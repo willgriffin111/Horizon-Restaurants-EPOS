@@ -3,10 +3,11 @@ import mysql.connector
 from database import dbfunc
 
 class EmployeeAccount:
-    def __init__(self, id, name, type):
+    def __init__(self, id, restrant, name, type):
         self.__name = name
         self.__staffId = id
         self.__accountType = type
+        self.__restrantID = restrant
     
     #Getters
     def getStaffId(self):
@@ -17,6 +18,9 @@ class EmployeeAccount:
     
     def getAccountType(self):
         return self.__accountType
+    
+    def getRestrantID(self):
+        return self.__restrantID
     
     #update functions
     def updatePassword(self,newpass):

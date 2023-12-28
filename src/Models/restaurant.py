@@ -188,7 +188,7 @@ class Reservation:
     def cancelReservation():
         print("")
         
-    def updateReservation(self, column_index, newValueUI):
+    def updateReservation(self, column_index, newValue):
         print("")
         self.columnName == ""
         if column_index == 1:
@@ -203,33 +203,12 @@ class Reservation:
         if conn != None:    #Checking if connection is None                    
             if conn.is_connected(): #Checking if connection is established  
                 dbcursor = conn.cursor()    #Creating cursor object                                                 
-                dbcursor.execute("UPDATE reservation SET %s = %s WHERE reservation_id = %s;", (self.columnName,newValueUI,self.reservationID)) 
+                dbcursor.execute("UPDATE reservation SET %s = %s WHERE reservation_id = %s;", (self.columnName,newValue,self.reservationID)) 
                 conn.commit()
                 dbcursor.close()
                 conn.close() 
                 
-    def checkAvailability(self):
-        # Calculate the start and end times
-        self.beforeReservationTime = self.reservationTime - datetime.timedelta(hours=3)
-        self.afterReservationTime = self.reservationTime + datetime.timedelta(hours=3)
-
-        # Format the times as strings in the format MySQL expects
-        self.beforeReservationTime = self.beforeReservationTime.strftime("%H:%M:%S")
-        self.afterReservationTime = self.afterReservationTime.strftime("%H:%M:%S")
-        conn = dbfunc.getConnection() 
-        if conn != None:    #Checking if connection is None                    
-            if conn.is_connected(): #Checking if connection is established  
-                dbcursor = conn.cursor()    #Creating cursor object                                                 
-                dbcursor.execute("SELECT * FROM reservation WHERE reservation_date = %s \
-                AND reservation_time BETWEEN (%s) AND (%s);", (self.reservationDate,self.beforeReservationTime,self.afterReservationTime))
-                if(dbcursor.rowcount > 0):
-                    dbcursor.close()
-                    conn.close() 
-                    return False
-                else:
-                    dbcursor.close()
-                    conn.close() 
-                    return True
+    
                 
         
     def getReservationDetails():
@@ -238,20 +217,7 @@ class Reservation:
     def reservationToJSON():
         print("")
     
-    # def insertToDB(self):
-    #     print('Adding New Reservation')          
-    #     conn = dbfunc.getConnection() 
-    #     if conn != None:    #Checking if connection is None                  
-    #         if conn.is_connected(): #Checking if connection is established                        
-    #             print('MySQL Connection is established')                          
-    #             dbcursor = conn.cursor()    #Creating cursor object                                                 
-    #             dbcursor.execute("INSERT INTO employee (employee_name, employee_account_type, \
-    #                              employee_password) VALUES (%s, %s, %s)", (staffName, staffType, staffPass))                                        
-    #             conn.commit() 
-    #             print("User created sucsesfully")
-    #             dbcursor.close()       
-    #             conn.close()
-    #     print("")
+    
     
     def removeFromDB():
         print("")

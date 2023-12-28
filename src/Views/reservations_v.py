@@ -8,13 +8,9 @@ from tkinter import Toplevel, ttk, messagebox
 import random
 
 
-userName = "Will Griffin"
-userId = "193812"
 
-bookings = [
-            ("1231481", "Alex Rogers", "123", "Bristol 1", "1/1/2024", "12:00"),
-            ("4310832", "James Beal", "123", "Nottingham 1", "2/1/2024", "12:00"),
-        ]
+
+
 '''
 Impentation example:
 
@@ -36,13 +32,13 @@ class ReservationsView(Tk.Frame):
         self.configure(bg="#1A58B5")
         # self.resizable(False, False)
         self.sidebar()
-        self.topbar(userName=userName, userID=userId)
+        self.topbar()
         self.showBookings()
         self.bottombar()
 
     # Top bar of window --------------------------------------------------------------------------------------------------------------------------------------|
     
-    def topbar(self, userName, userID):
+    def topbar(self):
         self.topFrame = Tk.Frame(self, borderwidth=25, relief=Tk.FLAT, bg="#2976E9")
         self.topFrame.pack(fill=Tk.X)
 
@@ -53,11 +49,11 @@ class ReservationsView(Tk.Frame):
         self.topUnderline.create_line(4, 2, 143, 2, width=2, fill="white")
         self.topUnderline.pack(fill=Tk.X)
 
-        self.username = Tk.Label(self.topFrame, text=f"User: {userName}", fg="white", bg="#2976E9", font=("Arial", 12))
+        self.username = Tk.Label(self.topFrame, text=f"", fg="white", bg="#2976E9", font=("Arial", 12))
         self.username.pack(side=Tk.RIGHT, anchor="e")
         self.username.place(relx=1.0, rely=0.5, anchor="e", x=-170, y=4)
 
-        self.userIDLabel = Tk.Label(self.topFrame, text=f"ID: {userID}", fg="white", bg="#2976E9", font=("Arial", 12))
+        self.userIDLabel = Tk.Label(self.topFrame, text=f"", fg="white", bg="#2976E9", font=("Arial", 12))
         self.userIDLabel.pack(side=Tk.RIGHT, anchor="e")
         self.userIDLabel.place(relx=1.0, rely=0.5, anchor="e", x=-90, y=4)
 
@@ -77,7 +73,7 @@ class ReservationsView(Tk.Frame):
         self.delete_button.pack(pady=30)
         
     # Create window popup --------------------------------------------------------------------------------------------------------------------------------------|
-    def createReservations(self):
+    def createReservationsManager(self):
         
         self.reservationsPopUp = Toplevel(self)
         self.reservationsPopUp.title("Create reservations")
@@ -85,11 +81,11 @@ class ReservationsView(Tk.Frame):
         self.reservationsPopUp.configure(bg="#FFFFFF")  
 
         # List of restaurant names for the dropdown (this will dynamicaly load from db)
-        restaurantNames = ("Birmingham 1", "Birmingham 2", "Bristol 1","Bristol 2", "Cardiff 1", "Cardiff 2", "Glasgow 1", "Glasgow 2" , "Manchester 1", "Manchester 2", "Nottingham 1", "Nottingham 2", "London 1", "London 2")  # Add your restaurant names here
+          # Add your restaurant names here
 
        
         Tk.Label(self.reservationsPopUp, text="Restaurant name", bg="white").pack(pady=(20, 5))
-        self.restaurantNameDropDown = ttk.Combobox(self.reservationsPopUp, values=restaurantNames)
+        self.restaurantNameDropDown = ttk.Combobox(self.reservationsPopUp)
         self.restaurantNameDropDown.pack(pady=(0, 20), padx=20)
 
 
@@ -128,6 +124,47 @@ class ReservationsView(Tk.Frame):
         self.submitUI_btn = Tk.Button(self.submitButtonFrame, text="Submit", bg="#4CAF50")
         self.submitUI_btn.pack()
         
+    def createReservationsOther(self):
+        
+        self.reservationsPopUp = Toplevel(self)
+        self.reservationsPopUp.title("Create reservations")
+        self.reservationsPopUp.geometry("300x500")  
+        self.reservationsPopUp.configure(bg="#FFFFFF")  
+
+        Tk.Label(self.reservationsPopUp, text="Customer name").pack(pady=(10, 0))
+        self.customerNameUI = Tk.Entry(self.reservationsPopUp)
+        self.customerNameUI.pack(pady=(0, 10))
+
+        Tk.Label(self.reservationsPopUp, text="Customer number").pack(pady=(10, 0))
+        self.customerNumberUI = Tk.Entry(self.reservationsPopUp)
+        self.customerNumberUI.pack(pady=(0, 10))
+
+        Tk.Label(self.reservationsPopUp, text="Party size").pack(pady=(10, 0))
+        self.partySizeUI = Tk.Entry(self.reservationsPopUp)
+        self.partySizeUI.pack(pady=(0, 10))
+
+        self.datetimeframe = Tk.Frame(self.reservationsPopUp, bg="white")
+        self.datetimeframe.pack(fill=Tk.X, pady=20)
+
+        self.dateFrame = Tk.Frame(self.datetimeframe, bg="white")
+        self.dateFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
+
+        Tk.Label(self.dateFrame, text="Date", width=5).pack()
+        self.dateUI = Tk.Entry(self.dateFrame)
+        self.dateUI.pack()
+
+        self.timeframe = Tk.Frame(self.datetimeframe, bg="white" , width=5)
+        self.timeframe.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
+
+        Tk.Label(self.timeframe, text="Time").pack()
+        self.timeUI = Tk.Entry(self.timeframe)
+        self.timeUI.pack(expand=True)
+
+        # Submit Button
+        self.submitButtonFrame = Tk.Frame(self.reservationsPopUp, bg="white")
+        self.submitButtonFrame.pack(side=Tk.BOTTOM, fill=Tk.X, pady=20)
+        self.submitUI_btn = Tk.Button(self.submitButtonFrame, text="Submit", bg="#4CAF50")
+        self.submitUI_btn.pack()
         
     
 
@@ -161,7 +198,7 @@ class ReservationsView(Tk.Frame):
         if hasattr(self, 'tree'):
             self.tree.destroy()
         
-        columns = ("Reservation ID", "Customer name", "Customer number", "Restaurant name", "Date", "Time")
+        columns = ("Reservation ID", "Customer name", "Customer number", "Restaurant ID", "Date", "Time")
         self.tree = ttk.Treeview(self, columns=columns, show='headings', selectmode='browse')
         
         for col in columns:
@@ -169,8 +206,7 @@ class ReservationsView(Tk.Frame):
             self.tree.column(col, width=100, anchor="center")
 
 
-        for row in bookings:
-            self.tree.insert('', 'end', values=row)
+        self.insert_data()
 
         self.tree.pack(side='right', fill='both', expand=True)
 
@@ -178,6 +214,16 @@ class ReservationsView(Tk.Frame):
         self.scrollbar = ttk.Scrollbar(self, orient='vertical', command=self.tree.yview)
         self.tree.configure(yscroll=self.scrollbar.set)
         self.scrollbar.pack(side='right', fill='y')
+        
+    def clear_table(self):
+        for record in self.tree.get_children():
+            self.tree.delete(record)
+    
+    def insert_data(self, data = None):
+        # For loop to generate the values in the database 
+        if data != None:
+            for row in data:
+                self.tree.insert('', 'end', values=row)
         
     # Deleting reservations --------------------------------------------------------------------------------------------------------------------------------------|
     
