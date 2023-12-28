@@ -4,35 +4,37 @@ Date: 12/12/2023
 Version: 1.0
 '''
 import tkinter as tk
-from tkinter import ttk, Toplevel
+from tkinter import ttk, Toplevel, messagebox
+import random
 
 inventoryData = [
-    ['123', 'potato', '123', '123', 'ingredient'],
-    ['456', 'Apples', '456', '456', 'ingredient'],
-    ['789', 'Oranges', '789', '789', 'ingredient'],
-    ['111', 'Bananas', '111', '111', 'ingredient'],
-    ['222', 'Berries', '222', '222', 'ingredient'],
-    ['333', 'Grapes', '333', '333', 'ingredient'],
-    ['444', 'Pineapple', '444', '444', 'ingredient'],
-    ['555', 'Watermelon', '555', '555', 'ingredient'],
-    ['666', 'Peaches', '666', '666', 'ingredient'],
-    ['777', 'Plums', '777', '777', 'ingredient'],
-    ['888', 'Kiwi', '888', '888', 'ingredient'],
-    ['999', 'Mango', '999', '999', 'ingredient'],
-    ['101', 'Strawberries', '101', '101', 'ingredient'],
-    ['202', 'Blueberries', '202', '202', 'ingredient'],
-    ['303', 'Raspberries', '303', '303', 'ingredient'],
-    ['404', 'Blackberries', '404', '404', 'ingredient'],
-    ['505', 'Pears', '505', '505', 'ingredient'],
-    ['606', 'Cherries', '606', '606', 'ingredient'],
-    ['707', 'Lemons', '707', '707', 'ingredient'],
-    ['808', 'Limes', '808', '808', 'ingredient'],
-    ['909', 'Spoons', '909', '909', 'equipment'],
-    ['010', 'Forks', '010', '010', 'equipment'],
-    ['111', 'Knives', '111', '111', 'equipment'],
-    ['212', 'Plates', '212', '212', 'equipment'],
-    ['313', 'Bowls', '313', '313', 'equipment']
+    ('123', 'potato', '123', '123', 'ingredient'),
+    ('456', 'Apples', '456', '456', 'ingredient'),
+    ('789', 'Oranges', '789', '789', 'ingredient'),
+    ('111', 'Bananas', '111', '111', 'ingredient'),
+    ('222', 'Berries', '222', '222', 'ingredient'),
+    ('333', 'Grapes', '333', '333', 'ingredient'),
+    ('444', 'Pineapple', '444', '444', 'ingredient'),
+    ('555', 'Watermelon', '555', '555', 'ingredient'),
+    ('666', 'Peaches', '666', '666', 'ingredient'),
+    ('777', 'Plums', '777', '777', 'ingredient'),
+    ('888', 'Kiwi', '888', '888', 'ingredient'),
+    ('999', 'Mango', '999', '999', 'ingredient'),
+    ('101', 'Strawberries', '101', '101', 'ingredient'),
+    ('202', 'Blueberries', '202', '202', 'ingredient'),
+    ('303', 'Raspberries', '303', '303', 'ingredient'),
+    ('404', 'Blackberries', '404', '404', 'ingredient'),
+    ('505', 'Pears', '505', '505', 'ingredient'),
+    ('606', 'Cherries', '606', '606', 'ingredient'),
+    ('707', 'Lemons', '707', '707', 'ingredient'),
+    ('808', 'Limes', '808', '808', 'ingredient'),
+    ('909', 'Spoons', '909', '909', 'equipment'),
+    ('010', 'Forks', '010', '010', 'equipment'),
+    ('111', 'Knives', '111', '111', 'equipment'),
+    ('212', 'Plates', '212', '212', 'equipment'),
+    ('313', 'Bowls', '313', '313', 'equipment')
 ]
+
 
 class App(tk.Tk):
     def __init__(self):
@@ -70,7 +72,7 @@ class App(tk.Tk):
         user_id.place(relx=1.0, rely=0.5, anchor='e', x=-260, y=4)
 
         # Refresh Button
-        refresh_button = tk.Button(topFrame, text='Refresh', command=self.refreshGUI, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
+        refresh_button = tk.Button(topFrame, text='Refresh', command=self.refresh_tree_view, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
         refresh_button.place(relx=1.0, rely=0.5, anchor='e', x=-110, y=4)
 
         # Home Button
@@ -91,7 +93,7 @@ class App(tk.Tk):
         add_staff = tk.Button(self.inventory_frame, text='Add', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5,command=self.add_inventory_pop)
         add_staff.pack(side=tk.LEFT,padx=6)
 
-        remove_staff = tk.Button(self.inventory_frame, text='Delete', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
+        remove_staff = tk.Button(self.inventory_frame, text='Delete', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5, command=self.deleteSelectedItem)
         remove_staff.pack(side=tk.LEFT,padx=6)
 
         # edit_staff = tk.Button(self.inventory_frame, text='Edit', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
@@ -111,7 +113,6 @@ class App(tk.Tk):
         self.inventory_window = Toplevel(self)
         self.inventory_window.title("Inventory add")
         self.inventory_window.geometry('250x400')
-        self.inventory_window.configure(bg='#1A58B5')
         self.inventory_window.resizable(False, False)
     
         add_title = tk.Label(self.inventory_window, text='New Inventory', fg='black', bg='white', font=("Arial", 18))
@@ -140,6 +141,10 @@ class App(tk.Tk):
     
         type_box = tk.Entry(self.inventory_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
         type_box.pack()
+        
+        submit_button = tk.Button(self.inventory_window, text='Submit', command=lambda: self.addToInventory(name_box, qty_box, reorder_box, type_box))
+        submit_button.pack(pady=10)
+        
     
     def inv_table_space(self):
         self.inventory_table_frame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='#1A58B5', height=300, width=480)
@@ -182,14 +187,42 @@ class App(tk.Tk):
         self.inventory_tree.pack(pady=10)
         
         
-        
-    def refreshGUI(self):
-        for widget in self.winfo_children():
-            if isinstance(widget, tk.Frame):
-                widget.destroy()
-        self.topBar()
-        self.inventoryTree()
-        self.inv_table_space()   
+    def deleteSelectedItem(self):
+        selected_item = self.inventory_tree.selection()
+        if selected_item:
+            item_index = int(selected_item[0])
+            del inventoryData[item_index]  
+            self.inventory_tree.delete(selected_item)  
+
+        else:
+            tk.messagebox.showinfo("Delete", "No item selected")
+            
+    def addToInventory(self, name_entry, qty_entry, reorder_entry, type_entry):
+        name = name_entry.get()
+        qty = qty_entry.get()
+        reorder = reorder_entry.get()
+        inv_type = type_entry.get()
+
+        new_id = random.randint(100, 999)
+
+        new_item = [new_id, name, qty, reorder, inv_type]
+        inventoryData.append(new_item)
+
+        self.refresh_tree_view()
+
+        self.inventory_window.destroy()
+
+    def refresh_tree_view(self):
+        # Clear existing rows in the treeview
+        for i in self.inventory_tree.get_children():
+            self.inventory_tree.delete(i)
+
+        # Populate treeview with updated data
+        count = 0
+        for record in inventoryData:
+            tag = 'evenrow' if count % 2 == 0 else 'oddrow'
+            self.inventory_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3], record[4]), tags=(tag,))
+            count += 1
 
         
             
