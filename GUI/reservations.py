@@ -178,7 +178,7 @@ class App(Tk.Tk):
         saveButton.pack()
 
     def saveNewValue(self, row_id, column_index, new_value, edit_window):
-
+        print(column_index)
         curentValues = list(self.tree.item(row_id, 'values'))
         curentValues[column_index] = new_value
         self.tree.item(row_id, values=curentValues)

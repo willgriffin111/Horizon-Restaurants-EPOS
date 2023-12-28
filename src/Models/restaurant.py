@@ -1,9 +1,13 @@
 """
 file name: Restaurant.py
-Author: Shahbaz 
-Date Created: 18/12/2022
+Author: Shahbaz, Alex Rogers 
+Date Created: 27/12/2022
 """
+
+import datetime
+from database import dbfunc
 from enum import Enum
+
 
 class OrderStatus(Enum):
     PENDING = "Pending"
@@ -19,7 +23,7 @@ class PaymentStatus(Enum):
 class ReservationStatus(Enum):
     PENDING = "Pending"
     CONFIRMED = "Confirmed"
-    CANCELLED = "Cancelled"
+    
 
 
 # ------------------MENU ---------------------------
@@ -34,9 +38,11 @@ class MenuItem:
        self.isAvailable = isAvailable
 
 class MenuCategory:
+
     def __init__(self, ID, name) -> None:
         self.categoryID = ID
         self.name = name
+        self.menuItems = []
         self.menuItems = []
     
     def addItem(self, name, desc, price, ingredients, isAvailable):
@@ -54,7 +60,13 @@ class MenuCategory:
             return None
         
         
+        
 class Menu:
+    def __init__(self) -> None:
+        self.menuID = None
+        self.name = None
+        self.description = None
+        self.categories = []
     def __init__(self) -> None:
         self.menuID = None
         self.name = None
@@ -63,6 +75,7 @@ class Menu:
     
     def addCategory(self, name):
         categoryID = len(self.categories) + 1
+        newCategory = MenuCategory(categoryID, name)
         newCategory = MenuCategory(categoryID, name)
         self.categories.append(newCategory)
         return newCategory
@@ -74,6 +87,41 @@ class Menu:
             return categoryToRemove
         else:
             return None
+    
+    def getMenu(self):
+        menu = {}
+
+        for category in self.categories:
+            categoryName = category.name
+            categoryItems = []
+        
+            for item in category.menuItems:
+                itemDetails = {
+                    'name': item.name,
+                    'description': item.desc,
+                    'price': item.price,
+                    'ingredients': item.ingredients,
+                    'isAvailable': item.isAvailable
+                }
+                categoryItems.append(itemDetails)
+
+            menu[categoryName] = categoryItems
+        
+        return menu
+
+    def getCategories(self):
+        return [category.name for category in self.categories]
+    
+    def getMenuItemsForCategory(self, categoryName):
+        category = next((cat for cat in self.categories if cat.name == categoryName), None)
+        if category:
+            return [item.name for item in category.menuItems]
+        else:
+            return []
+
+    def getMenuItemDetails(self, menuItem):
+        pass
+    
     
     def getMenu(self):
         menu = {}
@@ -123,11 +171,12 @@ class Order:
 
 #-----------------------RESERVATION-----------------------
 class Reservation:
-    def __init__(self, ID, restaurantID, customerName, customerPhone, reservationTime, partySize, tableNum, reservationStatus:ReservationStatus, createdBy, createdAt, specialRequests=None) -> None:
+    def __init__(self, ID, restaurantID, customerName, customerPhone, partySize, tableNum , createdBy, createdAt, reservationDate, reservationTime,reservationStatus:ReservationStatus, specialRequests=None) -> None:
         self.reservationID = ID
         self.restaurantID = restaurantID
         self.customerName = customerName
         self.customerPhone = customerPhone
+        self.reservationDate = reservationDate
         self.reservationTime = reservationTime
         self.specialRequests = specialRequests
         self.partySize = partySize
@@ -135,12 +184,50 @@ class Reservation:
         self.reservationStatus = reservationStatus
         self.createdBy = createdBy
         self.createdAt = createdAt
+        
+    def cancelReservation():
+        print("")
+        
+    def updateReservation(self, column_index, newValue):
+        print("")
+        self.columnName == ""
+        if column_index == 1:
+            self.columnName == "reservation_customer_name"
+        elif column_index == 2:
+            self.columnName == "reservation_customer_phone"
+        elif column_index == 4:
+            self.columnName == "reservation_date"
+        elif column_index == 5:
+            self.columnName == "reservation_time"
+        conn = dbfunc.getConnection() 
+        if conn != None:    #Checking if connection is None                    
+            if conn.is_connected(): #Checking if connection is established  
+                dbcursor = conn.cursor()    #Creating cursor object                                                 
+                dbcursor.execute("UPDATE reservation SET %s = %s WHERE reservation_id = %s;", (self.columnName,newValue,self.reservationID)) 
+                conn.commit()
+                dbcursor.close()
+                conn.close() 
+                
+    
+                
+        
+    def getReservationDetails():
+        print("")
+        
+    def reservationToJSON():
+        print("")
+    
+    
+    
+    def removeFromDB():
+        print("")
 
 #---------------------------RESTAURANT------------------------------
 class Restaurant:
     def __init__(self, menu):
         self.menu = menu
         self.restaurantID = None
+        self.name = None
         self.name = None
         self.capacity = None
         self.numStaff = None

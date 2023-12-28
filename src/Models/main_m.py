@@ -2,6 +2,7 @@ from .auth_m import Auth
 from .admin_m import Admin
 from .order_m import Order
 from .restaurant import Restaurant, Menu
+from .reservation_m import ReservationManager
 
 
 class Model:
@@ -10,6 +11,7 @@ class Model:
         self.admin = Admin()
         self.order = Order()
         self.menu = Menu()
+        self.reservation = ReservationManager()
         self.restaurant = Restaurant(self.menu) 
 
         self.menu.addCategory("Starters")

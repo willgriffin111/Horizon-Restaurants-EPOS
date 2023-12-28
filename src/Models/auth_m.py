@@ -27,7 +27,7 @@ class Auth(ObservableModel):
                 if conn.is_connected(): #Checking if connection is established                        
                     print('MySQL Connection is established')                          
                     dbcursor = conn.cursor()    #Creating cursor object                                                 
-                    dbcursor.execute("SELECT employee_password, employee_name, employee_account_type \
+                    dbcursor.execute("SELECT employee_password, restaurant_id, employee_name, employee_account_type \
                         FROM employee WHERE employee_id = %s;", (staffId,))                                                
                     staffdata = dbcursor.fetchone()
                     if dbcursor.rowcount < 1: #this mean no user exists                         
@@ -40,7 +40,7 @@ class Auth(ObservableModel):
                             dbcursor.close()
                             conn.close()
                             #Creates employee class with id name and account type all stored 
-                            employee = EmployeeAccount(staffId,staffdata[1],staffdata[2])                   
+                            employee = EmployeeAccount(staffId,staffdata[1],staffdata[2],staffdata[3])                   
                             print("You are now logged in")                                
                             #REDIRECT TO ACCOUNT PAGE
                             #clears password from frame so its not there when logining out
