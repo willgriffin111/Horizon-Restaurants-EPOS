@@ -71,7 +71,7 @@ class ReservationManager(ObservableModel):
                 if restaurantID == None:                                            
                     dbcursor.execute("SELECT reservation_id, reservation_customer_name, reservation_customer_phone, restaurant_id, reservation_date, reservation_time FROM reservation;")    
                 else:
-                    dbcursor.execute("SELECT reservation_id, reservation_customer_name, reservation_customer_phone, restaurant_id, reservation_date, reservation_time FROM reservation WHERE reservation_id = "+str(restaurantID)+";")                                       
+                    dbcursor.execute("SELECT reservation_id, reservation_customer_name, reservation_customer_phone, restaurant_id, reservation_date, reservation_time FROM reservation WHERE restaurant_id = "+str(restaurantID)+";")                                         
                 self.reservationlist = dbcursor.fetchall()
                 dbcursor.close()
                 conn.close() 
