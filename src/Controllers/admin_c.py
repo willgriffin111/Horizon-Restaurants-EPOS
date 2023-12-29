@@ -38,7 +38,7 @@ class AdminController:
     #staff tab
     def staff_edit(self):
         self.frame.staff_edit()
-        self.frame.staff_tree.bind("<Double-1>", self.frame.onDoubleClickStaff)
+        self.frame.staff_tree.bind("<Double-1>", self.onDoubleClickStaff)
         self.frame.add_staff_btn.config(command=self.add_staff_pop)
         self.frame.remove_staff_btn.config(command=self.remove_staff)
         
@@ -80,6 +80,16 @@ class AdminController:
         self.columnId = self.frame.staff_tree.identify_column(event.x)
         if self.rowId and self.columnId:
             self.frame.editWindowPopup(self.frame.staff_tree, self.rowId, self.columnId)
+            #binding buttons
+            self.frame.save_btn.config(command=self.saveNewValue)
+            
+    def saveNewValue(self):
+        self.column_index = int(self.columnId[1:]) - 1
+        self.curentValues = list(self.frame.staff_tree.item(self.rowId, 'values'))
+        self.model.admin.updateStaff(self.column_index, self.frame.newValueUI.get(), self.curentValues[0])
+        self.clear_edit_staff()
+        self.frame.editWindow.destroy()
+        
         
         
         

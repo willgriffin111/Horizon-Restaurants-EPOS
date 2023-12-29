@@ -66,16 +66,12 @@ class Admin(ObservableModel):
                 dbcursor.close()       
                 conn.close()
                 
-    def updateStaff(self, column_index, newValue, reservationID): #updates the data from the reservations table
+    def updateStaff(self, column_index, newValue, staffID): #updates the data from the reservations table
         #finding out what data type needs to be updated
-        if column_index == 1:
-            self.columnName = 'reservation_customer_name'
-        elif column_index == 2:
-            self.columnName = 'reservation_customer_phone'
-        elif column_index == 4:
-            self.columnName = 'reservation_date'
-        elif column_index == 5:
-            self.columnName = 'reservation_time'
+        
+        if column_index == 3:
+            newValue = sha256_crypt.hash(newValue)
+    
         conn = dbfunc.getConnection() 
         if conn != None:    #Checking if connection is None                    
             if conn.is_connected(): #Checking if connection is established  
@@ -83,13 +79,13 @@ class Admin(ObservableModel):
                 #updates data
                 #finding out what data type needs to be updated
                 if column_index == 1:
-                    dbcursor.execute('UPDATE reservation SET reservation_customer_name = %s WHERE reservation_id = %s;', (newValue,reservationID)) 
+                    dbcursor.execute('UPDATE employee SET employee_name = %s WHERE employee_id = %s;', (newValue,staffID)) 
                 elif column_index == 2:
-                    dbcursor.execute('UPDATE reservation SET reservation_customer_phone = %s WHERE reservation_id = %s;', (newValue,reservationID))
+                    dbcursor.execute('UPDATE employee SET employee_account_type = %s WHERE employee_id = %s;', (newValue,staffID))
+                elif column_index == 3:
+                    dbcursor.execute('UPDATE employee SET reservation_date = %s WHERE employee_id = %s;', (newValue,staffID))
                 elif column_index == 4:
-                    dbcursor.execute('UPDATE reservation SET reservation_date = %s WHERE reservation_id = %s;', (datetime.strptime(newValue, '%d/%m/%Y'),reservationID))
-                elif column_index == 5:
-                    dbcursor.execute('UPDATE reservation SET reservation_time = %s WHERE reservation_id = %s;', (datetime.strptime(newValue, "%H:%M"),reservationID))                                               
+                    dbcursor.execute('UPDATE employee SET restaurant_id = %s WHERE employee_id = %s;', (newValue,staffID))                                               
                 
                 conn.commit()
                 dbcursor.close()

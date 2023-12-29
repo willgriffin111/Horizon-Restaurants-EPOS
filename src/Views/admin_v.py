@@ -315,13 +315,7 @@ class AdminView(tk.Frame):
         self.columnId = self.inventory_tree.identify_column(event.x)
         if self.rowId and self.columnId:
             self.editWindowPopup(self.inventory_tree, self.rowId, self.columnId)
-
-    def onDoubleClickStaff(self, event):
-        self.rowId = self.staff_tree.identify_row(event.y)
-        self.columnId = self.staff_tree.identify_column(event.x)
-        if self.rowId and self.columnId:
-            self.editWindowPopup(self.staff_tree, self.rowId, self.columnId)
-        
+  
 
     def editWindowPopup(self, tree, row_id, column_id):
         self.editWindow = Toplevel(self)
@@ -336,14 +330,9 @@ class AdminView(tk.Frame):
         self.newValueUI.pack(pady=10)
         self.newValueUI.insert(0, self.current_value)
         
-        self.saveButton = tk.Button(self.editWindow, text="Save", command=lambda: self.saveNewValue(tree, row_id, self.column_index, self.newValueUI.get(), self.editWindow))
-        self.saveButton.pack()
+        self.save_btn = tk.Button(self.editWindow, text="Save")
+        self.save_btn.pack()
 
-    def saveNewValue(self, tree, row_id, column_index, new_value, edit_window):
-        self.currentValues = list(tree.item(row_id, 'values'))
-        self.currentValues[column_index] = new_value
-        tree.item(row_id, values=self.currentValues)
-        edit_window.destroy()
 
 
     # bottom bar -----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
