@@ -8,6 +8,7 @@ from .order_modify_v import OrderModifyView
 from .admin_v import AdminView
 from .order_view_v import OrdersView
 from .reservations_v import ReservationsView
+from .inventory_v import InventoryView
 
 
 class Frames(TypedDict):
@@ -28,6 +29,7 @@ class View:
         self._add_frame(OrderCreate, "order")
         self._add_frame(OrderModifyView, "order-modify")
         self._add_frame(AdminView, "admin")
+        self._add_frame(InventoryView, "inventory")
         
 
     def _add_frame(self, Frame, name: str) -> None:

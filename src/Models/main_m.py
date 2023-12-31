@@ -3,6 +3,7 @@ from .admin_m import Admin
 from .order_m import Order
 from .restaurant import Restaurant, Menu
 from .reservation_m import ReservationManager
+from .inventory_m import Inventory
 
 
 class Model:
@@ -12,6 +13,7 @@ class Model:
         self.order = Order()
         self.menu = Menu()
         self.reservation = ReservationManager()
+        self.inventory = Inventory()
         self.restaurant = Restaurant(self.menu) 
 
         self.menu.addCategory("Starters")

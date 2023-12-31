@@ -30,6 +30,16 @@ TABLES['INVENTORY'] = 'CREATE TABLE inventory (\
   REFERENCES restaurant (restaurant_id)\
 );'
 
+TABLES['INVENTORY_RESTAURANT'] = 'CREATE TABLE inventory_restaurant (\
+  restaurant_id INT,\
+  inventory_id INT,\
+  FOREIGN KEY (restaurant_id) \
+  REFERENCES restaurant (restaurant_id),\
+  FOREIGN KEY (inventory_id) \
+  REFERENCES inventory (inventory_id)\
+);'
+
+
 TABLES['MENU'] = 'CREATE TABLE menu(\
   menu_id INT NOT NULL AUTO_INCREMENT,\
   PRIMARY KEY (menu_id),\
@@ -96,7 +106,7 @@ TABLES['RESERVATIONS'] = 'CREATE TABLE reservation (\
   reservation_author VARCHAR(64) NOT NULL,\
   reservation_creation_time DATETIME NOT NULL,\
   reservation_date DATE NOT NULL,\
-  reservation_time TIME NOT NULL,\
+  reservation_time DATETIME NOT NULL,\
   restaurant_id INT,\
   FOREIGN KEY (restaurant_id) \
   REFERENCES restaurant (restaurant_id)\
@@ -186,8 +196,4 @@ else:
 #| 2       | 2            | 2                    | (Salad needs 2 units of Tomatoes)
 #| 2       | 3            | 1                    | (Salad needs 1 unit of Cheese)
 #| 2       | 4            | 4                    | (Salad needs 4 units of Pasta)
-
-
-
-
 
