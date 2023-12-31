@@ -65,14 +65,17 @@ class HomeView(tk.Frame):
         self.viewOrders_btn = tk.Button(self.menuFrame, text='View Orders', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
         self.viewOrders_btn.grid(row=0, column=2, padx=10, pady=10)
         
-        self.modifyOrders_btn = tk.Button(self.menuFrame, text='Inventory', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
-        self.modifyOrders_btn.grid(row=1, column=0, padx=10, pady=10)
+        self.inventory_modify_btn = tk.Button(self.menuFrame, text='Manage Inventory', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
+        self.inventory_modify_btn.grid(row=1, column=0, padx=10, pady=10)
+
+        self.inventory_btn = tk.Button(self.menuFrame, text='View Inventory', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
+        self.inventory_btn.grid(row=1, column=1, padx=10, pady=10)
 
         self.adminFeatures_btn = tk.Button(self.menuFrame, text='Admin Features', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
-        self.adminFeatures_btn.grid(row=1, column=1, padx=10, pady=10)
+        self.adminFeatures_btn.grid(row=1, column=2, padx=10, pady=10)
 
         self.reports_btn = tk.Button(self.menuFrame, text='Reports', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
-        self.reports_btn.grid(row=1, column=2, padx=10, pady=10)
+        self.reports_btn.grid(row=1, column=3, padx=10, pady=10)
 
     # Bottom bar 
         self.bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')

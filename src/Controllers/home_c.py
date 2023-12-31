@@ -20,7 +20,8 @@ class HomeController:
         self.frame.createReservation_btn.config(command=self.createReservation)
         self.frame.createOrder_btn.config(command=self.createOrder)
         self.frame.viewOrders_btn.config(command=self.viewOrders)
-        self.frame.modifyOrders_btn.config(command=self.modifyOrders)
+        self.frame.inventory_modify_btn.config(command=self.inventory_modify)
+        self.frame.inventory_btn.config(command=self.inventory)
         self.frame.adminFeatures_btn.config(command=self.adminFeatures)
         self.frame.reports_btn.config(command=self.reports)
 
@@ -37,8 +38,13 @@ class HomeController:
         print("View Orders button clicked")
         self.view.switch("orderView")
         
-    def modifyOrders(self) -> None:
-        print("Modify Orders button clicked")
+    def inventory_modify(self) -> None:
+        print("Inventory modify button clicked")
+        self.view.switch("inventory-modify")
+    
+    def inventory(self):
+        print("inventory button clicked")
+        self.view.switch("inventory")
         
     def adminFeatures(self) -> None:
         print("Admin Features button clicked")
@@ -58,7 +64,8 @@ class HomeController:
                 self.frame.createReservation_btn.grid(row=0, column=0, padx=10, pady=10)
                 self.frame.createOrder_btn.grid(row=0, column=1, padx=10, pady=10)
                 self.frame.viewOrders_btn.grid(row=0, column=2, padx=10, pady=10)
-                self.frame.modifyOrders_btn.grid(row=1, column=0, padx=10, pady=10)
+                self.frame.inventory_modify_btn.grid(row=1, column=0, padx=10, pady=10)
+                self.frame.inventory_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid(row=1, column=1, padx=10, pady=10)
                 self.frame.reports_btn.grid(row=1, column=2, padx=10, pady=10)
             elif(userType == 'DIRECTOR'):
@@ -66,7 +73,8 @@ class HomeController:
                 self.frame.createReservation_btn.grid_forget()
                 self.frame.createOrder_btn.grid_forget()
                 self.frame.viewOrders_btn.grid_forget()
-                self.frame.modifyOrders_btn.grid_forget()
+                self.frame.inventory_modify_btn.grid_forget()
+                self.frame.inventory_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
                 self.frame.reports_btn.grid(row=1, column=2, padx=10, pady=10)
             elif(userType == 'MANAGER'):
@@ -74,7 +82,8 @@ class HomeController:
                 self.frame.createReservation_btn.grid(row=0, column=0, padx=10, pady=10)
                 self.frame.createOrder_btn.grid(row=0, column=1, padx=10, pady=10)
                 self.frame.viewOrders_btn.grid(row=0, column=2, padx=10, pady=10)
-                self.frame.modifyOrders_btn.grid(row=1, column=0, padx=10, pady=10)
+                self.frame.inventory_modify_btn.grid(row=1, column=0, padx=10, pady=10)
+                self.frame.inventory_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
                 self.frame.reports_btn.grid(row=1, column=1, padx=10, pady=10)
             elif(userType == 'CHEF'):
@@ -82,7 +91,8 @@ class HomeController:
                 self.frame.createReservation_btn.grid_forget()
                 self.frame.createOrder_btn.grid_forget()
                 self.frame.viewOrders_btn.grid_forget()
-                self.frame.modifyOrders_btn.grid_forget()
+                self.frame.inventory_modify_btn.grid_forget()
+                self.frame.inventory_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
                 self.frame.reports_btn.grid(row=1, column=2, padx=10, pady=10)
             elif(userType == 'KITCHEN'):
@@ -90,15 +100,17 @@ class HomeController:
                 self.frame.createReservation_btn.grid_forget()
                 self.frame.createOrder_btn.grid_forget()
                 self.frame.viewOrders_btn.grid(row=0, column=0, padx=10, pady=10)
-                self.frame.modifyOrders_btn.grid(row=0, column=1, padx=10, pady=10)
+                self.frame.inventory_modify_btn.grid_forget()
+                self.frame.inventory_btn.grid(row=0, column=1, padx=10, pady=10)
                 self.frame.adminFeatures_btn.grid_forget()
                 self.frame.reports_btn.grid_forget()
             elif(userType == 'FRONT'):
                 #displaying front buttons
                 self.frame.createReservation_btn.grid(row=0, column=0, padx=10, pady=10)
                 self.frame.createOrder_btn.grid(row=0, column=1, padx=10, pady=10)
+                self.frame.inventory_btn.grid(row=0, column=2, padx=10, pady=10)
                 self.frame.viewOrders_btn.grid_forget()
-                self.frame.modifyOrders_btn.grid(row=0, column=2, padx=10, pady=10)
+                self.frame.inventory_modify_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
                 self.frame.reports_btn.grid_forget()
         else:
@@ -107,7 +119,8 @@ class HomeController:
             self.frame.createReservation_btn.grid_forget()
             self.frame.createOrder_btn.grid_forget()
             self.frame.viewOrders_btn.grid_forget()
-            self.frame.modifyOrders_btn.grid_forget()
+            self.frame.inventory_modify_btn.grid_forget()
+            self.frame.inventory_btn.grid_forget()
             self.frame.adminFeatures_btn.grid_forget()
             self.frame.reports_btn.grid_forget()
             

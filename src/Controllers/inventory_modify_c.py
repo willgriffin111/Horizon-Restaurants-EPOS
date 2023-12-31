@@ -8,11 +8,11 @@ from tkinter import messagebox
 from Models.main_m import Model
 from Views.main_v import View
 
-class InventoryController:
+class InventoryModifyController:
     def __init__(self, model: Model, view: View) -> None:
         self.model = model
         self.view = view
-        self.frame = self.view.frames["inventory"]
+        self.frame = self.view.frames["inventory-modify"]
         self._bind()
 
     def _bind(self) -> None:
