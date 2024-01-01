@@ -60,19 +60,12 @@ class InventoryView(Frame):
         self.main_frame.pack()
         self.main_frame.columnconfigure(1, weight=1)
         self.main_frame.rowconfigure(1, weight=1)
-        self.main_frame.rowconfigure(2, weight=10)
+        self.main_frame.rowconfigure(2, weight=1)
 
         self.inventory_frame = tk.Frame(self.main_frame, borderwidth=25, bg='#1A58B5', height=120, width=480)
-        self.inventory_frame.grid(column=1, row=1, sticky='we')
+        self.inventory_frame.grid(column=1, row=1, sticky='nswe')
         self.inventory_frame.rowconfigure(1, weight=1)
-        self.inventory_frame.columnconfigure((0,1), weight=5)
-        self.inventory_frame.columnconfigure(2, weight=1)
-
-        self.add_inventory_item_btn = tk.Button(self.inventory_frame, text='Add', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
-        self.add_inventory_item_btn.grid(row=1, column=0, sticky='we', padx=2)
-
-        self.remove_inventory_item_btn = tk.Button(self.inventory_frame, text='Delete', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
-        self.remove_inventory_item_btn.grid(row=1, column=1, sticky='we', padx=2)
+        self.inventory_frame.columnconfigure(0, weight=1)
 
         self.update_item_option_list()
     
@@ -93,7 +86,7 @@ class InventoryView(Frame):
 
             self.type_filter_combobox = ttk.Combobox(self.inventory_frame, values=self.item_type_option_list, textvariable=self.selected_option, state="readonly")
             self.type_filter_combobox.configure(style="TCombobox")
-            self.type_filter_combobox.grid(row=1, column=2, sticky='nswe', padx=2)
+            self.type_filter_combobox.grid(row=1, column=0, sticky='nswe')
             # Set the default selection to the first item on initialisation
             if item_filter_selected is None:
                 self.type_filter_combobox.current(0)
@@ -151,16 +144,16 @@ class InventoryView(Frame):
         self.inventory_tree.column("#0", width=0, minwidth=0)
         self.inventory_tree.column("ID", anchor='center', width=90, minwidth=90)
         self.inventory_tree.column("Name", anchor='w', width=column_width, minwidth=column_width)
-        self.inventory_tree.column("Qty",  anchor='w', width=35, minwidth=35)
+        self.inventory_tree.column("Qty",  anchor='center', width=50, minwidth=35)
         self.inventory_tree.column("re-order", anchor='center', width=column_width, minwidth=column_width)
         self.inventory_tree.column("inventory-type", anchor='w', width=column_width, minwidth=column_width)
 
         # Formatting Headers 
-        self.inventory_tree.heading("ID", text="Item ID",anchor='w')
+        self.inventory_tree.heading("ID", text="Item ID",anchor='center')
         self.inventory_tree.heading("Name", text="Item Name",anchor='center')
-        self.inventory_tree.heading("Qty", text="Qty",anchor='center')
-        self.inventory_tree.heading("re-order", text="Re-order level",anchor='e')
-        self.inventory_tree.heading("inventory-type", text="Inventory type",anchor='e')
+        self.inventory_tree.heading("Qty", text="Stock",anchor='center')
+        self.inventory_tree.heading("re-order", text="Re-order Level",anchor='center')
+        self.inventory_tree.heading("inventory-type", text="Item Type",anchor='center')
 
         # Add tag configurations for odd and even rows
         self.inventory_tree.tag_configure('oddrow', background='white', foreground='black')
@@ -184,8 +177,21 @@ class InventoryView(Frame):
         count = 0
         for record in data:
             tag = 'evenrow' if count % 2 == 0 else 'oddrow'     # Give alternating colours to rows
+
+            # Check if stock is lower than re-order level
+            stock = int(record[2])
+            reorder_level = int(record[3])
+
+            if stock < reorder_level:
+                tag = 'lowstock'   # my custom tag for low stock, ITS MINE
+                #print(f"low stock: {record}")
+
             self.inventory_tree.insert(parent='', index='end', iid=count, text="", values=record, tags=(tag,))
+            #print(f"Inserted record: {record} with tags: {tag}")
             count += 1
+        
+        # Setting background colour for MY TAG to red, to show low stock
+        self.inventory_tree.tag_configure('lowstock', background='#d42839', foreground='white') # background='#EB5160', foreground='#d42839'
     
     def clear_tree_view(self):
         # Clear existing rows in the treeview

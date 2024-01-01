@@ -1,5 +1,5 @@
 """
-File name: inventory_c.py
+File name: inventory_modify_c.py
 Author: Shahbaz Bokhari
 Date created: 30/12/2023
 """

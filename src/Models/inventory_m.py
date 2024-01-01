@@ -178,5 +178,8 @@ class Inventory(ObservableModel):
             print(f"Error: {err}")
 
 
-
-
+    def send_reorder_email(self, item_data):
+        # I'm not gonna actually put my email details in here lol but we can make a dummy email for the demonstration, just simulate for now
+        # item_data will let the manager know which item to re-order
+        # For now I'm just going to return true to signal the email has been sent without errors
+        return True
