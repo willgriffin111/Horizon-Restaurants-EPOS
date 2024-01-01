@@ -11,6 +11,7 @@ from .admin_c import AdminController
 from .order_view_c import OrderViewController
 from .reservations_c import ReservationsController
 from .inventory_modify_c import InventoryModifyController
+from .inventory_c import InventoryController
 
 
 class Controller:
@@ -24,7 +25,8 @@ class Controller:
         self.admin_controller = AdminController(model, view)
         self.order_view_controller = OrderViewController(model, view)
         self.reservation_controller = ReservationsController(model,view)
-        self.inventory_controller = InventoryModifyController(model, view)
+        self.inventory_modify_controller = InventoryModifyController(model, view)
+        self.inventory_controller = InventoryController(model, view)
 
         self.model.auth.add_event_listener("auth_changed", self.auth_state_listener)
         self.model.order.add_event_listener("order_saved", self.update_order_in_modify_page)
@@ -34,6 +36,7 @@ class Controller:
             self.home_controller.update_view()
             self.admin_controller.update_view()
             self.reservation_controller.update_view()
+            self.inventory_modify_controller.update_view()
             self.inventory_controller.update_view()
             self.view.switch("home")
         else:
