@@ -4,6 +4,7 @@ from .order_m import Order
 from .restaurant import Restaurant, Menu
 from .reservation_m import ReservationManager
 from .inventory_m import Inventory
+from .account_m import Account
 
 
 class Model:
@@ -15,6 +16,7 @@ class Model:
         self.reservation = ReservationManager()
         self.inventory = Inventory()
         self.restaurant = Restaurant(self.menu) 
+        self.account = Account()
 
         self.menu.addCategory("Starters")
         self.menu.addCategory("Mains")
