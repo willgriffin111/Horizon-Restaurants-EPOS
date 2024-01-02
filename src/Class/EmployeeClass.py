@@ -52,4 +52,5 @@ class EmployeeAccount:
                 conn.commit()
                 dbcursor.close()
                 conn.close()
+                self.__name = name
         

@@ -24,6 +24,7 @@ class HomeController:
         self.frame.inventory_btn.config(command=self.inventory)
         self.frame.adminFeatures_btn.config(command=self.adminFeatures)
         self.frame.reports_btn.config(command=self.reports)
+        self.frame.Acc_btn.config(command=self.account)
 
     #button functions
     def createReservation(self) -> None:
@@ -52,6 +53,10 @@ class HomeController:
         
     def reports(self) -> None:
         print("Reports button clicked")
+        
+    def account(self)  -> None:
+        print("Account button clicked")
+        self.view.switch("account")
 
     def update_view(self) -> None:
         current_user = self.model.auth.current_user

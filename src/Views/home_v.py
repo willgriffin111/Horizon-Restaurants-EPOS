@@ -24,6 +24,10 @@ class HomeView(tk.Frame):
         self.canvas = tk.Canvas(self.topFrame, height=2, bg='#2976E9', highlightthickness=0)
         self.canvas.create_line(4, 2, 218, 2, width=2, fill='white')
         self.canvas.pack(fill=tk.X)
+        
+        self.Acc_btn = tk.Button(self.topFrame, text='Account', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None,width=15)
+        self.Acc_btn.pack(side=tk.RIGHT, anchor='e')
+        self.Acc_btn.place(relx=1.0, rely=0.5, anchor='e', x=-300, y=4)
 
         # Username
         self.username = tk.Label(self.topFrame, text=f"", fg='white', bg='#2976E9', font=('Arial', 14))
