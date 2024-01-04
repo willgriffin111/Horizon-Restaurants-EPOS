@@ -29,9 +29,11 @@ class AccountController:
         self.frame.submit_name_btn.config(command=self.name_update)
     
     def name_update(self):
+        if not all([self.frame.name_box.get()]):
+                messagebox.showerror("Error", "All fields are required")
+                return
         self.model.account.updateName(self.frame.name_box.get(), self.model.auth.current_user)
         self.frame.staff_window.destroy()
-        print("updateing name")
         
 
     #password update
@@ -40,17 +42,22 @@ class AccountController:
         self.frame.submit_password_btn.config(command=self.password_update)
     
     def password_update(self):
+        if not all([self.frame.new_password_box.get(),self.frame.re_password_box.get()]):
+                messagebox.showerror("Error", "All fields are required")
+                return
+            
         self.model.account.updatePassword(self.frame.new_password_box.get(),self.frame.re_password_box.get(), self.model.auth.current_user)
         self.frame.staff_window.destroy()
 
     #home tab
     def home_btn(self) -> None:
         self.view.switch("home")
-        print("going home")
+
      
     def logoff(self) -> None:
-        print("log off")
-        self.model.auth.logout()
+        confirmation=messagebox.askquestion('Log off', 'Are you sure you want to log off?')
+        if confirmation == 'yes':
+            self.model.auth.logout()
     
     #update view
     def update_view(self) -> None:
@@ -59,7 +66,7 @@ class AccountController:
             self.frame.staff_name.config(text=f"Hey, {current_user.getName()} ")
             self.frame.staff_id.config(text=f"ID: {current_user.getStaffId()} ")
             self.frame.staff_role.config(text=f"Role: {current_user.getAccountType()} ")
-            self.frame.staff_location.config(text=f"Store ID: {current_user.getRestrantID()} ")
+            self.frame.staff_location.config(text=f"Restaurant ID: {current_user.getRestrantID()} ")
         else:
             self.frame.staff_name.config(text=f"Hey, Name ")
             self.frame.staff_id.config(text=f"ID: 12345678 ")

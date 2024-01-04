@@ -9,13 +9,14 @@ from .base_m import ObservableModel
 from database import dbfunc
 from passlib.hash import sha256_crypt
 import re
+from tkinter import messagebox
 
 
 
 class Admin(ObservableModel):
     
     #gets list of all empoyees
-    def get_employee_list(self) -> None:  
+    def get_employee_list(self) -> None:
         print('Getting Emyploee Data')
         error = "" #reseting error           
         conn = dbfunc.getConnection() 
@@ -33,8 +34,8 @@ class Admin(ObservableModel):
                     return(employeeData)
                 
         if(error != ""):
-            print(error)
-            return(employeeData)
+            messagebox.showerror("Error", error)
+            return(None)
         
     def add_new_staff(self,staffName,staffType,staffPass,restaurantID) -> None:
         staffPass = sha256_crypt.hash(staffPass)
@@ -49,7 +50,7 @@ class Admin(ObservableModel):
                 dbcursor.execute("INSERT INTO employee (employee_name, employee_account_type, \
                                  employee_password, restaurant_id) VALUES (%s, %s, %s, %s)", (staffName, staffType, staffPass, restaurantID))                                        
                 conn.commit() 
-                print("User created sucsesfully")
+                messagebox.showinfo("Sucsess", "User created sucsesfully.")
                 dbcursor.close()       
                 conn.close()
                 
@@ -62,7 +63,7 @@ class Admin(ObservableModel):
                 dbcursor = conn.cursor()    #Creating cursor object                                                 
                 dbcursor.execute("DELETE FROM employee WHERE employee_id = "+str(staffId)+";")                                        
                 conn.commit() 
-                print("User removed sucsesfully")
+                messagebox.showinfo("Sucsess", "User removed sucsesfully.")
                 dbcursor.close()       
                 conn.close()
                 
@@ -80,12 +81,16 @@ class Admin(ObservableModel):
                 #finding out what data type needs to be updated
                 if column_index == 1:
                     dbcursor.execute('UPDATE employee SET employee_name = %s WHERE employee_id = %s;', (newValue,staffID)) 
+                    messagebox.showinfo("Sucsess", "User name updated.")
                 elif column_index == 2:
                     dbcursor.execute('UPDATE employee SET employee_account_type = %s WHERE employee_id = %s;', (newValue,staffID))
+                    messagebox.showinfo("Sucsess", "User type updated.")
                 elif column_index == 3:
                     dbcursor.execute('UPDATE employee SET employee_password = %s WHERE employee_id = %s;', (newValue,staffID))
+                    messagebox.showinfo("Sucsess", "User password updated.")
                 elif column_index == 4:
-                    dbcursor.execute('UPDATE employee SET restaurant_id = %s WHERE employee_id = %s;', (newValue,staffID))                                               
+                    dbcursor.execute('UPDATE employee SET restaurant_id = %s WHERE employee_id = %s;', (newValue,staffID))   
+                    messagebox.showinfo("Sucsess", "Restaurant ID updated.")                                            
                 
                 conn.commit()
                 dbcursor.close()
