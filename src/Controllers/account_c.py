@@ -42,7 +42,6 @@ class AccountController:
     def password_update(self):
         self.model.account.updatePassword(self.frame.new_password_box.get(),self.frame.re_password_box.get(), self.model.auth.current_user)
         self.frame.staff_window.destroy()
-        print("updateing password")
 
     #home tab
     def home_btn(self) -> None:
