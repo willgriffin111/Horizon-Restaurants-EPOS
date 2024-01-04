@@ -90,7 +90,7 @@ TABLES['EMPLOYEES'] = 'CREATE TABLE employee (\
 TABLES['TABLES'] = 'CREATE TABLE tables (\
   table_id INT NOT NULL AUTO_INCREMENT,\
   PRIMARY KEY (table_id),\
-  table_num INT NOT NULL,\
+  table_number INT NOT NULL,\
   table_capacity INT NOT NULL,\
   restaurant_id INT,\
   FOREIGN KEY (restaurant_id) \
