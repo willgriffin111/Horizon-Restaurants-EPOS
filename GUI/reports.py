@@ -6,78 +6,89 @@ from datetime import datetime, timedelta
 import numpy as np
 
 salesData = {
-    "2024-01-01": 1000,
-    "2024-01-02": 1200,
-    "2024-01-03": 1100,
-    "2024-01-04": 800,
-    "2024-01-05": 1250,
-    "2024-01-06": 1300,
-    "2024-01-07": 900,
-    "2024-01-08": 950,
-    "2024-01-09": 1230,
-    "2024-01-10": 1100,
-    "2024-01-11": 980,
-    "2024-01-12": 1180,
-    "2024-01-13": 1270,
-    "2024-01-14": 930,
-    "2024-01-15": 1150,
-    "2024-01-16": 1190,
-    "2024-01-17": 1260,
-    "2024-01-18": 1050,
-    "2024-01-19": 1340,
-    "2024-01-20": 980,
-    "2024-01-21": 1100,
-    "2024-01-22": 1070,
-    "2024-01-23": 1230,
-    "2024-01-24": 1120,
-    "2024-01-25": 1250,
-    "2024-01-26": 1300,
-    "2024-01-27": 940,
-    "2024-01-28": 980,
-    "2024-01-29": 1150,
-    "2024-01-30": 1200,
-    "2024-01-31": 1100,
-    "2024-02-01": 1180,
-    "2024-02-02": 1220,
-    "2024-02-03": 1300,
-    "2024-02-04": 900,
-    "2024-02-05": 1000,
-    "2024-02-06": 1150,
-    "2024-02-07": 950,
-    "2024-02-08": 1250,
-    "2024-02-09": 1100,
-    "2024-02-10": 1200,
-    "2024-02-11": 1180,
-    "2024-02-12": 1320,
-    "2024-02-13": 1250,
-    "2024-02-14": 940,
-    "2024-02-15": 980,
-    "2024-02-16": 1150,
-    "2024-02-17": 1200,
-    "2024-02-18": 1100,
-    "2024-02-19": 1180,
-    "2024-02-20": 1220,
-    "2024-02-21": 1300,
-    "2024-02-22": 900,
-    "2024-02-23": 1000,
-    "2024-02-24": 1150,
-    "2024-02-25": 950,
-    "2024-02-26": 1250,
-    "2024-02-27": 1100,
-    "2024-02-28": 1200
+    '2024-01-01': {
+        'Birmingham': {'Restaurant1': 247, 'Restaurant2': 271},
+        'Bristol': {'Restaurant1': 226, 'Restaurant2': 271},
+        'Cardiff': {'Restaurant1': 196, 'Restaurant2': 264},
+        'Glasgow': {'Restaurant1': 214, 'Restaurant2': 178},
+        'Manchester': {'Restaurant1': 132, 'Restaurant2': 211},
+        'Nottingham': {'Restaurant1': 188, 'Restaurant2': 267},
+        'London': {'Restaurant1': 289, 'Restaurant2': 212}
+    },
+    '2024-01-10': {
+        'Birmingham': {'Restaurant1': 247, 'Restaurant2': 248},
+        'Bristol': {'Restaurant1': 228, 'Restaurant2': 125},
+        'Cardiff': {'Restaurant1': 247, 'Restaurant2': 174},
+        'Glasgow': {'Restaurant1': 134, 'Restaurant2': 223},
+        'Manchester': {'Restaurant1': 218, 'Restaurant2': 248},
+        'Nottingham': {'Restaurant1': 262, 'Restaurant2': 265},
+        'London': {'Restaurant1': 269, 'Restaurant2': 253}
+    },
+    '2024-01-20': {
+        'Birmingham': {'Restaurant1': 244, 'Restaurant2': 182},
+        'Bristol': {'Restaurant1': 178, 'Restaurant2': 105},
+        'Cardiff': {'Restaurant1': 103, 'Restaurant2': 291},
+        'Glasgow': {'Restaurant1': 197, 'Restaurant2': 227},
+        'Manchester': {'Restaurant1': 127, 'Restaurant2': 151},
+        'Nottingham': {'Restaurant1': 177, 'Restaurant2': 245},
+        'London': {'Restaurant1': 233, 'Restaurant2': 291}
+    },
+    '2024-01-30': {
+        'Birmingham': {'Restaurant1': 121, 'Restaurant2': 296},
+        'Bristol': {'Restaurant1': 293, 'Restaurant2': 223},
+        'Cardiff': {'Restaurant1': 196, 'Restaurant2': 174},
+        'Glasgow': {'Restaurant1': 169, 'Restaurant2': 154},
+        'Manchester': {'Restaurant1': 187, 'Restaurant2': 238},
+        'Nottingham': {'Restaurant1': 122, 'Restaurant2': 206},
+        'London': {'Restaurant1': 162, 'Restaurant2': 192}
+    },
+    '2024-02-01': {
+        'Birmingham': {'Restaurant1': 282, 'Restaurant2': 275},
+        'Bristol': {'Restaurant1': 291, 'Restaurant2': 205},
+        'Cardiff': {'Restaurant1': 255, 'Restaurant2': 126},
+        'Glasgow': {'Restaurant1': 213, 'Restaurant2': 246},
+        'Manchester': {'Restaurant1': 289, 'Restaurant2': 103},
+        'Nottingham': {'Restaurant1': 287, 'Restaurant2': 240},
+        'London': {'Restaurant1': 130, 'Restaurant2': 175}
+    },
+    '2024-02-10': {
+        'Birmingham': {'Restaurant1': 264, 'Restaurant2': 178},
+        'Bristol': {'Restaurant1': 144, 'Restaurant2': 279},
+        'Cardiff': {'Restaurant1': 109, 'Restaurant2': 242},
+        'Glasgow': {'Restaurant1': 271, 'Restaurant2': 139},
+        'Manchester': {'Restaurant1': 261, 'Restaurant2': 257},
+        'Nottingham': {'Restaurant1': 206, 'Restaurant2': 104},
+        'London': {'Restaurant1': 187, 'Restaurant2': 180}
+    },
+    '2024-02-20': {
+        'Birmingham': {'Restaurant1': 189, 'Restaurant2': 106},
+        'Bristol': {'Restaurant1': 156, 'Restaurant2': 242},
+        'Cardiff': {'Restaurant1': 248, 'Restaurant2': 167},
+        'Glasgow': {'Restaurant1': 225, 'Restaurant2': 201},
+        'Manchester': {'Restaurant1': 206, 'Restaurant2': 247},
+        'Nottingham': {'Restaurant1': 245, 'Restaurant2': 136},
+        'London': {'Restaurant1': 222, 'Restaurant2': 152}
+    }
 }
 
-# Thanks gpt
-def group_sales_by_week(sales_data):
-    grouped_data = {}
-    for date_str, sales in sales_data.items():
-        date = datetime.strptime(date_str, "%Y-%m-%d")
-        start_of_week = date - timedelta(days=date.weekday())
-        week_str = start_of_week.strftime("%Y-%m-%d")
-        if week_str not in grouped_data:
-            grouped_data[week_str] = 0
-        grouped_data[week_str] += sales
-    return grouped_data
+
+def groupSalesByWeek(salesData):
+    groupedData = {}
+    cities = ["Birmingham", "Bristol", "Cardiff", "Glasgow", "Manchester", "Nottingham", "London"]
+    
+    for dateStr, sales in salesData.items():
+        date = datetime.strptime(dateStr, "%Y-%m-%d")
+        sartOfWeek = date - timedelta(days=date.weekday())
+        weekStr = sartOfWeek.strftime("%Y-%m-%d")
+
+        if weekStr not in groupedData:
+            groupedData[weekStr] = {city: {"Restaurant1": 0, "Restaurant2": 0} for city in cities}
+
+        for city in sales:
+            for restaurant, revenue in sales[city].items():
+                groupedData[weekStr][city][restaurant] += revenue
+    
+    return groupedData
 
 class App(tk.Tk):
     def __init__(self):
@@ -101,38 +112,107 @@ class App(tk.Tk):
         salesLabel = tk.Label(self.contentFrame, text="Weekly Sales Reports", font=('Arial', 20))
         salesLabel.pack(pady=20)
 
-        weekly_sales_data = group_sales_by_week(salesData)
+        # Dropdown for restaurant selection
+        self.selected_restaurant = tk.StringVar()
+        restaurant_options = self.getRestaurantOptions()
+        restaurant_dropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_restaurant, values=restaurant_options)
+        restaurant_dropdown.current(0)  # Default selection is the first option
+        restaurant_dropdown.pack(pady=10)
+        restaurant_dropdown.bind("<<ComboboxSelected>>", self.update_graph)  # Bind selection change event
 
-        weeks = list(weekly_sales_data.keys())
-        weekly_sales = list(weekly_sales_data.values())
+        # Initial Graph
+        self.update_graph()
 
-        statsFrame = tk.Frame(self.contentFrame)
-        statsFrame.pack(pady=10)
+    def getRestaurantOptions(self):
+        options = ["Show All Restaurants"]
 
-        totalRevenue = sum(weekly_sales)
-        totalRevenueLabel = tk.Label(statsFrame, text=f"Total Revenue: £{totalRevenue}", font=('Arial', 14))
-        totalRevenueLabel.pack(side=tk.LEFT, padx=10)
-        
-        totalProfit = sum([s * 0.1 for s in weekly_sales])  # Assuming 10% profit for simplicity
-        totalProfitLabel = tk.Label(statsFrame, text=f"Total Profit: £{totalProfit:.2f}", font=('Arial', 14))
-        totalProfitLabel.pack(side=tk.LEFT, padx=10)
-        
-        profitMargin = (totalProfit / totalRevenue) * 100 
-        profitMarginLabel = tk.Label(statsFrame, text=f"Profit Margin: {profitMargin:.2f}%", font=('Arial', 14))
-        profitMarginLabel.pack(side=tk.LEFT, padx=10)
+        # Get the data for the first day
+        firstDayData = salesData[list(salesData.keys())[0]]
 
-        fig, ax = plt.subplots()
-        ax.plot(weeks, weekly_sales)
-        ax.set(xlabel='Week Starting', ylabel='Sales (£)', title='Weekly Sales Data')
-        ax.grid()
-        plt.xticks(rotation=45)
+        # Loop over each city in the first day's data
+        for city in firstDayData:
+            # Loop over each restaurant in the city
+            for restaurant in firstDayData[city]:
+                # Add the city and restaurant to the options list
+                options.append(f"{city} - {restaurant}")
 
-        canvas = FigureCanvasTkAgg(fig, master=self.contentFrame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        # Return the list of options
+        return options
+    
+    
+    def update_graph(self, event=None):
+        print("Updating graph...")  
+        selected = self.selected_restaurant.get()
+        if selected == "Show All Restaurants":
+            print("Showing data for all restaurants")
+
+            weekly_sales_data = groupSalesByWeek(salesData)
+
+            # Calculate total sales for all restaurants
+            total_sales_per_week = {}
+            for week, cities_data in weekly_sales_data.items():
+                total_sales = 0
+                for city in cities_data.values():
+                    for restaurant_sales in city.values():
+                        total_sales += restaurant_sales
+                total_sales_per_week[week] = total_sales
+
+            print(f"Weekly sales data for all restaurants: {total_sales_per_week}")
+
+            # Destroy the previous canvas if it exists
+            if hasattr(self, 'canvas'):
+                self.canvas.get_tk_widget().destroy()
+
+            # Extract weeks and total_sales from the total_sales_per_week dictionary
+            weeks = list(total_sales_per_week.keys())
+            total_sales = list(total_sales_per_week.values())
+
+            # Plotting the new graph
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=50)
+            ax.clear()  # Clear previous plot
+            ax.plot(weeks, total_sales, label="Total Sales of All Restaurants")
+            ax.set(xlabel='Week Starting', ylabel='Sales (£)', title='Weekly Sales Data - All Restaurants')
+            ax.grid()
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+
+            self.canvas = FigureCanvasTkAgg(fig, master=self.contentFrame)  
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        elif selected:  # Check if something else is selected
+            selected_city, selected_restaurant = selected.split(' - ')
+            print(f"Selected: {selected_city}, {selected_restaurant}")  
+
+            weekly_sales_data = groupSalesByWeek(salesData)
+
+            total_sales_per_week = {}
+            for week, cities_data in weekly_sales_data.items():
+                if selected_city in cities_data:
+                    total_sales_per_week[week] = cities_data[selected_city].get(selected_restaurant, 0)
+
+            print(f"Weekly sales data: {total_sales_per_week}")
+
+            # Destroy the previous canvas if it exists
+            if hasattr(self, 'canvas'):
+                self.canvas.get_tk_widget().destroy()
+
+            # Extract weeks and total_sales from the total_sales_per_week dictionary
+            weeks = list(total_sales_per_week.keys())
+            total_sales = list(total_sales_per_week.values())
+
+            # Plotting the new graph
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=50)
+            ax.clear()  # Clear previous plot
+            ax.plot(weeks, total_sales, label=f"Sales of {selected}")
+            ax.set(xlabel='Week Starting', ylabel='Sales (£)', title=f'Weekly Sales Data - {selected}')
+            ax.grid()
+            plt.xticks(rotation=45)
+            plt.tight_layout()
 
 
-
+            self.canvas = FigureCanvasTkAgg(fig, master=self.contentFrame)  
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
     def showStaffReports(self):
         self.clearContent()
