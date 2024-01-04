@@ -51,14 +51,14 @@ class OrderCreate(Frame):
         self.menu = {}
         self.order = {}
         self.categoryButtons = {}
-        self.totalDiscount = 0
+        self.total_discount = 0
         self.selected_table = Tk.StringVar()
         self.selected_table.set(tables[0])  # Set the default value
         self.sidebar()
-        self.topbar(userName=userName, userID=userId)
+        self.topbar()
         self.bottombar()
         self.discount_window = None
-        self.createMenuCategories()
+        self.create_menu_categories()
 
     def setOrder(self, order):
         self.order = order
@@ -119,26 +119,26 @@ class OrderCreate(Frame):
     
     def staff_disc(self):
         print('Staff discount applied')
-        self.totalDiscount = 25
+        self.total_discount = 25
         self.updateOrderSummary()
         self.discount_window.destroy()
         
     def christmass_disc(self):
         print('Christmas discount applied')
-        self.totalDiscount = 10
+        self.total_discount = 10
         self.updateOrderSummary()
         self.discount_window.destroy()
 
     def remove_disc(self):
         print('Discount removed')
-        self.totalDiscount = 0
+        self.total_discount = 0
         self.updateOrderSummary()
         self.discount_window.destroy()
 
 
     # Top bar of window --------------------------------------------------------------------------------------------------------------------------------------|
     
-    def topbar(self, userName, userID):
+    def topbar(self):
         self.topFrame = Tk.Frame(self, borderwidth=25, relief=Tk.FLAT, bg="#2976E9")
         self.topFrame.pack(fill=Tk.X)
 
@@ -149,13 +149,13 @@ class OrderCreate(Frame):
         self.topUnderline.create_line(4, 2, 143, 2, width=2, fill="white")
         self.topUnderline.pack(fill=Tk.X)
 
-        self.username = Tk.Label(self.topFrame, text=f"User: {userName}", fg="white", bg="#2976E9", font=("Arial", 12))
+        self.username = Tk.Label(self.topFrame, fg="white", bg="#2976E9", font=("Arial", 12))
         self.username.pack(side=Tk.RIGHT, anchor="e")
         self.username.place(relx=1.0, rely=0.5, anchor="e", x=-170, y=4)
 
-        self.userIDLabel = Tk.Label(self.topFrame, text=f"ID: {userID}", fg="white", bg="#2976E9", font=("Arial", 12))
-        self.userIDLabel.pack(side=Tk.RIGHT, anchor="e")
-        self.userIDLabel.place(relx=1.0, rely=0.5, anchor="e", x=-90, y=4)
+        self.user_id = Tk.Label(self.topFrame, fg="white", bg="#2976E9", font=("Arial", 12))
+        self.user_id.pack(side=Tk.RIGHT, anchor="e")
+        self.user_id.place(relx=1.0, rely=0.5, anchor="e", x=-90, y=4)
 
         # Home Button
         self.homeButton = Tk.Button(self.topFrame, text="Home", bd=0, highlightthickness=0, highlightbackground="#2976E9", pady=10, border=None)
@@ -172,8 +172,9 @@ class OrderCreate(Frame):
         totalPrice = 0.0
         defaultQuantity = 1
 
-        print(f"Order Page, order = {self.order}\n")
+        
         if menuItem:
+            menuItem['category'] = category
             key = menuItem.get('name', None)
             if key is not None:
                 # If the menuItem is already in the order, update the quantity, otherwise just set the default quantity of 1
@@ -185,14 +186,16 @@ class OrderCreate(Frame):
                     self.order[key] = newMenuItem
         
         self.updateWidgets()
+        print(f"Order Page, order = {self.order}\n")
 
     def updateWidgets(self):
         # Calculate total items and price
         totalItems = sum(item['quantity'] for item in self.order.values())
-        totalPrice = sum(item['price'] * item['quantity'] for item in self.order.values())
+        self.total_price = sum(item['price'] * item['quantity'] for item in self.order.values())
 
         # Apply discount
-        totalPrice *= (1 - self.totalDiscount / 100)
+        self.discount_amount = self.total_price * (self.total_discount / 100)
+        self.discounted_price = self.total_price - self.discount_amount
 
         # Update the itemList and Summary in the sidebar
         self.itemList.delete(0, Tk.END)
@@ -204,18 +207,13 @@ class OrderCreate(Frame):
                 entry = f"{item['name']} x {item['quantity']} - £{item['price'] * item['quantity']:.2f}"
                 self.itemList.insert(Tk.END, entry)
 
-            # Check if there is a description for the item
-            # if 'description' in item:
-            #     descriptionLabel = Tk.Label(self.itemList, text=f"  Description: {item['description']}", fg='black', bg="#F0FFFF")
-            #     descriptionLabel.pack()
-
-
         # Clear and update the Summary Frame
         for widget in self.summaryFrame.winfo_children():
             widget.destroy()
 
-        Tk.Label(self.summaryFrame, text=f"Items: {totalItems}", fg='black', bg="#F0FFFF").pack(side=Tk.LEFT)
-        Tk.Label(self.summaryFrame, text=f"Total: £{totalPrice:.2f}", fg='black', bg="#F0FFFF").pack(side=Tk.RIGHT)
+        Tk.Label(self.summaryFrame, text=f"Items: {totalItems}", fg='black', bg="#F0FFFF").pack(padx=10, pady=5, anchor='w')
+        Tk.Label(self.summaryFrame, text=f"Discounted: -£{self.discount_amount:.2f}", fg='black', bg="#F0FFFF").pack(padx=10, pady=5, anchor='w')
+        Tk.Label(self.summaryFrame, text=f"Total: £{self.discounted_price:.2f}", fg='black', bg="#F0FFFF").pack(padx=10, pady=5, anchor='w')
     # Window Side bar ----------------------------------------------------------------------------------------------------------------------------------------|
     def sidebar(self):
         self.sidebar = Tk.Frame(self, width=300, height=478, bg="#F0FFFF")
@@ -262,8 +260,8 @@ class OrderCreate(Frame):
         self.buttonFrame.columnconfigure((0,1,2), weight=1)
         self.buttonFrame.rowconfigure(0, weight=1)
 
-        payButton = Tk.Button(self.buttonFrame, text="Pay", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
-        payButton.grid(row=0, column=0,sticky='new')
+        self.pay_button = Tk.Button(self.buttonFrame, text="Pay", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
+        self.pay_button.grid(row=0, column=0,sticky='new')
 
         discount = Tk.Button(self.buttonFrame, text="Discount", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3, command=self.discount_btn)
         discount.grid(row=0, column=1,sticky='new')
@@ -278,7 +276,7 @@ class OrderCreate(Frame):
         self.updateOrderSummary(table=selectedValue) # thank you Will that comment is a life saver
 
         
-    def createMenuCategories(self, menu=None):
+    def create_menu_categories(self, menu=None):
         self.menu = menu or {}
         self.menuFrame = Tk.Frame(self, bg="#1A58B5")
         self.menuFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
@@ -308,7 +306,7 @@ class OrderCreate(Frame):
         for index, option in enumerate(menuItems):
             row = index // 3  # Calculate the row number
             col = index % 3  # Calculate the column number
-            optionButton = Tk.Button(self.optionsFrame, text=option['name'], width=26, height=7,borderwidth=0, command=lambda o=option: self.updateOrderSummary(category=category, menuItem=o))
+            optionButton = Tk.Button(self.optionsFrame, text=option['name'], width=26, height=7,borderwidth=0, command=lambda c=category, o=option: self.updateOrderSummary(category=c, menuItem=o))
             optionButton.grid(row=row, column=col, padx=10, pady=5)
 
 
