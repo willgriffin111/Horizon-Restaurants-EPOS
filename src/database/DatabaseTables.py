@@ -45,9 +45,10 @@ TABLES['MENU'] = 'CREATE TABLE menu(\
   PRIMARY KEY (menu_id),\
   restaurant_id INT,\
   menu_item_name VARCHAR(64) NOT NULL,\
-  menu_item_quantity INT NOT NULL,\
   menu_item_category VARCHAR(64) NOT NULL,\
   menu_item_notes VARCHAR(64),\
+  menu_item_price float,\
+  is_available tinyint(1),\
   FOREIGN KEY (restaurant_id) \
   REFERENCES restaurant (restaurant_id)\
 );'
@@ -64,17 +65,17 @@ TABLES['MENU_INGREDIENTS'] = 'CREATE TABLE menu_ingredients(\
   REFERENCES restaurant (restaurant_id)\
 );'
 
-TABLES['DISCOUNT'] = 'CREATE TABLE discount (\
-  discount_id INT NOT NULL AUTO_INCREMENT, \
-  PRIMARY KEY (discount_id),\
-  discount_name VARCHAR(64) NOT NULL,\
-  discount_validity_start DATE  NOT NULL,\
-  discount_validity_end DATE NOT NULL,\
-  discount_condition  VARCHAR(64) NOT NULL,\
-  discount_is_active VARCHAR(64) NOT NULL,\
-  discount_author VARCHAR(64) NOT NULL,\
-  discount_date_created DATE NOT NULL\
-);'
+# TABLES['DISCOUNT'] = 'CREATE TABLE discount (\
+#   discount_id INT NOT NULL AUTO_INCREMENT, \
+#   PRIMARY KEY (discount_id),\
+#   discount_name VARCHAR(64) NOT NULL,\
+#   discount_validity_start DATE  NOT NULL,\
+#   discount_validity_end DATE NOT NULL,\
+#   discount_condition  VARCHAR(64) NOT NULL,\
+#   discount_is_active VARCHAR(64) NOT NULL,\
+#   discount_author VARCHAR(64) NOT NULL,\
+#   discount_date_created DATE NOT NULL\
+# );'
 
 TABLES['EMPLOYEES'] = 'CREATE TABLE employee (\
   employee_id INT NOT NULL AUTO_INCREMENT,\
@@ -90,7 +91,7 @@ TABLES['EMPLOYEES'] = 'CREATE TABLE employee (\
 TABLES['TABLES'] = 'CREATE TABLE tables (\
   table_id INT NOT NULL AUTO_INCREMENT,\
   PRIMARY KEY (table_id),\
-  table_num INT NOT NULL,\
+  table_number INT NOT NULL,\
   table_capacity INT NOT NULL,\
   restaurant_id INT,\
   FOREIGN KEY (restaurant_id) \
@@ -119,11 +120,7 @@ TABLES['BILLS'] = 'CREATE TABLE bill (\
   bill_id INT NOT NULL AUTO_INCREMENT, \
   PRIMARY KEY (bill_id),\
   bill_sub_total DOUBLE NOT NULL,\
-  bill_discount_applied DOUBLE NOT NULL,\
-  bill_due_amount DOUBLE NOT NULL,\
-  discount_id INT,\
-  FOREIGN KEY (discount_id) \
-  REFERENCES discount (discount_id)\
+  bill_discount_applied DOUBLE NOT NULL\
 );'
 
 TABLES['ORDERS'] = 'CREATE TABLE orders (\
@@ -131,8 +128,9 @@ TABLES['ORDERS'] = 'CREATE TABLE orders (\
   PRIMARY KEY (order_id),\
   order_table_num INT NOT NULL,\
   order_status VARCHAR(64) NOT NULL,\
-  order_menu_items VARCHAR(64) NOT NULL,\
-  order_payment_status VARCHAR(64) NOT NULL,\
+  order_menu_item VARCHAR(64) NOT NULL,\
+  order_menu_item_qty VARCHAR(64) NOT NULL,\
+  order_menu_item_desc VARCHAR(64) NOT NULL,\
   order_author VARCHAR(64) NOT NULL,\
   order_time_created DATETIME NOT NULL,\
   order_price VARCHAR(64) NOT NULL,\
