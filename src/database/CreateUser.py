@@ -6,10 +6,10 @@ from passlib.hash import sha256_crypt
 # DB_NAME = 'horizon_resturant'    #DB Name
 # DB_NAME = 'horizonResturant'    #DB Name  MISPELLED
 DB_NAME = 'Horizon_Restaurant'
-staffId = 1
+staffId = 3
 restrantid = 1
-staffName = 'admin'
-staffType = 'ADMIN'
+staffName = 'JEV'
+staffType = 'FRONT'
 staffPassword = sha256_crypt.hash('password')  #password goes in brackets default password
 
 restId = 1
@@ -17,23 +17,23 @@ restloc = "BRISTOL"
 restname = 'Bristol 1'
 restcap = 6
 
-
-conn = dbfunc.getConnection() 
-if conn != None:    #Checking if connection is None
-    if conn.is_connected(): #Checking if connection is established
-        print('MySQL Connection is established')                          
-        dbcursor = conn.cursor()    #Creating cursor object
-        dbcursor.execute('USE {};'.format(DB_NAME)) #use database
-        dbcursor.execute("INSERT INTO restaurant (restaurant_id, restaurant_location, restaurant_name, \
-                         restaurant_capacity) VALUES (%s, %s, %s, %s)", (restId, restloc, restname, restcap))     
-        conn.commit() 
-        print("resterant created sucsesfully")
-        dbcursor.close()       
-        conn.close() #Connection must be closed
-    else:
-        print('DB connection error')
-else:
-    print('DBFunc error')
+# Create restaurant
+# conn = dbfunc.getConnection() 
+# if conn != None:    #Checking if connection is None
+#     if conn.is_connected(): #Checking if connection is established
+#         print('MySQL Connection is established')                          
+#         dbcursor = conn.cursor()    #Creating cursor object
+#         dbcursor.execute('USE {};'.format(DB_NAME)) #use database
+#         dbcursor.execute("INSERT INTO restaurant (restaurant_id, restaurant_location, restaurant_name, \
+#                          restaurant_capacity) VALUES (%s, %s, %s, %s)", (restId, restloc, restname, restcap))     
+#         conn.commit() 
+#         print("resterant created sucsesfully")
+#         dbcursor.close()       
+#         conn.close() #Connection must be closed
+#     else:
+#         print('DB connection error')
+# else:
+#     print('DBFunc error')
     
 conn = dbfunc.getConnection() 
 if conn != None:    #Checking if connection is None
