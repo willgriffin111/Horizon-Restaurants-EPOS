@@ -6,15 +6,15 @@ from passlib.hash import sha256_crypt
 # DB_NAME = 'horizon_resturant'    #DB Name
 # DB_NAME = 'horizonResturant'    #DB Name  MISPELLED
 DB_NAME = 'Horizon_Restaurant'
-staffId = 1
-restrantid = 1
+staffId = 2
+restrantid = 2
 staffName = 'admin'
 staffType = 'ADMIN'
 staffPassword = sha256_crypt.hash('password')  #password goes in brackets default password
 
-restId = 1
+restId = 2
 restloc = "BRISTOL"
-restname = 'Bristol 1'
+restname = 'Bristol 2'
 restcap = 6
 
 
@@ -58,9 +58,9 @@ if conn != None:    #Checking if connection is None
         print('MySQL Connection is established')                          
         dbcursor = conn.cursor()    #Creating cursor object
         dbcursor.execute('USE {};'.format(DB_NAME)) #use database
-        dbcursor.execute("INSERT INTO tables (table_number, table_capacity, restaurant_id) VALUES (%s, %s, %s)", (1, 6, 1))    
+        dbcursor.execute("INSERT INTO tables (table_number, table_capacity, restaurant_id) VALUES (%s, %s, %s)", (1, 6, 2))    
         conn.commit() 
-        print("User created sucsesfully")
+        print("table created sucsesfully")
         dbcursor.close()       
         conn.close() #Connection must be closed
     else:

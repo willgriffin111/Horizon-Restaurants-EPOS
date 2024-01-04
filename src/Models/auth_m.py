@@ -9,6 +9,7 @@ from .base_m import ObservableModel
 from passlib.hash import sha256_crypt
 from Class.EmployeeClass import EmployeeAccount
 from database import dbfunc
+from tkinter import messagebox
 
 
 
@@ -57,7 +58,7 @@ class Auth(ObservableModel):
             error = "No username/password entered"
             
         if(error != ""):
-            print(error)
+            messagebox.showerror("Error", error)
 
 
     def logout(self) -> None:

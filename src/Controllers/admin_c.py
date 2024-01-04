@@ -57,6 +57,9 @@ class AdminController:
         self.frame.add_submit.config(command=self.add_staff)
         
     def add_staff(self):
+        if not all([self.frame.name_box.get(),self.frame.role_box.get(),self.frame.password_box.get(),self.frame.chosen_restaurant_option.get()]):
+                messagebox.showerror("Error", "All fields are required")
+                return
         self.model.admin.add_new_staff(self.frame.name_box.get(),self.frame.role_box.get(),self.frame.password_box.get(),self.frame.chosen_restaurant_option.get())
         self.frame.staff_window.destroy()
         self.clear_edit_staff()
@@ -66,8 +69,10 @@ class AdminController:
     def remove_staff(self):
         self.selectedItem = self.frame.staff_tree.selection() 
         if self.selectedItem:
-            self.selectedStaffId = self.frame.staff_tree.item(self.selectedItem)['values'][0]  
-            self.model.admin.remove_staff(self.selectedStaffId)
+            confirmation=messagebox.askquestion('Delete account', 'Do you want to remove this account?')
+            if confirmation == 'yes':
+                self.selectedStaffId = self.frame.staff_tree.item(self.selectedItem)['values'][0]  
+                self.model.admin.remove_staff(self.selectedStaffId)
             self.clear_edit_staff()
         else:
             messagebox.showerror("Error", "No item selected")
@@ -79,11 +84,19 @@ class AdminController:
         self.rowId = self.frame.staff_tree.identify_row(event.y)
         self.columnId = self.frame.staff_tree.identify_column(event.x)
         if self.rowId and self.columnId:
-            self.frame.editWindowPopup(self.frame.staff_tree, self.rowId, self.columnId)
-            #binding buttons
-            self.frame.save_btn.config(command=self.saveNewValue)
+            self.column_index = int(self.columnId[1:]) - 1
+            if self.column_index != 0:
+                #creates pop up window
+                self.frame.editWindowPopup(self.frame.staff_tree, self.rowId, self.columnId)
+                #binding buttons
+                self.frame.save_btn.config(command=self.saveNewValue)
+            else:
+                messagebox.showerror("Error", "You cannot edit this value")
             
     def saveNewValue(self):
+        if not all([self.frame.newValueUI.get()]):
+                messagebox.showerror("Error", "All fields are required")
+                return
         self.column_index = int(self.columnId[1:]) - 1
         self.curentValues = list(self.frame.staff_tree.item(self.rowId, 'values'))
         self.model.admin.updateStaff(self.column_index, self.frame.newValueUI.get(), self.curentValues[0])

@@ -73,8 +73,10 @@ class ReservationsController:
     def deleteReservation(self):
         self.selectedItem = self.frame.tree.selection() 
         if self.selectedItem:
-            self.selectedReservationId = self.frame.tree.item(self.selectedItem)['values'][0]  
-            self.model.reservation.cancelReservation(self.selectedReservationId)
+            confirmation=messagebox.askquestion('Delete reservation', 'Do you want to remove this reservation?')
+            if confirmation == 'yes':
+                self.selectedReservationId = self.frame.tree.item(self.selectedItem)['values'][0]  
+                self.model.reservation.cancelReservation(self.selectedReservationId)
             self.refreshTable()
         else:
             messagebox.showerror("Error", "No item selected")
