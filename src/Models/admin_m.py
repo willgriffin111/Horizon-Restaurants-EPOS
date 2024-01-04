@@ -83,7 +83,7 @@ class Admin(ObservableModel):
                 elif column_index == 2:
                     dbcursor.execute('UPDATE employee SET employee_account_type = %s WHERE employee_id = %s;', (newValue,staffID))
                 elif column_index == 3:
-                    dbcursor.execute('UPDATE employee SET reservation_date = %s WHERE employee_id = %s;', (newValue,staffID))
+                    dbcursor.execute('UPDATE employee SET employee_password = %s WHERE employee_id = %s;', (newValue,staffID))
                 elif column_index == 4:
                     dbcursor.execute('UPDATE employee SET restaurant_id = %s WHERE employee_id = %s;', (newValue,staffID))                                               
                 

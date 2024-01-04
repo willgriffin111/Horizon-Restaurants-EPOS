@@ -21,7 +21,7 @@ class ReservationManager(ObservableModel):
                         dbcursor.execute("INSERT INTO reservation (restaurant_id, reservation_customer_name, reservation_customer_phone, \
                                         table_id, reservation_party_size, reservation_author, reservation_creation_time, reservation_date,\
                                             reservation_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (restaurantID, customerName, customerNumber, self.tableID,
-                                                                                                        partySize, employeeID,datetime.now(), datetime.strptime(date, '%d/%m/%Y'), datetime.strptime(time, "%H:%M"))) 
+                                                                                                        partySize, employeeID,datetime.now(), datetime.strptime(date, '%Y-%m-%d'), datetime.strptime(time, "%H:%M:%S"))) 
                         conn.commit()
                         dbcursor.close()
                         conn.close() 
