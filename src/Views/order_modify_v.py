@@ -44,7 +44,7 @@ class OrderModifyView(Frame):
     # Note Window ------------------------------------------------------------------------------------------------------------------------------------------------|
 
     def display_notes(self):
-        selected_item = self.get_selected_item()
+        selected_item = self.get_selected_item().rstrip(' x')
         if selected_item:
             self.discount_window = Toplevel(self)
             self.discount_window.title("Notes")
@@ -215,7 +215,8 @@ class OrderModifyView(Frame):
         '''
         THIS WILL BE DB FUNCTIONS TO INCREASE QUANTITY IN THE DB AND UPDATE THE GUI WITH updateItemList()
         '''
-        selected_item = self.get_selected_item()
+        selected_item = self.get_selected_item().rstrip(' x')
+        print(selected_item)
         if selected_item:
             details = self.order[selected_item]
             quantity, price = details['quantity'], details['price']
@@ -228,7 +229,7 @@ class OrderModifyView(Frame):
         '''
         THIS WILL BE DB FUNCTIONS TO INCREASE DECREASE IN THE DB AND UPDATE THE GUI WITH updateItemList()
         '''
-        selected_item = self.get_selected_item()
+        selected_item = self.get_selected_item().rstrip(' x')
         if selected_item:
             details = self.order[selected_item]
             quantity, price = details['quantity'], details['price']
@@ -240,7 +241,7 @@ class OrderModifyView(Frame):
         '''
         THIS WILL BE DB FUNCTIONS TO INCREASE REMOVE FROM THE DB AND UPDATE THE GUI WITH updateItemList()
         '''
-        selected_item = self.get_selected_item()
+        selected_item = self.get_selected_item().rstrip(' x')
         if selected_item:
             del self.order[selected_item]
             self.updateItemList()

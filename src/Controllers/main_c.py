@@ -44,6 +44,7 @@ class Controller:
             self.inventory_modify_controller.update_view()
             self.inventory_controller.update_view()
             self.account_controller.update_view()
+            self.order_controller.update_view()
             self.view.switch("home")
         else:
             self.view.switch("login")
