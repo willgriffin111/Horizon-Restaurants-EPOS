@@ -8,13 +8,13 @@ from passlib.hash import sha256_crypt
 DB_NAME = 'Horizon_Restaurant'
 staffId = 3
 restrantid = 1
-staffName = 'JEV'
+staffName = 'Will'
 staffType = 'FRONT'
 staffPassword = sha256_crypt.hash('password')  #password goes in brackets default password
 
 restId = 1
-restloc = "BRISTOL"
-restname = 'Bristol 1'
+restloc = "MARS"
+restname = 'its joe mamas restaurant'
 restcap = 6
 
 # Create restaurant
@@ -35,6 +35,7 @@ restcap = 6
 # else:
 #     print('DBFunc error')
     
+# Create USER
 conn = dbfunc.getConnection() 
 if conn != None:    #Checking if connection is None
     if conn.is_connected(): #Checking if connection is established
@@ -51,3 +52,20 @@ if conn != None:    #Checking if connection is None
         print('DB connection error')
 else:
     print('DBFunc error')
+    
+# Create TABLE
+# conn = dbfunc.getConnection() 
+# if conn != None:    #Checking if connection is None
+#     if conn.is_connected(): #Checking if connection is established
+#         print('MySQL Connection is established')                          
+#         dbcursor = conn.cursor()    #Creating cursor object
+#         dbcursor.execute('USE {};'.format(DB_NAME)) #use database
+#         dbcursor.execute("INSERT INTO tables (table_number, table_capacity, restaurant_id) VALUES (%s, %s, %s)", (1, 6, 1))    
+#         conn.commit() 
+#         print("table created sucsesfully")
+#         dbcursor.close()       
+#         conn.close() #Connection must be closed
+#     else:
+#         print('DB connection error')
+# else:
+#     print('DBFunc error')

@@ -96,6 +96,10 @@ class ReservationsView(Tk.Frame):
         Tk.Label(self.reservationsPopUp, text="Customer number").pack(pady=(10, 0))
         self.customerNumberUI = Tk.Entry(self.reservationsPopUp)
         self.customerNumberUI.pack(pady=(0, 10))
+        
+        Tk.Label(self.reservationsPopUp, text="Table number").pack(pady=(10, 0))
+        self.tableNumUI = Tk.Entry(self.reservationsPopUp)
+        self.tableNumUI.pack(pady=(0, 10))
 
         Tk.Label(self.reservationsPopUp, text="Party size").pack(pady=(10, 0))
         self.partySizeUI = Tk.Entry(self.reservationsPopUp)
@@ -138,6 +142,10 @@ class ReservationsView(Tk.Frame):
         Tk.Label(self.reservationsPopUp, text="Customer number").pack(pady=(10, 0))
         self.customerNumberUI = Tk.Entry(self.reservationsPopUp)
         self.customerNumberUI.pack(pady=(0, 10))
+        
+        Tk.Label(self.reservationsPopUp, text="Table number").pack(pady=(10, 0))
+        self.tableNumUI = Tk.Entry(self.reservationsPopUp)
+        self.tableNumUI.pack(pady=(0, 10))
 
         Tk.Label(self.reservationsPopUp, text="Party size").pack(pady=(10, 0))
         self.partySizeUI = Tk.Entry(self.reservationsPopUp)
@@ -198,7 +206,7 @@ class ReservationsView(Tk.Frame):
         if hasattr(self, 'tree'):
             self.tree.destroy()
         
-        columns = ("Reservation ID", "Customer name", "Customer number", "Restaurant ID", "Date", "Time")
+        columns = ("Reservation ID", "Customer name", "Customer number", "Restaurant ID", "Table Number", "Date", "Time")
         self.tree = ttk.Treeview(self, columns=columns, show='headings', selectmode='browse')
         
         for col in columns:

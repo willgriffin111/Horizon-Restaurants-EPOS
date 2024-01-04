@@ -39,15 +39,16 @@ class ReservationsController:
         self.partySize = self.frame.partySizeUI.get()
         self.date = self.frame.dateUI.get()
         self.time = self.frame.timeUI.get()
+        self.tableNum = self.frame.tableNumUI.get()
         
         if self.model.auth.current_user.getAccountType() == "ADMIN" or self.model.auth.current_user.getAccountType() == "MANAGER":
             #checks to see if all boxes have entered data
-            if not all([self.restaurantName, self.customerName, self.customerNumber, self.partySize, self.date, self.time]):
+            if not all([self.restaurantName, self.customerName, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
                 messagebox.showerror("Error", "All fields are required")
                 return
         else:
             #checks to see if all boxes have entered data
-            if not all([self.customerName, self.customerNumber, self.partySize, self.date, self.time]):
+            if not all([self.customerName, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
                 messagebox.showerror("Error", "All fields are required")
                 return
             
@@ -63,7 +64,7 @@ class ReservationsController:
         #creates reservation in database table
         self.model.reservation.createReservation(self.restaurantID, self.customerName, 
                                                 self.customerNumber , self.partySize ,self.date,
-                                                self.time,self.model.auth.current_user.getStaffId())
+                                                self.time,self.model.auth.current_user.getStaffId(), self.tableNum)
         
         self.refreshTable()
         self.frame.reservationsPopUp.destroy()
@@ -72,8 +73,10 @@ class ReservationsController:
     def deleteReservation(self):
         self.selectedItem = self.frame.tree.selection() 
         if self.selectedItem:
-            self.selectedReservationId = self.frame.tree.item(self.selectedItem)['values'][0]  
-            self.model.reservation.cancelReservation(self.selectedReservationId)
+            confirmation=messagebox.askquestion('Delete reservation', 'Do you want to remove this reservation?')
+            if confirmation == 'yes':
+                self.selectedReservationId = self.frame.tree.item(self.selectedItem)['values'][0]  
+                self.model.reservation.cancelReservation(self.selectedReservationId)
             self.refreshTable()
         else:
             messagebox.showerror("Error", "No item selected")
@@ -85,10 +88,14 @@ class ReservationsController:
         self.rowId = self.frame.tree.identify_row(event.y) #finds out what coloum and row have been selected
         self.columnId = self.frame.tree.identify_column(event.x)
         if self.rowId and self.columnId:
-            #creates pop up window
-            self.frame.editWindowPopup(self.rowId, self.columnId)
-            #binds buttons
-            self.frame.saveEditButton.config(command=self.saveNewValue)
+            self.column_index = int(self.columnId[1:]) - 1
+            if self.column_index != 0 and self.column_index != 3:
+                #creates pop up window
+                self.frame.editWindowPopup(self.rowId, self.columnId)
+                #binds buttons
+                self.frame.saveEditButton.config(command=self.saveNewValue)
+            else:
+                messagebox.showerror("Error", "You cannot edit this value")
     
     def saveNewValue(self):
         #formats index
