@@ -173,7 +173,9 @@ class OrderModifyView(Frame):
         try:
             selected_index = self.itemList.curselection()[0]
             selected_item = self.itemList.get(selected_index)
-            selected_item_key = " ".join(selected_item.split()[:2])  
+            # Split the string using " x" (space before "x") as the separator and take the first part
+            selected_item_key = selected_item.split(" x")[0].strip() 
+            print(f'selected_item: {selected_item}')
             return selected_item_key
         except:
             messagebox.showerror("Error", "No item selected")
@@ -216,7 +218,7 @@ class OrderModifyView(Frame):
         THIS WILL BE DB FUNCTIONS TO INCREASE QUANTITY IN THE DB AND UPDATE THE GUI WITH updateItemList()
         '''
         selected_item = self.get_selected_item().rstrip(' x')
-        print(selected_item)
+        print(self.get_selected_item())
         if selected_item:
             details = self.order[selected_item]
             quantity, price = details['quantity'], details['price']
