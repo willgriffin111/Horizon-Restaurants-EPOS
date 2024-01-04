@@ -111,14 +111,14 @@ class ReservationsView(Tk.Frame):
         self.dateFrame = Tk.Frame(self.datetimeframe, bg="white")
         self.dateFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
 
-        Tk.Label(self.dateFrame, text="Date", width=5).pack()
+        Tk.Label(self.dateFrame, text="Date YYYY-MM-DD").pack()
         self.dateUI = Tk.Entry(self.dateFrame)
         self.dateUI.pack()
 
         self.timeframe = Tk.Frame(self.datetimeframe, bg="white" , width=5)
         self.timeframe.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
 
-        Tk.Label(self.timeframe, text="Time").pack()
+        Tk.Label(self.timeframe, text="Time HH:MM:SS").pack()
         self.timeUI = Tk.Entry(self.timeframe)
         self.timeUI.pack(expand=True)
 
@@ -157,14 +157,14 @@ class ReservationsView(Tk.Frame):
         self.dateFrame = Tk.Frame(self.datetimeframe, bg="white")
         self.dateFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
 
-        Tk.Label(self.dateFrame, text="Date", width=5).pack()
+        Tk.Label(self.dateFrame, text="Date YYYY-MM-DD", width=5).pack()
         self.dateUI = Tk.Entry(self.dateFrame)
         self.dateUI.pack()
 
         self.timeframe = Tk.Frame(self.datetimeframe, bg="white" , width=5)
         self.timeframe.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
 
-        Tk.Label(self.timeframe, text="Time").pack()
+        Tk.Label(self.timeframe, text="Time HH:MM:SS").pack()
         self.timeUI = Tk.Entry(self.timeframe)
         self.timeUI.pack(expand=True)
 

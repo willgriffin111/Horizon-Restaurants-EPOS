@@ -13,6 +13,8 @@ class ReservationManager(ObservableModel):
     def createReservation(self,restaurantID,customerName,customerNumber,partySize,date,time,employeeID,tableNum):
         self.tableID = self.getTableID(tableNum, restaurantID)
         if self.tableID != None:
+            date = self.formatdate(date)
+            time = self.formattime(time)
             if(self.checkAvailability(date,time,self.tableID,restaurantID,partySize)):
                 conn = dbfunc.getConnection() 
                 if conn != None:    #Checking if connection is None                    
@@ -21,7 +23,7 @@ class ReservationManager(ObservableModel):
                         dbcursor.execute("INSERT INTO reservation (restaurant_id, reservation_customer_name, reservation_customer_phone, \
                                         table_id, reservation_party_size, reservation_author, reservation_creation_time, reservation_date,\
                                             reservation_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (restaurantID, customerName, customerNumber, self.tableID,
-                                                                                                        partySize, employeeID,datetime.now(), datetime.strptime(date, '%Y-%m-%d'), datetime.strptime(time, "%H:%M:%S"))) 
+                                                                                                        partySize, employeeID,datetime.now(), date, time)) 
                         conn.commit()
                         dbcursor.close()
                         conn.close() 
@@ -52,7 +54,9 @@ class ReservationManager(ObservableModel):
                     reservation = dbcursor.fetchone() 
                     tableID = self.getTableID(newValue,reservation[0]) 
                     if tableID != None:
-                        if (self.checkAvailability(reservation[1], reservation[2],tableID,reservation[0],reservation[3])):
+                        date = self.formatdate(reservation[1])
+                        time = self.formattime(reservation[2])
+                        if (self.checkAvailability(date,time,tableID,reservation[0],reservation[3])):
                             dbcursor.execute('UPDATE reservation SET table_id = %s WHERE reservation_id = %s;', (tableID,reservationID))
                             messagebox.showinfo("Sucsess", "Table has been updated")
                         else:
@@ -61,17 +65,21 @@ class ReservationManager(ObservableModel):
                 elif column_index == 5:
                     dbcursor.execute("SELECT restaurant_id, table_id, reservation_time, reservation_party_size FROM reservation WHERE restaurant_id = "+str(reservationID)+";")
                     reservation = dbcursor.fetchone()  
-                    if (self.checkAvailability(newValue, reservation[2],reservation[1],reservation[0],reservation[3])):
-                        dbcursor.execute('UPDATE reservation SET reservation_date = %s WHERE reservation_id = %s;', (datetime.strptime(newValue, '%Y-%m-%d'),reservationID))
+                    date = self.formatdate(newValue)
+                    time = self.formattime(reservation[2])
+                    if (self.checkAvailability(date, time,reservation[1],reservation[0],reservation[3])):
+                        dbcursor.execute('UPDATE reservation SET reservation_date = %s WHERE reservation_id = %s;', (date,reservationID))
                         messagebox.showinfo("Sucsess", "Date has been updated")
                     else:
                         messagebox.showerror("Error", "Table not available at that time.")
                         
                 elif column_index == 6:
                     dbcursor.execute("SELECT restaurant_id, table_id, reservation_date, reservation_party_size FROM reservation WHERE restaurant_id = "+str(reservationID)+";")
-                    reservation = dbcursor.fetchone()  
-                    if (self.checkAvailability(reservation[2], newValue,reservation[1],reservation[0],reservation[3])):
-                        dbcursor.execute('UPDATE reservation SET reservation_time = %s WHERE reservation_id = %s;', (datetime.strptime(newValue, "%H:%M:%S"),reservationID)) 
+                    reservation = dbcursor.fetchone() 
+                    date = self.formatdate(reservation[2])
+                    time = self.formattime(newValue) 
+                    if (self.checkAvailability(date, time,reservation[1],reservation[0],reservation[3])):
+                        dbcursor.execute('UPDATE reservation SET reservation_time = %s WHERE reservation_id = %s;', (time,reservationID)) 
                         messagebox.showinfo("Sucsess", "Time has been updated")
                     else:
                         messagebox.showerror("Error", "Table not available at that time.")                                              
@@ -129,13 +137,7 @@ class ReservationManager(ObservableModel):
             
         
     def checkAvailability(self,reservationDate,reservationTime,tableid,restaurantID, partySize):
-        # Calculate the start and end times
-        if isinstance(reservationTime, dt.timedelta) != True:
-            reservationTime = datetime.strptime(reservationTime, "%H:%M:%S")
-        if isinstance(reservationDate, dt.date) != True:
-            reservationDate = datetime.strptime(reservationDate, '%Y-%m-%d')
-            
-            
+        # Calculate the start and end times  
         self.beforeReservationTime = reservationTime - timedelta(hours=1)
         self.afterReservationTime = reservationTime  + timedelta(hours=1)
 
@@ -194,7 +196,23 @@ class ReservationManager(ObservableModel):
                     return(tableNum[1])
                 else:
                     messagebox.showerror("Error", "Table does not exsit")
-                    return None     
+                    return None    
+                
+    def formatdate(self,date):
+        try:
+            if isinstance(date, dt.date) != True:
+                date = datetime.strptime(date, '%Y-%m-%d') 
+            return(date)
+        except:
+            messagebox.showerror("Error", "Date should be in format Year-Month-Day e.g. 2024-12-12")
+    
+    def formattime(self,time):
+        try:
+            if isinstance(time, dt.timedelta) != True:
+                time = datetime.strptime(time, "%H:%M:%S")
+            return(time)
+        except:
+            messagebox.showerror("Error", "Time should be in format Hour:Minuite:Seccond e.g. 12:00:00")
     
             
   
