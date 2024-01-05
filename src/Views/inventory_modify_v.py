@@ -74,26 +74,25 @@ class InventoryModifyView(Frame):
         self.remove_inventory_item_btn = tk.Button(self.inventory_frame, text='Delete', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
         self.remove_inventory_item_btn.grid(row=1, column=1, sticky='we', padx=2)
 
-        self.update_item_option_list()
-    
-    def update_item_option_list(self, new_list=[], item_filter_selected=None):
-        self.item_type_option_list = new_list
-        self.selected_option = tk.StringVar(self.inventory_frame)
-        if len(self.item_type_option_list) > 0:
-            # self.selected_option.set(self.item_type_option_list[0])  # Set default value
-            # self.option_menu = tk.OptionMenu(self.inventory_frame, self.selected_option, *self.item_type_option_list)
-            # self.option_menu.configure(bg='#1A58B5',fg='white')
-            # self.option_menu.grid(row=1, column=2, sticky='nswe', padx=2)
-            self.style.configure(
+        self.style.configure(
                 "TCombobox",
                 foreground='black',
                 arrowcolor='black',
                 font=('Helvetica', 13)
             )
 
-            self.type_filter_combobox = ttk.Combobox(self.inventory_frame, values=self.item_type_option_list, textvariable=self.selected_option, state="readonly")
-            self.type_filter_combobox.configure(style="TCombobox")
-            self.type_filter_combobox.grid(row=1, column=2, sticky='nswe', padx=2)
+        self.type_filter_combobox = ttk.Combobox(self.inventory_frame, state="readonly")
+        self.type_filter_combobox.configure(style="TCombobox")
+        self.type_filter_combobox.grid(row=1, column=2, sticky='nswe', padx=2)
+
+        self.update_item_option_list()
+    
+    def update_item_option_list(self, new_list=[], item_filter_selected=None):
+        self.item_type_option_list = new_list
+        self.selected_option = tk.StringVar(self.inventory_frame)
+        if len(self.item_type_option_list) > 0:
+            self.type_filter_combobox['values'] = self.item_type_option_list
+            self.type_filter_combobox['textvariable'] = self.selected_option
             # Set the default selection to the first item on initialisation
             if item_filter_selected is None:
                 self.type_filter_combobox.current(0)
