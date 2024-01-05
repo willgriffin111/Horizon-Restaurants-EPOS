@@ -61,11 +61,8 @@ class Controller:
         self.inventory_modify_controller.update_view()
         self.inventory_controller.update_view()
         self.account_controller.update_view()
-<<<<<<< HEAD
         self.reports_controller.update_view()
-=======
         self.order_view_controller.update_view()
->>>>>>> origin/main
     
     def update_order_in_modify_page(self, data: Order):
         self.order_modify_controller.updateOrder()
