@@ -11,6 +11,7 @@ from .reservations_v import ReservationsView
 from .inventory_modify_v import InventoryModifyView
 from .inventory_v import InventoryView
 from .account_v import AccountView
+from .reports_v import ReportView
 
 
 class Frames(TypedDict):
@@ -34,6 +35,7 @@ class View:
         self._add_frame(InventoryModifyView, "inventory-modify")
         self._add_frame(InventoryView, "inventory")
         self._add_frame(AccountView, "account")
+        self._add_frame(ReportView, "reports")
         
 
     def _add_frame(self, Frame, name: str) -> None:
