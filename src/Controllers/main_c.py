@@ -48,6 +48,8 @@ class Controller:
             self.account_controller.update_view()
             self.order_controller.update_view()
             self.reports_controller.update_view()
+            self.order_view_controller.update_view()
+       
             self.view.switch("home")
         else:
             self.view.switch("login")
@@ -60,6 +62,7 @@ class Controller:
         self.inventory_controller.update_view()
         self.account_controller.update_view()
         self.reports_controller.update_view()
+        self.order_view_controller.update_view()
     
     def update_order_in_modify_page(self, data: Order):
         self.order_modify_controller.updateOrder()
