@@ -31,6 +31,9 @@ class Order(ObservableModel):
     def getSavedOrder(self):
         return self.order
 
+    def clear_order(self):
+        self.order = {}
+
     def create_bill(self, sub_total, discount_applied):
         # Create the connection and cursor object
         try:

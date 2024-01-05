@@ -22,10 +22,10 @@ class OrderController:
         self.frame.pay_button.config(command=self.pay)
 
     def update_categories(self):
-        restaurant_ID = self.model.auth.current_user.getRestrantID()
-        menu = self.model.menu.get_menu(restaurant_ID)
-        print(menu)
-        self.frame.create_menu_categories(menu) # running this view function again to load it with the updated category list
+        self.restaurant_ID = self.model.auth.current_user.getRestrantID()
+        self.menu = self.model.menu.get_menu(self.restaurant_ID)
+        print(self.menu)
+        self.frame.create_menu_categories(self.menu) # running this view function again to load it with the updated category list
     
     def update_view(self):
         current_user = self.model.auth.current_user
@@ -38,17 +38,22 @@ class OrderController:
             self.frame.user_id.config(text=f" ID: 12345678 ")
 
     def home(self) -> None:
+        # Clear the order variable in the view and model, then update the view
+        self.model.order.clear_order()
+        self.frame.setOrder({})
+        self.frame.updateOrderSummary()
         self.view.switch("home")
     
     def modify(self):
-        order = self.frame.order
-        self.model.order.saveOrder(order)
+        self.order = self.frame.order
+        self.model.order.saveOrder(self.order)
         self.view.switch("order-modify")
     
     def updateOrder(self):
-        order = self.model.order.getSavedOrder()
-        self.frame.setOrder(order)
+        self.order = self.model.order.getSavedOrder()
+        self.frame.setOrder(self.order)
         self.frame.updateOrderSummary()
+
 
     def pay(self):
         """
@@ -60,23 +65,28 @@ class OrderController:
         ez and thats done
         """
         # Get data from view
-        selected_table = self.frame.selected_table.get()
-        order = self.frame.order
-        author = self.model.auth.current_user.getStaffId()  
-        sub_total = self.frame.discounted_price
-        discount_applied = self.frame.total_discount / 100
+        self.selected_table = self.frame.selected_table.get()
+        self.order = self.frame.order
+        self.author = self.model.auth.current_user.getStaffId()  
+        self.sub_total = self.frame.discounted_price
+        self.discount_applied = self.frame.total_discount / 100
         # Error checking, table has to be selected and order cant be empty
-        if selected_table == 'Select Table':
+        if self.selected_table == 'Select Table':
             messagebox.showerror("Error", "Select a table.")
-        elif len(order) < 1: 
+        elif len(self.order) < 1: 
             messagebox.showerror("Error", "Order cannot be left empty.")
         else:
-            print(f'table: {selected_table}\norder: {order}')
+            print(f'table: {self.selected_table}\norder: {self.order}')
             restaurant_ID = self.model.auth.current_user.getRestrantID()
-            if self.model.order.create_order(restaurant_ID, order, selected_table, author, sub_total, discount_applied):
+            if self.model.order.create_order(restaurant_ID,self.order, self.selected_table, self.author, self.sub_total, self.discount_applied):
                 messagebox.showinfo("Success", "Order has been created!")
             elif 'Table value selected has no number':
                 messagebox.showerror("Error", "Table value selected has no number.")
             else:
                 messagebox.showerror("Error", "Database error, there's nothing we can do... *becomes Napolean 2.0* ")
+        
+        # Clear the order variable in the view and model, then update the view
+        self.model.order.clear_order()
+        self.frame.setOrder({})
+        self.frame.updateOrderSummary()
         

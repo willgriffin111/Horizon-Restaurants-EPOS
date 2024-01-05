@@ -14,6 +14,7 @@ from .reservations_c import ReservationsController
 from .inventory_modify_c import InventoryModifyController
 from .inventory_c import InventoryController
 from .account_c import AccountController
+from .menu_edit_c import MenuEditController
 from .reports_c import ReportController
 
 
@@ -31,6 +32,7 @@ class Controller:
         self.inventory_modify_controller = InventoryModifyController(model, view)
         self.inventory_controller = InventoryController(model, view)
         self.account_controller = AccountController(model, view)
+        self.menu_edit_controller = MenuEditController(model, view)
         self.reports_controller = ReportController(model, view)
         
 
@@ -47,6 +49,7 @@ class Controller:
             self.inventory_controller.update_view()
             self.account_controller.update_view()
             self.order_controller.update_view()
+            self.menu_edit_controller.update_view()
             self.reports_controller.update_view()
             self.order_view_controller.update_view()
        
@@ -61,6 +64,8 @@ class Controller:
         self.inventory_modify_controller.update_view()
         self.inventory_controller.update_view()
         self.account_controller.update_view()
+        self.order_controller.update_view()
+        self.menu_edit_controller.update_view()
         self.reports_controller.update_view()
         self.order_view_controller.update_view()
     

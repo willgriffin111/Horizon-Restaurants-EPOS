@@ -1,5 +1,5 @@
 '''
-Author: Jevhan Seechurn, Will Griffin, Alex Rogers
+Author: Jevhan Seechurn, Will Griffin, Alex Rogers, Shahbaz Bokhari
 Date: 13/12/2023
 Version: 1.1
 '''
@@ -80,6 +80,9 @@ class HomeView(tk.Frame):
 
         self.reports_btn = tk.Button(self.menuFrame, text='Reports', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
         self.reports_btn.grid(row=1, column=3, padx=10, pady=10)
+
+        self.menu_edit_btn = tk.Button(self.menuFrame, text='Menu Management', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
+        self.menu_edit_btn.grid(row=1, column=4, padx=10, pady=10)
 
     # Bottom bar 
         self.bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')

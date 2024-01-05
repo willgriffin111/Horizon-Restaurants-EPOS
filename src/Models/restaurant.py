@@ -120,54 +120,69 @@ class Menu:
 
         except mysql.connector.Error as err:
             print(f"Error: {err}")
+
+
+    def get_menu_items_of_type(self, item_category, restaurant_ID):
+        try:
+            conn = dbfunc.getConnection()
+
+            if conn is not None and conn.is_connected():
+                dbcursor = conn.cursor()
+                
+                if item_category == 'All':
+                    query = "SELECT menu_id, menu_item_name, menu_item_category, menu_item_price, is_available, menu_item_notes FROM menu WHERE restaurant_id = %s;"
+                    params = (restaurant_ID,)
+                else:
+                    query = "SELECT menu_id, menu_item_name, menu_item_category, menu_item_price, is_available, menu_item_notes FROM menu WHERE menu_item_category = %s AND restaurant_id = %s;"
+                    params = (item_category, restaurant_ID)
+
+                dbcursor.execute(query, params)
+                self.menu = dbcursor.fetchall()
+
+                dbcursor.close()
+                conn.close()
+
+                if not self.menu:
+                    print("No menu data found.")
+
+                return self.menu
+
+            else:
+                print("Database connection failed.")
+
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+
         
-    
-    def addCategory(self, name):
-        categoryID = len(self.categories) + 1
-        newCategory = MenuCategory(categoryID, name)
-        newCategory = MenuCategory(categoryID, name)
-        self.categories.append(newCategory)
-        return newCategory
+    def get_menu_category_list(self, restaurant_ID):
+        # Create the connection and cursor object
+        try:
+            # Create the connection and cursor object
+            conn = dbfunc.getConnection()
+            if conn is not None and conn.is_connected():
+                dbcursor = conn.cursor()
+                # Fetch the list of item types
+                query = "SELECT DISTINCT menu_item_category FROM menu WHERE restaurant_id = %s;"
+                params = (restaurant_ID,)
 
-    def removeCategory(self, ID):
-        categoryToRemove = next((cat for cat in self.categories if cat.categoryID == ID), None)
-        if categoryToRemove:
-            self.categories.remove(categoryToRemove)
-            return categoryToRemove
-        else:
-            return None
-    
-    def getMenu(self):
-        menu = {}
+                dbcursor.execute(query, params) # parameterized query to avoid SQl injection
+                distinct_menu_categories = dbcursor.fetchall()
+                dbcursor.close()
+                conn.close()
 
-        for category in self.categories:
-            categoryName = category.name
-            categoryItems = []
-        
-            for item in category.menuItems:
-                itemDetails = {
-                    'name': item.name,
-                    'description': item.desc,
-                    'price': item.price,
-                    'ingredients': item.ingredients,
-                    'isAvailable': item.isAvailable
-                }
-                categoryItems.append(itemDetails)
+                if not distinct_menu_categories:
+                    print("No data found.")
+                
+                cleaned_menu_categories =  [category[0] for category in distinct_menu_categories]  # converting list of tuples -> list of string values |||  [('Ingredient',), ('Beverage',), ('Cutlery',)] -> ['Ingredient', 'Beverage', 'Cutlery']
+                item_types = ['All']    #   a default value 
+                item_types.extend(cleaned_menu_categories)   
+                return item_types
+            
+            else:
+                print("Database connection failed.")
 
-            menu[categoryName] = categoryItems
-        
-        return menu
-
-    def getCategories(self):
-        return [category.name for category in self.categories]
-    
-    def getMenuItemsForCategory(self, categoryName):
-        category = next((cat for cat in self.categories if cat.name == categoryName), None)
-        if category:
-            return [item.name for item in category.menuItems]
-        else:
-            return []
-    
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
 
 # --------------------ORDER-----------------------
 class Order:
