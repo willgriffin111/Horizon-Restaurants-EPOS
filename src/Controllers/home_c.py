@@ -53,6 +53,7 @@ class HomeController:
         
     def reports(self) -> None:
         print("Reports button clicked")
+        self.view.switch("reports")
         
     def account(self)  -> None:
         print("Account button clicked")
