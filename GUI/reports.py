@@ -71,6 +71,10 @@ salesData = {
     }
 }
 
+staffData = {
+    'Will': (100,20,64,35.599,105),
+    'Neil': (200,122,1000,400,10,67)
+}
 
 def groupSalesByWeek(salesData):
     groupedData = {}
@@ -112,31 +116,25 @@ class App(tk.Tk):
         salesLabel = tk.Label(self.contentFrame, text="Weekly Sales Reports", font=('Arial', 20))
         salesLabel.pack(pady=20)
 
-        # Dropdown for restaurant selection
         self.selected_restaurant = tk.StringVar()
-        restaurant_options = self.getRestaurantOptions()
-        restaurant_dropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_restaurant, values=restaurant_options)
-        restaurant_dropdown.current(0)  # Default selection is the first option
-        restaurant_dropdown.pack(pady=10)
-        restaurant_dropdown.bind("<<ComboboxSelected>>", self.update_graph)  # Bind selection change event
+        restaurantOptions = self.getRestaurantOptions()
+        restaurantDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_restaurant, values=restaurantOptions)
+        restaurantDropdown.current(0)  
+        restaurantDropdown.pack(pady=10)
+        restaurantDropdown.bind("<<ComboboxSelected>>", self.update_graph)  
 
         # Initial Graph
         self.update_graph()
-
+        
     def getRestaurantOptions(self):
         options = ["Show All Restaurants"]
 
-        # Get the data for the first day
         firstDayData = salesData[list(salesData.keys())[0]]
 
-        # Loop over each city in the first day's data
         for city in firstDayData:
-            # Loop over each restaurant in the city
             for restaurant in firstDayData[city]:
-                # Add the city and restaurant to the options list
                 options.append(f"{city} - {restaurant}")
-
-        # Return the list of options
+                
         return options
     
     
@@ -159,11 +157,9 @@ class App(tk.Tk):
 
             print(f"Weekly sales data for all restaurants: {total_sales_per_week}")
 
-            # Destroy the previous canvas if it exists
             if hasattr(self, 'canvas'):
                 self.canvas.get_tk_widget().destroy()
 
-            # Extract weeks and total_sales from the total_sales_per_week dictionary
             weeks = list(total_sales_per_week.keys())
             total_sales = list(total_sales_per_week.values())
 
@@ -192,11 +188,9 @@ class App(tk.Tk):
 
             print(f"Weekly sales data: {total_sales_per_week}")
 
-            # Destroy the previous canvas if it exists
             if hasattr(self, 'canvas'):
                 self.canvas.get_tk_widget().destroy()
 
-            # Extract weeks and total_sales from the total_sales_per_week dictionary
             weeks = list(total_sales_per_week.keys())
             total_sales = list(total_sales_per_week.values())
 
@@ -218,6 +212,38 @@ class App(tk.Tk):
         self.clearContent()
         staffLabel = tk.Label(self.contentFrame, text="Staff Reports", font=('Arial', 20))
         staffLabel.pack(pady=20)
+
+        # Dropdown for employee selection
+        self.selected_employee = tk.StringVar()
+        emplyeeOptions = list(staffData.keys())  # List of employee names
+        employeeDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_employee, values=emplyeeOptions)
+        employeeDropdown.current(0)  # Default selection is the first option
+        employeeDropdown.pack(pady=10)
+        employeeDropdown.bind("<<ComboboxSelected>>", self.updateStaffReport)  # Bind selection change event
+
+        # Label to display total sales
+        self.totalSalesLabel = tk.Label(self.contentFrame, text="", font=('Arial', 16))
+        self.totalSalesLabel.pack(pady=10)
+
+        # Initial update for the first employee
+        self.updateStaffReport()
+
+    def updateStaffReport(self, event=None):
+        selectedEmployees = self.selected_employee.get()
+        emplyeeSales = staffData[selectedEmployees]
+
+        # Calculate metrics
+        totalSales = sum(emplyeeSales)
+        numberOfOrders = len(emplyeeSales)
+        averageOrderPrice = totalSales / numberOfOrders 
+
+        # Update the display label
+        displayText = (f"Total Sales for {selectedEmployees}: £{totalSales}\n"
+                        f"Number of Orders: {numberOfOrders}\n"
+                        f"Average Order Price: £{averageOrderPrice:.2f}")
+        self.totalSalesLabel.config(text=displayText)
+
+
 
     def clearContent(self):
         for widget in self.contentFrame.winfo_children():
