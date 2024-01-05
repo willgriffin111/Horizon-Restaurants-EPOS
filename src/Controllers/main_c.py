@@ -14,6 +14,7 @@ from .reservations_c import ReservationsController
 from .inventory_modify_c import InventoryModifyController
 from .inventory_c import InventoryController
 from .account_c import AccountController
+from .menu_edit_c import MenuEditController
 
 
 class Controller:
@@ -30,6 +31,7 @@ class Controller:
         self.inventory_modify_controller = InventoryModifyController(model, view)
         self.inventory_controller = InventoryController(model, view)
         self.account_controller = AccountController(model, view)
+        self.menu_edit_controller = MenuEditController(model, view)
         
 
         self.model.auth.add_event_listener("auth_changed", self.auth_state_listener)
