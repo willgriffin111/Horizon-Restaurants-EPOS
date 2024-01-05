@@ -30,8 +30,11 @@ class OrdersView(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.tableOrders = {}  
+        self.doneButton = tk.Button(self, text="Done")
         self.create_top_frame()
-        
+    
+    def setOrderCompleteCallback(self, callback):
+        self.orderCompleteCallback = callback
 
     def create_top_frame(self):
         topFrame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='#2976E9')
@@ -47,14 +50,14 @@ class OrdersView(Frame):
         canvas.pack(fill=tk.X)
 
         # Username
-        username = tk.Label(topFrame, text=" User: Gordon ", fg='white', bg='#2976E9', font=('Arial', 14))
-        username.pack(side=tk.RIGHT, anchor='e')
-        username.place(relx=1.0, rely=0.5, anchor='e', x=-350, y=4)
+        self.username = tk.Label(topFrame, fg='white', bg='#2976E9', font=('Arial', 14))
+        self.username.pack(side=tk.RIGHT, anchor='e')
+        self.username.place(relx=1.0, rely=0.5, anchor='e', x=-350, y=4)
 
         # User ID
-        user_id = tk.Label(topFrame, text="ID: 193812", fg='white', bg='#2976E9', font=('Arial', 14))
-        user_id.pack(side=tk.RIGHT, anchor='e')
-        user_id.place(relx=1.0, rely=0.5, anchor='e', x=-260, y=4)
+        self.user_id = tk.Label(topFrame,fg='white', bg='#2976E9', font=('Arial', 14))
+        self.user_id.pack(side=tk.RIGHT, anchor='e')
+        self.user_id.place(relx=1.0, rely=0.5, anchor='e', x=-260, y=4)
 
         # Refresh Button
         self.refresh_button = tk.Button(topFrame, text='Refresh', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
@@ -103,16 +106,19 @@ class OrdersView(Frame):
 
         tableNumberTitle = tk.Label(tableFrame, text=tableNumber, font=("inter", 12), bg="lightgrey")
         tableNumberTitle.pack(fill=tk.X)
-        
+
         for order in orders:
+            
             orderText = f"{order[1]} x {order[0]}"
             if len(order) > 2:  # Special instructions
                 orderText += " (" + ", ".join(order[2:]) + ")"
             orderLabel = tk.Label(tableFrame, text=orderText)
             orderLabel.pack(anchor=tk.W, padx=5)
-        
-        self.doneButton = tk.Button(tableFrame, text="Done")
-        self.doneButton.pack(anchor=tk.S, padx=5)
+            
+    
+        doneButton = tk.Button(tableFrame, text="Done",
+                                command=lambda tn=tableNumber: self.orderCompleteCallback(tn))
+        doneButton.pack(anchor=tk.S, padx=5)
 
     def removeOrder(self, tableNumber):
         self.tableOrders.pop(tableNumber)

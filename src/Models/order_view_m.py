@@ -51,16 +51,17 @@ class OrderView(ObservableModel):
             print(f"Database Error: {err}")
             return table_orders
     
-    def completeOrder(self, restaurant_ID, order_id):
+    def completeOrder(self, restaurant_ID, tableNum):
+        
         try:
             with dbfunc.getConnection() as conn:
                 if conn.is_connected():
                     query = """
                             UPDATE orders 
                             SET order_status = 'COMPLETED' 
-                            WHERE restaurant_id = %s AND order_id = %s;
+                            WHERE restaurant_id = %s AND order_table_num = %s;
                             """
-                    params = (restaurant_ID, order_id)
+                    params = (restaurant_ID, tableNum)
                     with conn.cursor() as cursor:
                         cursor.execute(query, params)
                         conn.commit()
