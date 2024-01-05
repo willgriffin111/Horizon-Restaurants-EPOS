@@ -55,10 +55,10 @@ class ReportController:
         
         if(self.current_user.getAccountType() == "MANAGER"):
             self.frame.insertIntoStaffProfit(self.model.reports.getStaffProfit(self.current_user.getRestrantID()))
-            self.frame.insertIntoStaffProfit(self.model.reports.getStaffOrders(self.current_user.getRestrantID()))
+            self.frame.insertIntoStaffOrder(self.model.reports.getStaffOrders(self.current_user.getRestrantID()))
         else:
             self.frame.insertIntoStaffProfit(self.model.reports.getStaffProfit())
-            self.frame.insertIntoStaffProfit(self.model.reports.getStaffOrders())
+            self.frame.insertIntoStaffOrder(self.model.reports.getStaffOrders())
         
     #home tab
     def home_btn(self) -> None:
