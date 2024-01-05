@@ -115,14 +115,38 @@ class App(tk.Tk):
         salesLabel = tk.Label(self.contentFrame, text="Weekly Sales Reports", font=('Arial', 20))
         salesLabel.pack(pady=20)
 
-        self.selected_restaurant = tk.StringVar()
+        dateInputFrame = tk.Frame(self.contentFrame)
+        dateInputFrame.pack(pady=10)
+
+        startDateFrame = tk.Frame(dateInputFrame)
+        startDateFrame.pack(side=tk.LEFT, padx=10)
+        tk.Label(startDateFrame, text="Start Date (YYYY-MM-DD):").pack()
+        self.startDateEnrty = tk.Entry(startDateFrame)
+        self.startDateEnrty.pack()
+
+        endDateFrame = tk.Frame(dateInputFrame)
+        endDateFrame.pack(side=tk.LEFT, padx=10)
+        tk.Label(endDateFrame, text="End Date (YYYY-MM-DD):").pack()
+        self.endDateEntry = tk.Entry(endDateFrame)
+        self.endDateEntry.pack()
+
+        self.updateGraphButoon = tk.Button(dateInputFrame, text="Update Graph", command=self.update_graph)
+        self.updateGraphButoon.pack(side=tk.LEFT, padx=10)
+        
+        totalSalesLabel = tk.Label(self.contentFrame, text="Total revenue: £200")
+        totalSalesLabel.pack(pady=10)
+        
+        
+
+        self.selectedRestaurnant = tk.StringVar()
         restaurantOptions = self.getRestaurantOptions()
-        restaurantDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_restaurant, values=restaurantOptions)
-        restaurantDropdown.current(0)  
+        restaurantDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selectedRestaurnant, values=restaurantOptions)
+        restaurantDropdown.current(0)
         restaurantDropdown.pack(pady=10)
-        restaurantDropdown.bind("<<ComboboxSelected>>", self.update_graph)  
+        restaurantDropdown.bind("<<ComboboxSelected>>", self.update_graph)
 
         self.update_graph()
+
         
     def getRestaurantOptions(self):
         options = ["Show All Restaurants"]
@@ -138,33 +162,34 @@ class App(tk.Tk):
     
     def update_graph(self, event=None):
         print("Updating graph...")  
-        selected = self.selected_restaurant.get()
+        
+        selected = self.selectedRestaurnant.get()
         if selected == "Show All Restaurants":
             print("Showing data for all restaurants")
 
-            weekly_sales_data = groupSalesByWeek(salesData)
+            weeklySalesData = groupSalesByWeek(salesData)
 
             # Calculate total sales for all restaurants
-            total_sales_per_week = {}
-            for week, cities_data in weekly_sales_data.items():
-                total_sales = 0
-                for city in cities_data.values():
-                    for restaurant_sales in city.values():
-                        total_sales += restaurant_sales
-                total_sales_per_week[week] = total_sales
+            totalSalesPerWeek = {}
+            for week, citiesData in weeklySalesData.items():
+                totalSales = 0
+                for city in citiesData.values():
+                    for restaurantSales in city.values():
+                        totalSales += restaurantSales
+                totalSalesPerWeek[week] = totalSales
 
-            print(f"Weekly sales data for all restaurants: {total_sales_per_week}")
+            print(f"Weekly sales data for all restaurants: {totalSalesPerWeek}")
 
             if hasattr(self, 'canvas'):
                 self.canvas.get_tk_widget().destroy()
 
-            weeks = list(total_sales_per_week.keys())
-            total_sales = list(total_sales_per_week.values())
+            weeks = list(totalSalesPerWeek.keys())
+            totalSales = list(totalSalesPerWeek.values())
 
             # Plotting the new graph
-            fig, ax = plt.subplots(figsize=(5, 4), dpi=50)
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=75)
             ax.clear()  
-            ax.plot(weeks, total_sales, label="Total Sales of All Restaurants")
+            ax.plot(weeks, totalSales, label="Total Sales of All Restaurants")
             ax.set(xlabel='Week Starting', ylabel='Sales (£)', title='Weekly Sales Data - All Restaurants')
             ax.grid()
             plt.xticks(rotation=45)
@@ -177,26 +202,26 @@ class App(tk.Tk):
             selected_city, selected_restaurant = selected.split(' - ')
             print(f"Selected: {selected_city}, {selected_restaurant}")  
 
-            weekly_sales_data = groupSalesByWeek(salesData)
+            weeklySalesData = groupSalesByWeek(salesData)
             
             # Calculate total sales for individual restaurant
-            total_sales_per_week = {}
-            for week, cities_data in weekly_sales_data.items():
-                if selected_city in cities_data:
-                    total_sales_per_week[week] = cities_data[selected_city].get(selected_restaurant, 0)
+            totalSalesPerWeek = {}
+            for week, citiesData in weeklySalesData.items():
+                if selected_city in citiesData:
+                    totalSalesPerWeek[week] = citiesData[selected_city].get(selected_restaurant, 0)
 
-            print(f"Weekly sales data: {total_sales_per_week}")
+            print(f"Weekly sales data: {totalSalesPerWeek}")
 
             if hasattr(self, 'canvas'):
                 self.canvas.get_tk_widget().destroy()
 
-            weeks = list(total_sales_per_week.keys())
-            total_sales = list(total_sales_per_week.values())
+            weeks = list(totalSalesPerWeek.keys())
+            totalSales = list(totalSalesPerWeek.values())
 
             # Plotting the new graph
-            fig, ax = plt.subplots(figsize=(5, 4), dpi=50)
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=75)
             ax.clear()  
-            ax.plot(weeks, total_sales, label=f"Sales of {selected}")
+            ax.plot(weeks, totalSales, label=f"Sales of {selected}")
             ax.set(xlabel='Week Starting', ylabel='Sales (£)', title=f'Weekly Sales Data - {selected}')
             ax.grid()
             plt.xticks(rotation=45)
@@ -212,7 +237,6 @@ class App(tk.Tk):
         staffLabel = tk.Label(self.contentFrame, text="Staff Reports", font=('Arial', 20))
         staffLabel.pack(pady=20)
 
-        # Dropdown for employee selection
         self.selected_employee = tk.StringVar()
         emplyeeOptions = list(staffData.keys())  
         employeeDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_employee, values=emplyeeOptions)

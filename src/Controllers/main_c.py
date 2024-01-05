@@ -14,6 +14,7 @@ from .reservations_c import ReservationsController
 from .inventory_modify_c import InventoryModifyController
 from .inventory_c import InventoryController
 from .account_c import AccountController
+from .reports_c import ReportController
 
 
 class Controller:
@@ -30,6 +31,7 @@ class Controller:
         self.inventory_modify_controller = InventoryModifyController(model, view)
         self.inventory_controller = InventoryController(model, view)
         self.account_controller = AccountController(model, view)
+        self.reports_controller = ReportController(model, view)
         
 
         self.model.auth.add_event_listener("auth_changed", self.auth_state_listener)
@@ -45,6 +47,7 @@ class Controller:
             self.inventory_controller.update_view()
             self.account_controller.update_view()
             self.order_controller.update_view()
+            self.reports_controller.update_view()
             self.view.switch("home")
         else:
             self.view.switch("login")
@@ -56,6 +59,7 @@ class Controller:
         self.inventory_modify_controller.update_view()
         self.inventory_controller.update_view()
         self.account_controller.update_view()
+        self.reports_controller.update_view()
     
     def update_order_in_modify_page(self, data: Order):
         self.order_modify_controller.updateOrder()
