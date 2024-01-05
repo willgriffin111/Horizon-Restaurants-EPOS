@@ -50,7 +50,7 @@ class ReservationManager(ObservableModel):
                     messagebox.showinfo("Sucsess", "Number has been updated")
                     
                 elif  column_index == 4:  
-                    dbcursor.execute("SELECT restaurant_id, reservation_date, reservation_time, reservation_party_size FROM reservation WHERE restaurant_id = "+str(reservationID)+";")
+                    dbcursor.execute("SELECT restaurant_id, reservation_date, reservation_time, reservation_party_size FROM reservation WHERE reservation_id = "+str(reservationID)+";")
                     reservation = dbcursor.fetchone() 
                     tableID = self.getTableID(newValue,reservation[0]) 
                     if tableID != None:
@@ -63,7 +63,7 @@ class ReservationManager(ObservableModel):
                             messagebox.showerror("Error", "Table not available at that time.")
                             
                 elif column_index == 5:
-                    dbcursor.execute("SELECT restaurant_id, table_id, reservation_time, reservation_party_size FROM reservation WHERE restaurant_id = "+str(reservationID)+";")
+                    dbcursor.execute("SELECT restaurant_id, table_id, reservation_time, reservation_party_size FROM reservation WHERE reservation_id = "+str(reservationID)+";")
                     reservation = dbcursor.fetchone()  
                     date = self.formatdate(newValue)
                     time = self.formattime(reservation[2])
@@ -74,7 +74,7 @@ class ReservationManager(ObservableModel):
                         messagebox.showerror("Error", "Table not available at that time.")
                         
                 elif column_index == 6:
-                    dbcursor.execute("SELECT restaurant_id, table_id, reservation_date, reservation_party_size FROM reservation WHERE restaurant_id = "+str(reservationID)+";")
+                    dbcursor.execute("SELECT restaurant_id, table_id, reservation_date, reservation_party_size FROM reservation WHERE reservation_id = "+str(reservationID)+";")
                     reservation = dbcursor.fetchone() 
                     date = self.formatdate(reservation[2])
                     time = self.formattime(newValue) 
