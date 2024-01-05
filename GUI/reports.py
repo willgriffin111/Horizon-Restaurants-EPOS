@@ -3,7 +3,6 @@ from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import datetime, timedelta
-import numpy as np
 
 salesData = {
     '2024-01-01': {
@@ -123,7 +122,6 @@ class App(tk.Tk):
         restaurantDropdown.pack(pady=10)
         restaurantDropdown.bind("<<ComboboxSelected>>", self.update_graph)  
 
-        # Initial Graph
         self.update_graph()
         
     def getRestaurantOptions(self):
@@ -165,7 +163,7 @@ class App(tk.Tk):
 
             # Plotting the new graph
             fig, ax = plt.subplots(figsize=(5, 4), dpi=50)
-            ax.clear()  # Clear previous plot
+            ax.clear()  
             ax.plot(weeks, total_sales, label="Total Sales of All Restaurants")
             ax.set(xlabel='Week Starting', ylabel='Sales (£)', title='Weekly Sales Data - All Restaurants')
             ax.grid()
@@ -175,12 +173,13 @@ class App(tk.Tk):
             self.canvas = FigureCanvasTkAgg(fig, master=self.contentFrame)  
             self.canvas.draw()
             self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        elif selected:  # Check if something else is selected
+        elif selected:  
             selected_city, selected_restaurant = selected.split(' - ')
             print(f"Selected: {selected_city}, {selected_restaurant}")  
 
             weekly_sales_data = groupSalesByWeek(salesData)
-
+            
+            # Calculate total sales for individual restaurant
             total_sales_per_week = {}
             for week, cities_data in weekly_sales_data.items():
                 if selected_city in cities_data:
@@ -196,7 +195,7 @@ class App(tk.Tk):
 
             # Plotting the new graph
             fig, ax = plt.subplots(figsize=(5, 4), dpi=50)
-            ax.clear()  # Clear previous plot
+            ax.clear()  
             ax.plot(weeks, total_sales, label=f"Sales of {selected}")
             ax.set(xlabel='Week Starting', ylabel='Sales (£)', title=f'Weekly Sales Data - {selected}')
             ax.grid()
@@ -215,29 +214,26 @@ class App(tk.Tk):
 
         # Dropdown for employee selection
         self.selected_employee = tk.StringVar()
-        emplyeeOptions = list(staffData.keys())  # List of employee names
+        emplyeeOptions = list(staffData.keys())  
         employeeDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_employee, values=emplyeeOptions)
         employeeDropdown.current(0)  # Default selection is the first option
         employeeDropdown.pack(pady=10)
-        employeeDropdown.bind("<<ComboboxSelected>>", self.updateStaffReport)  # Bind selection change event
+        employeeDropdown.bind("<<ComboboxSelected>>", self.updateStaffReport) 
 
-        # Label to display total sales
         self.totalSalesLabel = tk.Label(self.contentFrame, text="", font=('Arial', 16))
         self.totalSalesLabel.pack(pady=10)
 
-        # Initial update for the first employee
         self.updateStaffReport()
 
     def updateStaffReport(self, event=None):
         selectedEmployees = self.selected_employee.get()
         emplyeeSales = staffData[selectedEmployees]
 
-        # Calculate metrics
+
         totalSales = sum(emplyeeSales)
         numberOfOrders = len(emplyeeSales)
         averageOrderPrice = totalSales / numberOfOrders 
 
-        # Update the display label
         displayText = (f"Total Sales for {selectedEmployees}: £{totalSales}\n"
                         f"Number of Orders: {numberOfOrders}\n"
                         f"Average Order Price: £{averageOrderPrice:.2f}")
