@@ -47,6 +47,7 @@ class Controller:
             self.inventory_controller.update_view()
             self.account_controller.update_view()
             self.order_controller.update_view()
+            self.reports_controller.update_view()
             self.order_view_controller.update_view()
        
             self.reports_controller.update_view()
@@ -61,6 +62,7 @@ class Controller:
         self.inventory_modify_controller.update_view()
         self.inventory_controller.update_view()
         self.account_controller.update_view()
+        self.reports_controller.update_view()
         self.order_view_controller.update_view()
         self.reports_controller.update_view()
     
