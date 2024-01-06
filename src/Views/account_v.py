@@ -69,13 +69,13 @@ class AccountView(tk.Frame):
         self.new_password = tk.Label(self.staff_window, text='New password:', fg='black', bg='white', font=("Arial", 14))
         self.new_password.pack(pady=10)
 
-        self.new_password_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0, border=None)
+        self.new_password_box = tk.Entry(self.staff_window, show="*", width=14, fg='black', bg='lightgrey', borderwidth=0, border=None)
         self.new_password_box.pack()
 
         self.re_password = tk.Label(self.staff_window, text='Re-enter Password:', fg='black', bg='white', font=("Arial", 14))
         self.re_password.pack(pady=10)
 
-        self.re_password_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
+        self.re_password_box = tk.Entry(self.staff_window, show="*", width=14, fg='black', bg='lightgrey', borderwidth=0)
         self.re_password_box.pack()
 
 
