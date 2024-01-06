@@ -60,10 +60,6 @@ class MenuEditController:
     def create_menu_item_popup(self): # created pop up window to add details for the new item
         self.frame.add_menu_item_popup()
         self.frame.submit_new_item_btn.configure(command=self.create_menu_item) # calls function to insert into db and update view
-        self.frame.cancel_new_item_btn.configure(command=self.close_create_window)
-    
-    def close_create_window(self):
-        self.frame.add_menu_item_window.destroy()
     
     def create_menu_item(self): # inserts values into db and updates view (data form pop up window)
         # Get values of new items to be added

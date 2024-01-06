@@ -77,7 +77,9 @@ class InventoryModifyController:
 
         # Inserts inventory item into db
         self.restaurant_ID = self.model.auth.current_user.getRestrantID()
-        self.model.inventory.create_inventory_item(self.restaurant_ID, self.item_name, self.item_stock, self.reorder_lvl, self.item_type)
+        self.create_message = self.model.inventory.create_inventory_item(self.restaurant_ID, self.item_name, self.item_stock, self.reorder_lvl, self.item_type)
+        if self.create_message == "Name already exists":
+            messagebox.showerror("Error", "Name already exists.")
 
         # Updates view for new inventory item and gets rid of pop up window
         item_filter_selected = self.frame.selected_option.get()
@@ -90,7 +92,9 @@ class InventoryModifyController:
         if self.selected_item:
             self.selected_inventory_id = self.frame.inventory_tree.item(self.selected_item)['values'][0]
             self.restaurant_ID = self.model.auth.current_user.getRestrantID()
-            self.model.inventory.remove_inventory_item(self.restaurant_ID, self.selected_inventory_id)
+            self.message = self.model.inventory.remove_inventory_item(self.restaurant_ID, self.selected_inventory_id)
+            if self.message == "Item exists in menu cannot delete":
+                messagebox.showerror("Error", "Item has to be deleted from menu first.")
             # Update the view
             item_filter_selected = self.frame.selected_option.get()
             self.refresh_tree_view(item_filter_selected)
@@ -115,7 +119,9 @@ class InventoryModifyController:
         inventory_ID = self.frame.inventory_tree.item(row_ID, 'values')[0]
         restaurant_ID = self.model.auth.current_user.getRestrantID()
         # Update db
-        self.model.inventory.update_inventory_item(column_index, new_value, inventory_ID, restaurant_ID)
+        self.update_message = self.model.inventory.update_inventory_item(column_index, new_value, inventory_ID, restaurant_ID)
+        if self.update_message == "Cannot edit name or type, item exists in menu. Edit the name or type of the item there.":
+            messagebox.showerror("Error", "Cannot edit name or type, item exists in menu. Edit the name or type of the item there.")
         # Update the view and get rid of the pop-up window
         item_filter_selected = self.frame.selected_option.get()
         self.refresh_tree_view(item_filter_selected)

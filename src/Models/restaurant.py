@@ -82,7 +82,7 @@ class Menu:
                 dbcursor = conn.cursor()
 
                 # Fetch the menu from the database for the restaurant specified
-                query = "SELECT menu_item_name, menu_item_category, menu_item_price, is_available FROM menu WHERE restaurant_id = %s;"
+                query = "SELECT menu_item_name, menu_item_category, menu_item_price FROM menu WHERE restaurant_id = %s AND is_available = 1;"
                 params = (restaurant_ID,)
 
                 dbcursor.execute(query, params) # parameterized query to avoid SQl injection
@@ -98,12 +98,11 @@ class Menu:
                 # Formatting the menu data into a dictionary to make it more readable, W W 
                 formatted_menu = {}
                 for item in self.menu:
-                    name, category, price, is_available = item[0], item[1], item[2], item[3]
+                    name, category, price = item[0], item[1], item[2]
                     item_details = {
                         'name': name,
                         'description': '',
                         'price': price,
-                        'isAvailable': is_available,  
                     }
                     # Check if the category key already exists in formatted_menu
                     if category not in formatted_menu:
@@ -130,10 +129,10 @@ class Menu:
                 dbcursor = conn.cursor()
                 
                 if item_category == 'All':
-                    query = "SELECT menu_id, menu_item_name, menu_item_category, menu_item_price, is_available, menu_item_notes FROM menu WHERE restaurant_id = %s;"
+                    query = "SELECT menu_id, menu_item_name, menu_item_category, menu_item_price, menu_item_notes FROM menu WHERE restaurant_id = %s AND is_available = 1;"
                     params = (restaurant_ID,)
                 else:
-                    query = "SELECT menu_id, menu_item_name, menu_item_category, menu_item_price, is_available, menu_item_notes FROM menu WHERE menu_item_category = %s AND restaurant_id = %s;"
+                    query = "SELECT menu_id, menu_item_name, menu_item_category, menu_item_price, menu_item_notes FROM menu WHERE menu_item_category = %s AND restaurant_id = %s AND is_available = 1;"
                     params = (item_category, restaurant_ID)
 
                 dbcursor.execute(query, params)
@@ -162,7 +161,7 @@ class Menu:
             if conn is not None and conn.is_connected():
                 dbcursor = conn.cursor()
                 # Fetch the list of item types
-                query = "SELECT DISTINCT menu_item_category FROM menu WHERE restaurant_id = %s;"
+                query = "SELECT DISTINCT menu_item_category FROM menu WHERE restaurant_id = %s AND is_available = 1;"
                 params = (restaurant_ID,)
 
                 dbcursor.execute(query, params) # parameterized query to avoid SQl injection

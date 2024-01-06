@@ -161,16 +161,6 @@ class InventoryView(Frame):
             
         self.inventory_tree.grid(pady=10)
         
-        
-    # def deleteSelectedItem(self):
-    #     selected_item = self.inventory_tree.selection()
-    #     if selected_item:
-    #         item_index = int(selected_item[0])
-    #         del inventoryData[item_index]  
-    #         self.inventory_tree.delete(selected_item)  
-
-    #     else:
-    #         tk.messagebox.showinfo("Delete", "No item selected")
 
     def insert_tree_view(self, data):
         # Populate treeview with updated data
@@ -181,17 +171,26 @@ class InventoryView(Frame):
             # Check if stock is lower than re-order level
             stock = int(record[2])
             reorder_level = int(record[3])
+            is_available = bool(record[5])
 
-            if stock < reorder_level:
+            if stock <= reorder_level:
                 tag = 'lowstock'   # my custom tag for low stock, ITS MINE
                 #print(f"low stock: {record}")
+            # This tag is for items just added to the menu, by default their stock and reorder level will be 0, so it will be highlighted by green
+            if stock == 0 and reorder_level == 0:
+                tag = 'justadded'
+            # This tag is for items that have been deleted from the menu
+            if not(is_available):
+                tag = 'notavailable'
 
             self.inventory_tree.insert(parent='', index='end', iid=count, text="", values=record, tags=(tag,))
             #print(f"Inserted record: {record} with tags: {tag}")
             count += 1
         
-        # Setting background colour for MY TAG to red, to show low stock
-        self.inventory_tree.tag_configure('lowstock', background='#d42839', foreground='white') # background='#EB5160', foreground='#d42839'
+        # Setting background colour for MY TAGS
+        self.inventory_tree.tag_configure('lowstock', background='#FFAE42', foreground='white') # YELLOW FOR LOW STOCK background='#EB5160', foreground='#d42839'
+        self.inventory_tree.tag_configure('justadded', background='#77DD77', foreground='white') # GREEN FOR NEWLY ADDED MENU ITEMS
+        self.inventory_tree.tag_configure('notavailable', background='#d42839', foreground='white') # RED FOR ITEMS DELETED FROM MENU
     
     def clear_tree_view(self):
         # Clear existing rows in the treeview

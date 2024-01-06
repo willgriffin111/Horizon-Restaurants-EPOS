@@ -269,7 +269,7 @@ class MenuEdit(Frame):
         mid_frame.pack(pady=10,fill=tk.X, expand=True)
 
         self.menu_tree = ttk.Treeview(mid_frame,height=15, show='headings')
-        self.menu_tree['columns'] = ("ID", "Name", "category", "cost", "is-available", "desc")
+        self.menu_tree['columns'] = ("ID", "Name", "category", "cost", "desc")
         column_width = 100
 
         # Formatting columns
@@ -278,7 +278,6 @@ class MenuEdit(Frame):
         self.menu_tree.column("Name", anchor='w', width=column_width, minwidth=column_width)
         self.menu_tree.column("category",  anchor='w', width=50, minwidth=50)
         self.menu_tree.column("cost", anchor='center', width=50, minwidth=50)
-        self.menu_tree.column("is-available", anchor='center', width=50, minwidth=50)
         self.menu_tree.column("desc", anchor='w', width=column_width, minwidth=column_width)
 
         # Formatting Headers 
@@ -286,7 +285,6 @@ class MenuEdit(Frame):
         self.menu_tree.heading("Name", text="Item",anchor='center')
         self.menu_tree.heading("category", text="Category",anchor='center')
         self.menu_tree.heading("cost", text="Cost",anchor='center')
-        self.menu_tree.heading("is-available", text="Is Available",anchor='center')
         self.menu_tree.heading("desc", text='Description', anchor='w')
 
         # Add tag configurations for odd and even rows
