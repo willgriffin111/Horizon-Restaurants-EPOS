@@ -80,13 +80,14 @@ class OrderController:
             restaurant_ID = self.model.auth.current_user.getRestrantID()
             if self.model.order.create_order(restaurant_ID,self.order, self.selected_table, self.author, self.sub_total, self.discount_applied):
                 messagebox.showinfo("Success", "Order has been created!")
+                # Clear the order variable in the view and model, then update the view
+                self.model.order.clear_order()
+                self.frame.setOrder({})
+                self.frame.updateOrderSummary()
             elif 'Table value selected has no number':
                 messagebox.showerror("Error", "Table value selected has no number.")
             else:
                 messagebox.showerror("Error", "Database error, there's nothing we can do... *becomes Napolean 2.0* ")
         
-        # Clear the order variable in the view and model, then update the view
-        self.model.order.clear_order()
-        self.frame.setOrder({})
-        self.frame.updateOrderSummary()
+        
         
