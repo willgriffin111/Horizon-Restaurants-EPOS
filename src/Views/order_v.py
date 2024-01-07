@@ -253,8 +253,6 @@ class OrderCreate(Frame):
         topBox.rowconfigure(0, weight=1)
         topBox.grid(column=0, row=0, padx=10, pady=10)
 
-        logOutButton = Tk.Button(topBox, command=self.logOutButton, text="Log Out", bg="white", padx=5, borderwidth=0, highlightthickness=0, height=4, width=10)
-        logOutButton.grid(column=0, row=0, sticky='nswe')
 
         tableMenu = Tk.OptionMenu(topBox, self.selected_table, *tables, command=self.selectedTableChanged)
         tableMenu.config(bg="#F0FFFF", borderwidth=0, highlightthickness=0, fg='black')

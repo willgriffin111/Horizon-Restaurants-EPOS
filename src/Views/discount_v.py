@@ -44,9 +44,6 @@ class DiscountView(tk.Frame):
         self.refresh_button = tk.Button(self.top_frame, text='Refresh', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
         self.refresh_button.grid(pady=10, row=2, column=0)
 
-        self.submit_button = tk.Button(self.top_frame, text='Submit', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
-        self.submit_button.grid(pady=10, row=2, column=1)
-
         self.home_button = tk.Button(self.top_frame, text='Home', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
         self.home_button.grid(pady=10, row=2, column=2)
 
