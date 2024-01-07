@@ -25,17 +25,9 @@ class AdminView(tk.Frame):
 
     def staff_edit(self):
         print("Staff Edit button clicked")
-        self.inventory_frame.pack_forget()
-        self.inventory_table_frame.pack_forget()
         self.staff_frame.pack()
         self.staff_table_frame.pack()
 
-    def menu_edit(self):
-        print("Menu Edit button clicked")
-        self.staff_frame.pack_forget()
-        self.staff_table_frame.pack_forget()
-        self.inventory_frame.pack()
-        self.inventory_table_frame.pack()
 
     # Add Staff Window ------------------------------------------------------------------------------------------------------------------------------------------------|
 
@@ -154,14 +146,8 @@ class AdminView(tk.Frame):
         self.sidebar.pack(fill=tk.Y, side=tk.LEFT)
 
         self.side_label = tk.Label(self.sidebar,text="Admin Features",fg='white', bg='#474747', anchor='w', font=('Arial', 18),width=13)
-        self.side_label.pack(padx=45,pady=15)
+        self.side_label.pack(padx=10,pady=15)
 
-
-        self.staff_edit_side = tk.Button(self.sidebar, text='Staff', command=self.staff_edit, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None,width=15)
-        self.staff_edit_side.pack(pady=30)
-
-        self.menu_edit_side = tk.Button(self.sidebar, text='Menu', command=self.menu_edit, bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None,width=15)
-        self.menu_edit_side.pack(pady=30)
 
         self.home_btn = tk.Button(self.sidebar, text='Home', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None,width=15)
         self.home_btn.pack(pady=30)
@@ -185,13 +171,7 @@ class AdminView(tk.Frame):
         # edit_staff = tk.Button(self.staff_frame, text='Edit', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
         # edit_staff.pack(side=tk.LEFT,padx=6)
 
-        options = ['ADMIN', 'MANAGER', 'CHEF', 'FRONT', 'KITCHEN']
-        self.selected_option = tk.StringVar(self.staff_frame)
-        self.selected_option.set(options[0])  # Set default value
-
-        self.option_menu = tk.OptionMenu(self.staff_frame, self.selected_option, *options)
-        self.option_menu.configure(bg='white',fg='black',width=10)
-        self.option_menu.pack(anchor='s')
+        
     
     def staff_table_space(self):
         self.staff_table_frame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='white', height=300, width=480)
