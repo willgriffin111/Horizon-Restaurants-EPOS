@@ -7,13 +7,22 @@ import mysql.connector
 
 from .base_m import ObservableModel
 from database import dbfunc
+from tkinter import messagebox
 
 class MenuEdit(ObservableModel):
     def __init__(self):
         super().__init__()
     
     def create_menu_item(self, restaurant_ID, name, category, price, desc):
+        #checking to make sure price is type int or float
         try:
+            float(price)
+        except ValueError:
+            messagebox.showerror("ERROR", f"Please enter a valid price")
+            return
+        
+        try:
+            
             # Create the connection and cursor object
             conn = dbfunc.getConnection()
             if conn is not None and conn.is_connected():
@@ -40,9 +49,10 @@ class MenuEdit(ObservableModel):
                 conn.close()
                 
                 print("Menu item created and added to inventory")
+                
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
     
     def remove_menu_item(self, restaurant_ID, item_id):
         # Create the connection and cursor object
@@ -73,7 +83,7 @@ class MenuEdit(ObservableModel):
                     print("Menu item not found")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
 
 
     def update_menu_item(self, restaurant_ID, item_id, name, category, price, desc):
@@ -124,4 +134,4 @@ class MenuEdit(ObservableModel):
                     print("Menu item not found")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
