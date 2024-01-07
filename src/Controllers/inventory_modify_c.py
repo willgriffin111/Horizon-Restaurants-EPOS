@@ -92,12 +92,14 @@ class InventoryModifyController:
         if self.selected_item:
             self.selected_inventory_id = self.frame.inventory_tree.item(self.selected_item)['values'][0]
             self.restaurant_ID = self.model.auth.current_user.getRestrantID()
-            self.message = self.model.inventory.remove_inventory_item(self.restaurant_ID, self.selected_inventory_id)
-            if self.message == "Item exists in menu cannot delete":
-                messagebox.showerror("Error", "Item has to be deleted from menu first.")
-            # Update the view
-            item_filter_selected = self.frame.selected_option.get()
-            self.refresh_tree_view(item_filter_selected)
+            confirmation=messagebox.askquestion('Delete Item', 'Do you want to remove this item?')
+            if confirmation == 'yes':
+                self.message = self.model.inventory.remove_inventory_item(self.restaurant_ID, self.selected_inventory_id)
+                if self.message == "Item exists in menu cannot delete":
+                    messagebox.showerror("Error", "Item has to be deleted from menu first.")
+                # Update the view
+                item_filter_selected = self.frame.selected_option.get()
+                self.refresh_tree_view(item_filter_selected)
         else:
             messagebox.showerror("Error", "No item Selected")
         
@@ -118,6 +120,10 @@ class InventoryModifyController:
         column_index = self.frame.column_index
         inventory_ID = self.frame.inventory_tree.item(row_ID, 'values')[0]
         restaurant_ID = self.model.auth.current_user.getRestrantID()
+        if not all([new_value]):
+                messagebox.showerror("Error", "field must be filled")
+                return
+            
         # Update db
         self.update_message = self.model.inventory.update_inventory_item(column_index, new_value, inventory_ID, restaurant_ID)
         if self.update_message == "Cannot edit name or type, item exists in menu. Edit the name or type of the item there.":
