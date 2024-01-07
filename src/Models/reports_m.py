@@ -33,17 +33,19 @@ class Reports(ObservableModel):
                     totalforday = 0 
                     
                     if (SelectedRest != "Show All Restaurants"):
-                        dbcursor.execute("SELECT order_menu_item_qty, order_price FROM orders WHERE restaurant_id = %s \
+                        dbcursor.execute("SELECT * FROM orders WHERE restaurant_id = %s \
                         AND order_time_created BETWEEN (%s) AND (%s);", (SelectedRest,dateStart,dateStart + datetime.timedelta(days=1)))
                         
                     else:  
-                        dbcursor.execute("SELECT order_menu_item_qty, order_price FROM orders WHERE \
+                        dbcursor.execute("SELECT bill_id FROM orders WHERE \
                         order_time_created BETWEEN (%s) AND (%s);", (dateStart,dateStart + datetime.timedelta(days=1)))   
                                                          
                     self.orderList = dbcursor.fetchall()
                     
                     for order in self.orderList:
-                        totalforday += float(order[1]) * float(order[0])
+                        dbcursor.execute(f"SELECT * FROM bill WHERE bill_id = {order[0]}")
+                        self.billList = dbcursor.fetchone()
+                        totalforday += float(self.billList[1])
                         
                     self.totalRev += totalforday 
                     self.orderstotals.append(totalforday)
@@ -78,12 +80,14 @@ class Reports(ObservableModel):
                 
                 for employee in self.employeeList:
                     totalforstaff = 0 
-                    dbcursor.execute(f"SELECT order_menu_item_qty, order_price FROM orders WHERE order_author = {employee[0]};")  
+                    dbcursor.execute(f"SELECT bill_id FROM orders WHERE order_author = {employee[0]};")  
                     
                     self.orderList = dbcursor.fetchall()
                     
                     for order in self.orderList:
-                        totalforstaff += float(order[1]) * float(order[0])
+                        dbcursor.execute(f"SELECT * FROM bill WHERE bill_id = {order[0]}")
+                        self.billList = dbcursor.fetchone()
+                        totalforstaff += float(self.billList[1])
                         
                     self.stafflist.append([str(employee[0]),str(employee[2]),str(employee[3]),str(totalforstaff)])
                     
