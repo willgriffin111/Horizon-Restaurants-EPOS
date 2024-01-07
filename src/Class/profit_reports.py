@@ -1,8 +1,8 @@
 from fpdf import FPDF
 import matplotlib.pyplot as plt
 '''
-Author Jevhan Seechurn,
-Date: 06/01/2024 
+Author: Niel Paraggua
+Date: 18/12/2023
 Version: 1.0
 '''
 
