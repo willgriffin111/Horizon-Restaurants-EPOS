@@ -26,6 +26,7 @@ class OrderController:
         self.restaurant_ID = self.model.auth.current_user.getRestrantID()
         self.menu = self.model.menu.get_menu(self.restaurant_ID)
         print(self.menu)
+        self.frame.clear_menu_categories()
         self.frame.create_menu_categories(self.menu) # running this view function again to load it with the updated category list
     
     def update_view(self):

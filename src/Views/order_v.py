@@ -296,19 +296,27 @@ class OrderCreate(Frame):
         self.menuFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=True)
 
         # Grid layout for category buttons
-        gridFrame = Tk.Frame(self.menuFrame, bg="#1A58B5")
-        gridFrame.pack(pady=10)
+        self.gridFrame = Tk.Frame(self.menuFrame, bg="#1A58B5")
+        self.gridFrame.pack(pady=10)
+
 
 # Inside the createMenuCategories method --------------------------------------------------------------------------------------------------------------------------|
                  # Loop through categories and create buttons
         for col, (category, menuItems) in enumerate(self.menu.items()):
-            category_button = Tk.Button(gridFrame, text=category, width=10, height=5, borderwidth=0, command=lambda c=category, m=menuItems: self.displayCategoryOptions(c, m))
-            category_button.grid(row=0, column=col, padx=5, pady=5, sticky='w')
+            self.category_button = Tk.Button(self.gridFrame, text=category, width=10, height=5, borderwidth=0, command=lambda c=category, m=menuItems: self.displayCategoryOptions(c, m))
+            self.category_button.grid(row=0, column=col, padx=5, pady=5, sticky='w')
+            print(col)
             # self.categoryButtons[category] = category_button
 
 
         self.optionsFrame = Tk.Frame(self.menuFrame, bg="#1A58B5")
         self.optionsFrame.pack(fill=Tk.BOTH, expand=True)
+    
+    def clear_menu_categories(self):
+        for widget in self.menuFrame.winfo_children():
+            widget.destroy()
+        
+        self.menuFrame.destroy()
 
     def displayCategoryOptions(self, category, menuItems):
         # Clear previous options
