@@ -60,10 +60,11 @@ class Order(ObservableModel):
             return None
 
     def create_order(self, restaurant_ID, order, table, author, sub_total, discount_applied):
+        # I have to create this cause i need the bill_id for the order table when im inserting
         bill_id = self.create_bill(sub_total, discount_applied)
 
         # Get integer part using regex
-        table_num = re.sub(r'\D', '', table)
+        table_num = re.sub(r'\D', '', table) # could've used lstrip but this is way cooler
 
         try:
             # Convert to integer safely
@@ -81,7 +82,7 @@ class Order(ObservableModel):
                         # Have to convert to a string and format it to MySQL's datetime format
                         date_time_created_str = date_time_created.strftime('%Y-%m-%d %H:%M:%S')
 
-                        # Deduct items from inventory
+                        # stores item name, its quantity and price. If the stock is 0 (the menu item can't be ordered anymore duh..) it'll store the extra items ordered here so that they can be refunded
                         items_out_of_stock = {}
                         for menu_item, details in order.items():
                             # Extracting details from the dictionary
@@ -98,7 +99,7 @@ class Order(ObservableModel):
                             if current_stock:
                                 current_stock = current_stock[0]
 
-                                # Deduct the maximum possible quantity from the inventory
+                                # Deduct the maximum possible quantity from the inventory (quantity_to_deduct can go lower than 0)
                                 quantity_to_deduct = min(quantity, current_stock)
 
                                 # Update the inventory with the new stock quantity
@@ -106,7 +107,7 @@ class Order(ObservableModel):
                                 dbcursor.execute("UPDATE inventory SET inventory_item_stock = %s WHERE restaurant_id = %s AND inventory_item_name = %s",
                                                 (new_stock, restaurant_ID, name))
 
-                                # Log a message (you can customize this based on your needs)
+                                # some W print messages here
                                 print(f"Deducted {quantity_to_deduct} units of {name} from stock.")
 
                                 # Insert into the orders table with the deducted quantity
@@ -114,7 +115,7 @@ class Order(ObservableModel):
                                                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                                                 (restaurant_ID, bill_id, table_num, ORDER_STATUS[0], name, quantity_to_deduct, author, date_time_created_str, price, description))
 
-                                # Check if there is remaining quantity
+                                # Check if there is remaining quantity (this is what will be refunded cause theres no more menu items)
                                 remaining_quantity = quantity - quantity_to_deduct
                                 if remaining_quantity > 0:
                                     # Append the item individually to items_out_of_stock
@@ -136,8 +137,7 @@ class Order(ObservableModel):
                                 print(f"Inventory item {name} not found or insufficient stock. Refunding {quantity} items.")
 
 
-                        # Update the bill with the updated price
-                        # Update the bill with the updated price
+                        # Update the bill with the updated price, to account for the refund
                         remaining_price = sum(item['quantity'] * item['price'] for item in items_out_of_stock.values())
                         dbcursor.execute("UPDATE bill SET bill_sub_total = %s WHERE bill_id = %s",
                                         (sub_total - remaining_price, bill_id))
