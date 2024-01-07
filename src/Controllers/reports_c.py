@@ -54,8 +54,13 @@ class ReportController:
         
         self.frame.totalSalesLabel.config(text=f"Total revenue: £{self.fullTotalRev}")
         #puts data in graph
-        self.frame.update_graph(self.ordersdates, self.orderstotals, self.restaurantID)
-        self.frame.dowloadReport_btn.config(command=self.generateRestaurantReport)
+        try:
+            self.frame.dowloadReport_btn.forget()
+            self.frame.update_graph(self.ordersdates, self.orderstotals, self.restaurantID)
+            self.frame.dowloadReport_btn.config(command=self.generateRestaurantReport)
+        except AttributeError:
+            self.frame.update_graph(self.ordersdates, self.orderstotals, self.restaurantID)
+            self.frame.dowloadReport_btn.config(command=self.generateRestaurantReport)
         
     def generateRestaurantReport(self):
         pdf = PDFProfit()
