@@ -67,7 +67,7 @@ class ReportController:
         pdf.add_line_graph_to_pdf(self.ordersdates,self.orderstotals)
         pdf.sales_record(self.ordersdates,self.orderstotals)
         pdf.output(f'Restaurant-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf', 'F')
-        messagebox.showinfo("Sucsess", f"Restaurant-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf has been sucsessfully generated")
+        messagebox.showinfo("Sucsess", f"Restaurant-Report-{datetime.today().strftime('Y-%m-%d')}.pdf has been sucsessfully generated")
     
     def staffreport(self):
         self.frame.showStaffReports()
@@ -98,7 +98,7 @@ class ReportController:
         pdf.order_title()
         pdf.order_record(self.staffOrders, self.restName)
         pdf.output(f'Staff-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf', 'F')
-        messagebox.showinfo("Sucsess", f"Staff-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf has been sucsessfully generated")
+        messagebox.showinfo("Sucsess", f"Staff-Report-{datetime.today().strftime('%Y-%m-%d')}.pdf has been sucsessfully generated")
         
     #home tab
     def home_btn(self) -> None:
