@@ -7,6 +7,7 @@ import mysql.connector
 
 from .base_m import ObservableModel
 from database import dbfunc
+from tkinter import messagebox
 
 
 class Inventory(ObservableModel):
@@ -42,7 +43,7 @@ class Inventory(ObservableModel):
                 print("Database connection failed.")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
     
 
     def get_inventory_type_list(self, restaurant_ID):
@@ -102,7 +103,7 @@ class Inventory(ObservableModel):
                     print("Inventory item created")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
 
 
 
@@ -158,7 +159,7 @@ class Inventory(ObservableModel):
                     print("Inventory item not found")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
 
 
                 
@@ -206,7 +207,7 @@ class Inventory(ObservableModel):
                     print("Inventory item updated")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
 
             
     
@@ -243,7 +244,7 @@ class Inventory(ObservableModel):
                 print("Database connection failed.")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
 
 
     def send_reorder_email(self, item_data):

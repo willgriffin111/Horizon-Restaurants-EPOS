@@ -7,6 +7,7 @@ import mysql.connector
 
 from .base_m import ObservableModel
 from database import dbfunc
+from tkinter import messagebox
 
 
 class Discount(ObservableModel):
@@ -42,7 +43,7 @@ class Discount(ObservableModel):
                 print("Database connection failed.")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
 
     def get_discounts_for_orders(self, restaurant_ID):
         # Create the connection and cursor object
@@ -72,7 +73,7 @@ class Discount(ObservableModel):
                 print("Database connection failed.")
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
     
     #     self.model.discount.create_discount(self.restaurant_ID, self.name_value, self.value_percentage, self.start_date, self.end_date)
     def create_discount(self, restaurant_ID, name, value_percentage, start_date, end_date):
@@ -101,7 +102,7 @@ class Discount(ObservableModel):
                     print("Discount created")
                     return "Discount created"
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
             return "DB Error"
         
     def remove_discount(self, restaurant_ID, discount_id):
@@ -129,7 +130,7 @@ class Discount(ObservableModel):
                     return "Discount not found"
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
             return "DB Error"
     
     def update_discount(self, column_index, new_value, discount_ID, restaurant_ID):
@@ -157,7 +158,7 @@ class Discount(ObservableModel):
                 return "Discount updated"
 
         except mysql.connector.Error as err:
-            print(f"Error: {err}")
+            messagebox.showerror("ERROR", f"{err}")
             return "DB Error"
 
 
