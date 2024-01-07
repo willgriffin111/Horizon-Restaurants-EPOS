@@ -108,7 +108,7 @@ class MenuEditController:
             self.selected_item_data.append(self.frame.menu_tree.item(self.selected_item)['values'][1])
             self.selected_item_data.append(self.frame.menu_tree.item(self.selected_item)['values'][2])
             self.selected_item_data.append(self.frame.menu_tree.item(self.selected_item)['values'][3])
-            self.selected_item_data.append(self.frame.menu_tree.item(self.selected_item)['values'][5])
+            self.selected_item_data.append(self.frame.menu_tree.item(self.selected_item)['values'][4])
             self.frame.edit_menu_popup(self.selected_item_data)
             self.frame.submit_item_changes_btn.config(command=self.edit_menu_item)
         else:
