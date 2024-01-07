@@ -26,7 +26,7 @@ TABLES['INVENTORY'] = 'CREATE TABLE inventory (\
   inventory_item_stock INT NOT NULL,\
   inventory_item_reorder_level INT NOT NULL,\
   inventory_item_type VARCHAR(64) NOT NULL,\
-  is_available tinyint(1)\
+  is_available tinyint(1),\
   FOREIGN KEY (restaurant_id) \
   REFERENCES restaurant (restaurant_id)\
 );'
