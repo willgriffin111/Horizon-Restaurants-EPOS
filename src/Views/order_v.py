@@ -1,5 +1,5 @@
 import tkinter as Tk
-from tkinter import Toplevel, Frame
+from tkinter import Toplevel, Frame, ttk
 import copy
 
 
@@ -84,57 +84,71 @@ class OrderCreate(Frame):
         self.discount_window.configure(bg='#1A58B5')
         self.discount_window.resizable(False, False)
         
-        # Frame to hold the buttons
-        self.discountButtonContainer = Tk.Frame(self.discount_window, bg='#1A58B5')
+        self.discount_window.rowconfigure((0, 1), weight=1)
+        self.discount_window.columnconfigure(0, weight=1)
 
-        self.discountButtonContainer.place(relx=0.5, rely=0.5, anchor='center')
+        self.top_frame = Frame(self.discount_window, borderwidth=25, relief=Tk.FLAT, bg='#2976E9')
+        self.top_frame.pack(side="top", fill="both")
 
-        # Staff discount button
-        self.staff_discount = Tk.Button(self.discountButtonContainer, text='Staff discount', bg='white', fg='black', padx=10, pady=25, command=self.staff_disc, borderwidth=0, width=12)
-        self.staff_discount.pack(side='top', pady=10)  
+        self.apply_discount_button = Tk.Button(self.top_frame, text='Apply', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None)
+        self.apply_discount_button.pack(side="left", fill="both", expand=True, padx=2)
 
-        # Seasonal discount button
-        # THE IDEA IS TO ONLY SHOW THIS BUTOTN IN THE MONTH OF DECEMBER (SAME FUNCTIONALY AS HOME PAGE BUTTONS, WHERE BUTTONS ONLY SHOW IF AVAILABLE TO USER)
-        self.christmass_discount = Tk.Button(self.discountButtonContainer, text='Christams discount', bg='white', fg='black', padx=10, pady=25, command=self.christmass_disc, borderwidth=0, width=12)
-        self.christmass_discount.pack(side='top', pady=10)  
-        
-        '''
-        MAYBE ADD DISCOUNT FOR DAY OF THE WEEK
-        EG. 10% OFF ON MONDAYS
-        '''
-        
-        # Remove discount button
-        self.remove_discount = Tk.Button(self.discountButtonContainer, text='Remove discount', bg='white', fg='black', padx=10, pady=25, command=self.remove_disc, borderwidth=0, width=12)
-        self.remove_discount.pack(side='top', pady=10)  
-        
-       
-        
+        self.apply_staff_discount_button = Tk.Button(self.top_frame, text='Staff', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None)
+        self.apply_staff_discount_button.pack(side="left", fill="both", expand=True, padx=2)
 
-    def discount_btn(self):
-        if self.discount_window and self.discount_window.winfo_exists(): 
-            self.discount_window.destroy()  
-        else:
-            self.create_discount_window()
+        self.remove_discount_button = Tk.Button(self.top_frame, text='Remove', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, command=self.remove_discount)
+        self.remove_discount_button.pack(side="left", fill="both", expand=True, padx=2)
+
+        self.view_discounts_tree_view()
     
-    
-    def staff_disc(self):
-        print('Staff discount applied')
-        self.total_discount = 25
-        self.updateOrderSummary()
-        self.discount_window.destroy()
+    def view_discounts_tree_view(self):
+        self.discount_table_frame = Frame(self.discount_window, borderwidth=25, relief=Tk.FLAT, bg='#1A58B5', height=300, width=480)
+        self.discount_table_frame.pack(side="bottom", fill="both", expand=True)
         
-    def christmass_disc(self):
-        print('Christmas discount applied')
-        self.total_discount = 10
-        self.updateOrderSummary()
-        self.discount_window.destroy()
+        self.view_discount_tree = ttk.Treeview(self.discount_table_frame,height=15)
+        self.view_discount_tree['columns'] = ("name", "value")
+        column_width = 120
 
-    def remove_disc(self):
+        # Formatting columns
+        self.view_discount_tree.column("#0", width=0, minwidth=0)
+        self.view_discount_tree.column("name", anchor='w', width=column_width, minwidth=column_width)
+        self.view_discount_tree.column("value", anchor='w', width=column_width, minwidth=column_width)
+
+        # Formatting Headers 
+        self.view_discount_tree.heading("name", text="Discount Name",anchor='center')
+        self.view_discount_tree.heading("value", text="Value (%)",anchor='center')
+
+        # Add tag configurations for odd and even rows
+        self.view_discount_tree.tag_configure('oddrow', background='white', foreground='black')
+        self.view_discount_tree.tag_configure('evenrow', background='lightgray', foreground='black')
+
+        self.view_discount_tree.pack(side='left', expand=True)
+    
+    def clear_view_discounts_tree_view(self):
+        # Clear existing rows in the treeview
+        for row in self.view_discount_tree.get_children():
+            self.discount_tree.delete(row)
+    
+    def insert_tree_view(self, data):
+        # Populate treeview with updated data
+        count = 0
+        for record in data:
+            tag = 'evenrow' if count % 2 == 0 else 'oddrow'  # Give alternating colors to rows
+
+            self.view_discount_tree.insert(parent='', index='end', iid=count, text="", values=record, tags=(tag,))
+            count += 1
+
+    def remove_discount(self):
         print('Discount removed')
         self.total_discount = 0
         self.updateOrderSummary()
         self.discount_window.destroy()
 
+    def create_discount_popup(self):
+        if self.discount_window and self.discount_window.winfo_exists(): 
+            self.discount_window.destroy()  
+        else:
+            self.create_discount_window()      
 
     # Top bar of window --------------------------------------------------------------------------------------------------------------------------------------|
     
@@ -263,8 +277,8 @@ class OrderCreate(Frame):
         self.pay_button = Tk.Button(self.buttonFrame, text="Pay", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
         self.pay_button.grid(row=0, column=0,sticky='new')
 
-        discount = Tk.Button(self.buttonFrame, text="Discount", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3, command=self.discount_btn)
-        discount.grid(row=0, column=1,sticky='new')
+        self.view_discount_button = Tk.Button(self.buttonFrame, text="Discount", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
+        self.view_discount_button.grid(row=0, column=1,sticky='new')
 
         self.modify = Tk.Button(self.buttonFrame, text="Modify", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
         self.modify.grid(row=0, column=2,sticky='new')

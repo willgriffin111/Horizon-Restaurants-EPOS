@@ -8,6 +8,7 @@ from .account_m import Account
 from .menu_edit_m import MenuEdit
 from .reports_m import Reports
 from .order_view_m import OrderView
+from .discount_m import Discount
 
 
 class Model:
@@ -23,3 +24,4 @@ class Model:
         self.account = Account()
         self.menu_edit = MenuEdit()
         self.reports = Reports()
+        self.discount = Discount()

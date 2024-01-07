@@ -84,6 +84,9 @@ class HomeView(tk.Frame):
         self.menu_edit_btn = tk.Button(self.menuFrame, text='Menu Management', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
         self.menu_edit_btn.grid(row=1, column=4, padx=10, pady=10)
 
+        self.discount_btn = tk.Button(self.menuFrame, text='Discount Management', bd=0, bg=self.backgorundColor, fg=self.fontColor, font=self.fontDetails, width=self.buttonWidth, height=self.buttonHeight)
+        self.discount_btn.grid(row=1, column=4, padx=10, pady=10)
+
     # Bottom bar 
         self.bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')
         self.bottomFrame.pack(fill=tk.X, side=tk.BOTTOM)

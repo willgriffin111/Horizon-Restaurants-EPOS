@@ -16,6 +16,7 @@ from .inventory_c import InventoryController
 from .account_c import AccountController
 from .menu_edit_c import MenuEditController
 from .reports_c import ReportController
+from .discount_c import DiscountController
 
 
 class Controller:
@@ -34,6 +35,7 @@ class Controller:
         self.account_controller = AccountController(model, view)
         self.menu_edit_controller = MenuEditController(model, view)
         self.reports_controller = ReportController(model, view)
+        self.discount_controller = DiscountController(model, view)
         
 
         self.model.auth.add_event_listener("auth_changed", self.auth_state_listener)
@@ -52,6 +54,7 @@ class Controller:
             self.menu_edit_controller.update_view()
             self.reports_controller.update_view()
             self.order_view_controller.update_view()
+            self.discount_controller.update_view()
        
             self.reports_controller.update_view()
             self.view.switch("home")

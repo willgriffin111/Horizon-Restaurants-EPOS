@@ -20,6 +20,7 @@ class OrderController:
         self.frame.homeButton.config(command=self.home)
         self.frame.modify.config(command=self.modify)
         self.frame.pay_button.config(command=self.pay_popup)
+        self.frame.view_discount_button.config(command=self.view_discounts_popup)
 
     def update_categories(self):
         self.restaurant_ID = self.model.auth.current_user.getRestrantID()
@@ -36,6 +37,27 @@ class OrderController:
         else:
             self.frame.username.config(text=f" User: Name ")
             self.frame.user_id.config(text=f" ID: 12345678 ")
+    
+    def view_discounts_popup(self):
+        # Update the discounts with the discounts data form the db
+        self.frame.create_discount_popup()
+        self.refresh_view_discounts_tree_view()
+
+        self.frame.apply_discount_button.config(command=self.apply_discount)
+    
+    def apply_discount(self):
+        self.selected_discount = self.frame.view_discount_tree.selection()
+        if self.selected_discount:
+            self.selected_discount_value = self.frame.view_discount_tree.item(self.selected_discount)['values'][1]
+            self.frame.total_discount = float(self.selected_discount_value)
+            self.frame.updateOrderSummary()
+            self.frame.discount_window.destroy()  
+
+    def refresh_view_discounts_tree_view(self):
+        self.frame.clear_view_discounts_tree_view()
+        self.restaurant_ID = self.model.auth.current_user.getRestrantID()
+        self.discounts = self.model.discount.get_discounts_for_orders(self.restaurant_ID)
+        self.frame.insert_tree_view(self.discounts)
 
     def home(self) -> None:
         # Clear the order variable in the view and model, then update the view

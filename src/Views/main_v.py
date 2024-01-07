@@ -13,6 +13,7 @@ from .inventory_v import InventoryView
 from .account_v import AccountView
 from .menu_edit_v import MenuEdit
 from .reports_v import ReportView
+from .discount_v import DiscountView
 
 
 class Frames(TypedDict):
@@ -38,6 +39,7 @@ class View:
         self._add_frame(AccountView, "account")
         self._add_frame(MenuEdit, "menu-edit")
         self._add_frame(ReportView, "reports")
+        self._add_frame(DiscountView, "discount")
         
 
     def _add_frame(self, Frame, name: str) -> None:

@@ -26,6 +26,7 @@ class HomeController:
         self.frame.reports_btn.config(command=self.reports)
         self.frame.Acc_btn.config(command=self.account)
         self.frame.menu_edit_btn.config(command=self.menu_edit)
+        self.frame.discount_btn.config(command=self.discount)
 
     #button functions
     def createReservation(self) -> None:
@@ -63,6 +64,10 @@ class HomeController:
     def menu_edit(self):
         print("Menu Management button clicekd")
         self.view.switch("menu-edit")
+    
+    def discount(self):
+        print("Discount Management button clicked")
+        self.view.switch("discount")
 
     def update_view(self) -> None:
         current_user = self.model.auth.current_user
@@ -79,6 +84,7 @@ class HomeController:
                 self.frame.inventory_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid(row=1, column=1, padx=10, pady=10)
                 self.frame.reports_btn.grid(row=1, column=2, padx=10, pady=10)
+                self.frame.discount_btn.grid(row=2, column=0, padx=10, pady=10)
                 self.frame.menu_edit_btn.grid_forget()
             elif(userType == 'DIRECTOR'):
                 #displaying director buttons
@@ -99,6 +105,7 @@ class HomeController:
                 self.frame.inventory_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
                 self.frame.reports_btn.grid(row=1, column=1, padx=10, pady=10)
+                self.frame.discount_btn.grid(row=1, column=2, padx=10, pady=10)
                 self.frame.menu_edit_btn.grid_forget()
             elif(userType == 'CHEF'):
                 #displaying chef buttons (temp)
@@ -109,6 +116,7 @@ class HomeController:
                 self.frame.inventory_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
                 self.frame.menu_edit_btn.grid(row=0, column=1, padx=10, pady=10)
+                self.frame.discount_btn.grid_forget()
                 self.frame.reports_btn.grid_forget()
             elif(userType == 'KITCHEN'):
                 #displaying kitchen staff buttons
@@ -119,6 +127,7 @@ class HomeController:
                 self.frame.inventory_btn.grid(row=0, column=1, padx=10, pady=10)
                 self.frame.menu_edit_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
+                self.frame.discount_btn.grid_forget()
                 self.frame.reports_btn.grid_forget()
             elif(userType == 'FRONT'):
                 #displaying front buttons
@@ -129,6 +138,7 @@ class HomeController:
                 self.frame.viewOrders_btn.grid_forget()
                 self.frame.inventory_modify_btn.grid_forget()
                 self.frame.adminFeatures_btn.grid_forget()
+                self.frame.discount_btn.grid_forget()
                 self.frame.reports_btn.grid_forget()
         else:
             self.frame.username.config(text=f" User: Name ")
@@ -141,4 +151,6 @@ class HomeController:
             self.frame.adminFeatures_btn.grid_forget()
             self.frame.reports_btn.grid_forget()
             self.frame.menu_edit_btn.grid_forget()
+            self.frame.discount_btn.grid_forget()
+
             

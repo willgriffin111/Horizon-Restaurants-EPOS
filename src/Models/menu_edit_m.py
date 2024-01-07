@@ -52,9 +52,9 @@ class MenuEdit(ObservableModel):
             if conn is not None and conn.is_connected():
                 dbcursor = conn.cursor()
 
-                # Retrieve the menu item name before deletion
+                # Check if the item exists (just in case theres some weird tkinter edge case where its still showing in the view and the manager hasnt refreshed the page, look at me caring, so W)
                 dbcursor.execute("SELECT menu_item_name FROM menu WHERE restaurant_id = %s AND menu_id = %s", (restaurant_ID, item_id))
-                menu_item_name = dbcursor.fetchone()
+                menu_item_name = dbcursor.fetchone() # idk why im even doing this check for an edge case that'll never happen, but oh well 
 
                 if menu_item_name:
                     # Update is_available to False in the menu table
