@@ -49,7 +49,7 @@ class HomeView(tk.Frame):
             self.buttonHeight = 7
             self.buttonWidth = 15
         elif platform == "darwin":
-            self.buttonHeight = 10
+            self.buttonHeight = 7
             self.buttonWidth = 25
         else:
             self.buttonHeight = 10
