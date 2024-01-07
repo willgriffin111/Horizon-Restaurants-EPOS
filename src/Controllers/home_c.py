@@ -85,7 +85,7 @@ class HomeController:
                 self.frame.adminFeatures_btn.grid(row=1, column=1, padx=10, pady=10)
                 self.frame.reports_btn.grid(row=1, column=2, padx=10, pady=10)
                 self.frame.discount_btn.grid(row=2, column=0, padx=10, pady=10)
-                self.frame.menu_edit_btn.grid_forget()
+                self.frame.menu_edit_btn.grid(row=2, column=1, padx=10, pady=10)
             elif(userType == 'DIRECTOR'):
                 #displaying director buttons
                 self.frame.createReservation_btn.grid_forget()

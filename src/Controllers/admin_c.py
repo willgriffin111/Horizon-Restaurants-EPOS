@@ -18,8 +18,6 @@ class AdminController:
     def _bind(self) -> None:
         """Binds controller functions with respective buttons in the view"""
         self.frame.home_btn.config(command=self.home_btn)
-        self.frame.staff_edit_side.config(command=self.staff_edit)
-        self.frame.menu_edit_side.config(command=self.menu_edit)
     
         
         #edit staff tree buttons
@@ -43,9 +41,6 @@ class AdminController:
         self.frame.remove_staff_btn.config(command=self.remove_staff)
         
 
-    #menu tab
-    def menu_edit(self):
-        self.frame.menu_edit()
 
     #home tab
     def home_btn(self) -> None:
