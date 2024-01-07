@@ -17,8 +17,6 @@ class AdminView(tk.Frame):
         self.Sidebar()
         self.staff_button_frame()
         self.staff_table_space()
-        self.inv_button_frame()
-        self.inv_table_space()
         
     # button functions
 
@@ -77,47 +75,7 @@ class AdminView(tk.Frame):
         self.add_submit = tk.Button(self.staff_window, width=4, height=2, text='Submit', borderwidth=0)
         self.add_submit.pack(pady=20)
         
-        
-    def add_inventory_pop(self):
-        def destroy_window():
-            self.inventory_window.destroy()
-
-        self.inventory_window = Toplevel(self)
-        self.inventory_window.title("Inventory add")
-        self.inventory_window.geometry('250x400')
-        self.inventory_window.configure(bg='white')
-        self.inventory_window.resizable(False, False)
     
-        self.add_title = tk.Label(self.staff_window, text='New Inventory', fg='black', bg='white', font=("Arial", 18))
-        self.add_title.pack(pady=10)
-    
-        self.add_name = tk.Label(self.staff_window, text='Item name:', fg='black', bg='white', font=("Arial", 14))
-        self.add_name.pack(pady=10)
-    
-        self.name_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0, border=None)
-        self.name_box.pack()
-    
-        self.add_qty = tk.Label(self.staff_window, text='Quantity:', fg='black', bg='white', font=("Arial", 14))
-        self.add_qty.pack(pady=10)
-    
-        self.qty_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
-        self.qty_box.pack()
-    
-        self.add_reorder = tk.Label(self.staff_window, text='Re-order level:', fg='black', bg='white', font=("Arial", 14))
-        self.add_reorder.pack(pady=10)
-
-        self.reorder_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
-        self.reorder_box.pack()
-
-        self.inv_type = tk.Label(self.staff_window, text='Type:', fg='black', bg='white', font=("Arial", 14))
-        self.inv_type.pack(pady=10)
-    
-        self.type_box = tk.Entry(self.staff_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
-        self.type_box.pack()
-    
-        # Function to close the current window when the 'Add Staff' button is clicked
-        self.submit = tk.Button(self.staff_window, width=4, height=2, text='Submit', borderwidth=0)
-        self.submit.pack(pady=20)
         
 
     # Top bar ---------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -217,84 +175,6 @@ class AdminView(tk.Frame):
         for record in self.staff_tree.get_children():
             self.staff_tree.delete(record)
 
-   # Inventory button / Tree view  ----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-
-    def inv_button_frame(self):
-        self.inventory_frame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='white', height=120, width=480)
-        self.inventory_frame.pack()
-        self.inventory_frame.lower()
-
-        self.frame_label = tk.Label(self.inventory_frame, text='Inventory Management', fg='black', bg='white', font=("Arial", 18))
-        self.frame_label.pack(pady=10)
-
-        self.add_staff = tk.Button(self.inventory_frame, text='Add', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5,command=self.add_inventory_pop)
-        self.add_staff.pack(side=tk.LEFT,padx=6)
-
-        self.remove_staff = tk.Button(self.inventory_frame, text='Delete', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
-        self.remove_staff.pack(side=tk.LEFT,padx=6)
-
-        # edit_staff = tk.Button(self.inventory_frame, text='Edit', bd=0, highlightthickness=0, highlightbackground='#2976E9', pady=10, border=None, width=5)
-        # edit_staff.pack(side=tk.LEFT,padx=6)
-
-        options = ['All', 'Ingredient','Equipment']
-        self.selected_option = tk.StringVar(self.inventory_frame)
-        self.selected_option.set(options[0])  # Set default value
-
-        self.option_menu = tk.OptionMenu(self.inventory_frame, self.selected_option, *options)
-        self.option_menu.configure(bg='white',fg='black',width=10)
-        self.option_menu.pack(anchor='s')
-
-    def inv_table_space(self):
-        self.inventory_table_frame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='white', height=300, width=480)
-        self.inventory_table_frame.pack(pady=10)
-        self.inventory_table_frame.lower()
-
-        self.inventory_tree = ttk.Treeview( self.inventory_table_frame,height=15)
-        self.inventory_tree['columns'] = ("ID", "Name", "Qty", "re-order","inventory-type")
-        column_width = 120
-
-        # Formatting columns
-        self.inventory_tree.column("#0", width=0, minwidth=0)
-        self.inventory_tree.column("ID", anchor='center', width=90, minwidth=90)
-        self.inventory_tree.column("Name", anchor='w', width=column_width, minwidth=column_width)
-        self.inventory_tree.column("Qty",  anchor='w', width=35, minwidth=35)
-        self.inventory_tree.column("re-order", anchor='center', width=column_width, minwidth=column_width)
-        self.inventory_tree.column("inventory-type", anchor='w', width=column_width, minwidth=column_width)
-
-        # Formatting Headers 
-        self.inventory_tree.heading("ID", text="Item ID",anchor='w')
-        self.inventory_tree.heading("Name", text="Item Name",anchor='center')
-        self.inventory_tree.heading("Qty", text="Qty",anchor='center')
-        self.inventory_tree.heading("re-order", text="Re-order level",anchor='e')
-        self.inventory_tree.heading("inventory-type", text="Inventory type",anchor='e')
-
-        # Add tag configurations for odd and even rows
-        self.inventory_tree.tag_configure('oddrow', background='white', foreground='black')
-        self.inventory_tree.tag_configure('evenrow', background='lightgray', foreground='black')
-        
-        self.inventory_tree.pack(pady=10)
-        
-    def insert_data_inv(self, data = None):
-        # For loop to generate the values in the database 
-        if data != None:
-            count = 0
-            for record in data:
-                tag = 'evenrow' if count % 2 == 0 else 'oddrow'
-                self.inventory_tree.insert(parent='', index='end', iid=count, text="", values=(record[0], record[1], record[2], record[3],record[4]), tags=(tag,))
-                count += 1
-                self.inventory_tree.bind("<Double-1>", self.onDoubleClickInventory)
-    
-    def clear_table(self):
-        for record in self.inventory_tree.get_children():
-            self.inventory_tree.delete(record)
-        
-   # Edit cell value -----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-        
-    def onDoubleClickInventory(self, event):
-        self.rowId = self.inventory_tree.identify_row(event.y)
-        self.columnId = self.inventory_tree.identify_column(event.x)
-        if self.rowId and self.columnId:
-            self.editWindowPopup(self.inventory_tree, self.rowId, self.columnId)
   
 
     def editWindowPopup(self, tree, row_id, column_id):
