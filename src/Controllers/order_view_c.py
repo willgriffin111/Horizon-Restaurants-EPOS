@@ -43,7 +43,7 @@ class OrderViewController:
     def orderComplete(self, table_number):
         current_user = self.model.auth.current_user
         if current_user:
-            confirmation=messagebox.askquestion('Log off', 'Are you want to mark this order as complete?')
+            confirmation=messagebox.askquestion('Log off', 'Are you sure, you want to mark this order as complete?')
             if confirmation == 'yes':
                 self.model.orderView.completeOrder(current_user.getRestrantID(),table_number.strip("Table")[1])
                 self.updateOrders()

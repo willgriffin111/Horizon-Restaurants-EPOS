@@ -86,7 +86,7 @@ class InventoryModifyView(Frame):
             # self.option_menu.grid(row=1, column=2, sticky='nswe', padx=2)
             self.style.configure(
                 "TCombobox",
-                foreground='black',
+                foreground='white',
                 arrowcolor='black',
                 font=('Helvetica', 13)
             )
@@ -106,6 +106,7 @@ class InventoryModifyView(Frame):
         self.inventory_window = Toplevel(self)
         self.inventory_window.title("Inventory add")
         self.inventory_window.geometry('250x400')
+        self.inventory_window.configure(bg='white')
         self.inventory_window.resizable(False, False)
     
         add_title = tk.Label(self.inventory_window, text='New Inventory', fg='black', bg='white', font=("Arial", 18))
@@ -135,7 +136,7 @@ class InventoryModifyView(Frame):
         self.type_entry_field = tk.Entry(self.inventory_window, width=14, fg='black', bg='lightgrey', borderwidth=0)
         self.type_entry_field.pack()
         
-        self.submit_new_item_btn = tk.Button(self.inventory_window, text='Submit')
+        self.submit_new_item_btn = tk.Button(self.inventory_window, text='Submit',bg='white',width=5,height=2)
         self.submit_new_item_btn.pack(pady=10)
         
     
@@ -227,7 +228,3 @@ class InventoryModifyView(Frame):
     #     currentValues[int(column_index)] = new_value
     #     self.inventory_tree.item(int(row_id), values=currentValues)
     #     self.edit_window.destroy()
-
-    
-
-
