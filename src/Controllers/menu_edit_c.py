@@ -89,8 +89,8 @@ class MenuEditController:
         #   Use the selected item's id to remove it from the db
         self.selected_item = self.frame.menu_tree.selection()
         if self.selected_item:
-            confirmation = messagebox.askquestion('Delete Item', 'Are you sure you want to remove this item?')
-            if confirmation == 'yes':
+            self.confirmation = messagebox.askquestion('Delete Item', 'Are you sure you want to remove this item?')
+            if self.confirmation == 'yes':
                 self.selected_menu_item_id = self.frame.menu_tree.item(self.selected_item)['values'][0]
                 self.restaurant_ID = self.model.auth.current_user.getRestrantID()
                 self.model.menu_edit.remove_menu_item(self.restaurant_ID, self.selected_menu_item_id)

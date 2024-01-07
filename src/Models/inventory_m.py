@@ -251,3 +251,4 @@ class Inventory(ObservableModel):
         # item_data will let the manager know which item to re-order
         # For now I'm just going to return true to signal the email has been sent without errors
         return True
+    
