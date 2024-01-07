@@ -85,7 +85,7 @@ class Reports(ObservableModel):
                     for order in self.orderList:
                         totalforstaff += float(order[1]) * float(order[0])
                         
-                    self.stafflist.append([employee[0],employee[2],employee[3],totalforstaff])
+                    self.stafflist.append([str(employee[0]),str(employee[2]),str(employee[3]),str(totalforstaff)])
                     
                 dbcursor.close()
                 conn.close() 
@@ -112,10 +112,19 @@ class Reports(ObservableModel):
         
                     dbcursor.fetchall()
                         
-                    self.stafflist.append([employee[0],employee[2],employee[3],dbcursor.rowcount])
+                    self.stafflist.append([str(employee[0]),str(employee[2]),str(employee[3]),str(dbcursor.rowcount)])
                     
                 dbcursor.close()
                 conn.close() 
                 
                 return(self.stafflist)
-        
+            
+    def getRestName(self,SelectedRest):
+        conn = dbfunc.getConnection() 
+        if conn != None:    #Checking if connection is None                    
+            if conn.is_connected(): #Checking if connection is established
+                dbcursor = conn.cursor() #Creating cursor object   
+                dbcursor.execute(f"SELECT * FROM restaurant WHERE restaurant_id = {SelectedRest};")
+                self.restaurant_data = dbcursor.fetchone()
+                return self.restaurant_data[2]
+                
