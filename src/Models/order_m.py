@@ -139,6 +139,9 @@ class Order(ObservableModel):
 
                         # Update the bill with the updated price, to account for the refund
                         remaining_price = sum(item['quantity'] * item['price'] for item in items_out_of_stock.values())
+                        if discount_applied > 0:
+                            discount_amount = remaining_price * discount_applied
+                            remaining_price -= discount_amount
                         dbcursor.execute("UPDATE bill SET bill_sub_total = %s WHERE bill_id = %s",
                                         (sub_total - remaining_price, bill_id))
 

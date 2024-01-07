@@ -99,10 +99,15 @@ class OrderController:
             for item_name, item_info in self.message.items():
                 quantity = item_info['quantity']
                 price = item_info['price']
-                message += f"{quantity} units of {item_name} at £{price} each.\n"
+                if self.discount_applied > 0:
+                    discount_amount = price * self.discount_applied
+                    price -= discount_amount
+                    message += f"{quantity} units of {item_name} at £{price} each. Discounted at {self.discount_applied*100}%\n"
+                else:
+                    message += f"{quantity} units of {item_name} at £{price} each.\n"
             
             messagebox.showwarning("Items not fully deducted from stock.", message)
-            
+
         elif self.message == 'Table value selected has no number':
             messagebox.showerror("Error", "Table value selected has no number.")
         elif self.message == 'DB Error':
