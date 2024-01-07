@@ -60,14 +60,14 @@ class ReportController:
     def generateRestaurantReport(self):
         pdf = PDFProfit()
         self.title = 'Restaurant Preformace Report'
-        self.date = f'Date: {datetime.today().strftime('%Y-%m-%d')}'
+        self.date = f'Date: {datetime.today().strftime("%Y-%m-%d")}'
         self.name = f'User: {self.current_user.getName()}'
         pdf.add_page()
         pdf.subHeader(self.title,self.date,self.name)
         pdf.add_line_graph_to_pdf(self.ordersdates,self.orderstotals)
         pdf.sales_record(self.ordersdates,self.orderstotals)
-        pdf.output(f'Restaurant-Report-{datetime.today().strftime('%Y-%m-%d')}.pdf', 'F')
-        messagebox.showinfo("Sucsess", f"Restaurant-Report-{datetime.today().strftime('%Y-%m-%d')}.pdf has been sucsessfully generated")
+        pdf.output(f'Restaurant-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf', 'F')
+        messagebox.showinfo("Sucsess", f"Restaurant-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf has been sucsessfully generated")
     
     def staffreport(self):
         self.frame.showStaffReports()
@@ -89,7 +89,7 @@ class ReportController:
     def generateStaffReport(self):
         pdf = PDFProfit()
         self.title = 'Staff Preformace Report'
-        self.date = f'Date: {datetime.today().strftime('%Y-%m-%d')}'
+        self.date = f'Date: {datetime.today().strftime("%Y-%m-%d")}'
         self.name = f'User: {self.current_user.getName()}'
         pdf.add_page()
         pdf.subHeader(self.title,self.date,self.name)
@@ -97,8 +97,8 @@ class ReportController:
         pdf.profit_record(self.staffProfits,self.restName)
         pdf.order_title()
         pdf.order_record(self.staffOrders, self.restName)
-        pdf.output(f'Staff-Report-{datetime.today().strftime('%Y-%m-%d')}.pdf', 'F')
-        messagebox.showinfo("Sucsess", f"Staff-Report-{datetime.today().strftime('%Y-%m-%d')}.pdf has been sucsessfully generated")
+        pdf.output(f'Staff-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf', 'F')
+        messagebox.showinfo("Sucsess", f"Staff-Report-{datetime.today().strftime("%Y-%m-%d")}.pdf has been sucsessfully generated")
         
     #home tab
     def home_btn(self) -> None:
