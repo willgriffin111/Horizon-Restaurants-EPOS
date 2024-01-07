@@ -1,7 +1,7 @@
 '''
-Author: Alex Rogers
+Author: Niel Paraggua
 Date: 18/12/2023
-Version: 1.1
+Version: 1.0
 '''
 
 from typing import TypedDict, Union

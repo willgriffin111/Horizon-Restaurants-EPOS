@@ -1,3 +1,9 @@
+'''
+Author: Niel Paraggua
+Date: 18/12/2023
+Version: 1.0
+'''
+
 import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
