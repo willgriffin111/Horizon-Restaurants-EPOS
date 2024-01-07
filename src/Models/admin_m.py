@@ -41,18 +41,21 @@ class Admin(ObservableModel):
         staffPass = sha256_crypt.hash(staffPass)
         restaurantID = re.search('\(([^)]+)\)', restaurantID)
         restaurantID = restaurantID.group(1)
-        print('Adding New Staff')          
-        conn = dbfunc.getConnection() 
-        if conn != None:    #Checking if connection is None                  
-            if conn.is_connected(): #Checking if connection is established                        
-                print('MySQL Connection is established')                          
-                dbcursor = conn.cursor()    #Creating cursor object                                                 
-                dbcursor.execute("INSERT INTO employee (employee_name, employee_account_type, \
-                                 employee_password, restaurant_id) VALUES (%s, %s, %s, %s)", (staffName, staffType, staffPass, restaurantID))                                        
-                conn.commit() 
-                messagebox.showinfo("Sucsess", "User created sucsesfully.")
-                dbcursor.close()       
-                conn.close()
+        if staffType == "ADMIN" or staffType == "DIRECTOR" or staffType == "CHEF" or staffType == "MANAGER" or staffType == "KITCHEN" or staffType == "FRONT":
+            print('Adding New Staff')          
+            conn = dbfunc.getConnection() 
+            if conn != None:    #Checking if connection is None                  
+                if conn.is_connected(): #Checking if connection is established                        
+                    print('MySQL Connection is established')                          
+                    dbcursor = conn.cursor()    #Creating cursor object                                                 
+                    dbcursor.execute("INSERT INTO employee (employee_name, employee_account_type, \
+                                    employee_password, restaurant_id) VALUES (%s, %s, %s, %s)", (staffName, staffType, staffPass, restaurantID))                                        
+                    conn.commit() 
+                    messagebox.showinfo("Sucsess", "User created sucsesfully.")
+                    dbcursor.close()       
+                    conn.close()
+        else:
+            messagebox.showerror("ERROR","User type must be one of the following; ADMIN,DIRECTOR,CHEF,MANAGER,KITCHEN or FRONT")
                 
     def remove_staff(self,staffId) -> None:
         print('Removeing Staff')          
