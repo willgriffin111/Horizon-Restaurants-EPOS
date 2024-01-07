@@ -113,7 +113,7 @@ TABLES['RESERVATIONS'] = 'CREATE TABLE reservation (\
   reservation_id INT NOT NULL AUTO_INCREMENT, \
   PRIMARY KEY (reservation_id),\
   reservation_customer_name VARCHAR(64) NOT NULL,\
-  reservation_customer_phone INT NOT NULL,\
+  reservation_customer_phone VARCHAR(11) NOT NULL,\
   reservation_party_size INT NOT NULL,\
   reservation_author VARCHAR(64) NOT NULL,\
   reservation_creation_time DATETIME NOT NULL,\
