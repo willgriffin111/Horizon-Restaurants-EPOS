@@ -45,6 +45,7 @@ class OrderController:
         self.refresh_view_discounts_tree_view()
 
         self.frame.apply_discount_button.config(command=self.apply_discount)
+        self.frame.apply_staff_discount_button.config(command=self.enter_staff_ID_popup)
     
     def apply_discount(self):
         self.selected_discount = self.frame.view_discount_tree.selection()
@@ -52,7 +53,24 @@ class OrderController:
             self.selected_discount_value = self.frame.view_discount_tree.item(self.selected_discount)['values'][1]
             self.frame.total_discount = float(self.selected_discount_value)
             self.frame.updateOrderSummary()
-            self.frame.discount_window.destroy()  
+            self.frame.discount_window.destroy()
+
+    def enter_staff_ID_popup(self):
+        self.frame.enter_staff_ID_popup()
+        self.frame.submit_staff_ID_button.config(command=self.apply_staff_discount)
+        
+    def apply_staff_discount(self):
+        self.staff_ID = self.frame.staff_ID_entry.get()
+        self.confirm_staff = self.model.order.verify_staff_ID(self.staff_ID)
+        if self.confirm_staff:
+            messagebox.showinfo("Success", "Staff Discount Applied.")
+            self.frame.total_discount = 25.00
+            self.frame.updateOrderSummary()
+            self.frame.discount_window.destroy()
+        else:
+            messagebox.showerror("Nope", "Staff ID doesn't exist.")
+        self.frame.enter_staff_ID_window.destroy()    
+        return
 
     def refresh_view_discounts_tree_view(self):
         self.frame.clear_view_discounts_tree_view()

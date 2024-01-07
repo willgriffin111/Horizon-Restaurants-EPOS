@@ -143,6 +143,17 @@ class OrderCreate(Frame):
         self.total_discount = 0
         self.updateOrderSummary()
         self.discount_window.destroy()
+    
+    def enter_staff_ID_popup(self):
+        self.enter_staff_ID_window = Toplevel(self)
+        self.enter_staff_ID_window.title("Staff Discount")
+        self.enter_staff_ID_window.geometry("300x100")
+
+        self.staff_ID_entry = Tk.Entry(self.enter_staff_ID_window)
+        self.staff_ID_entry.pack(pady=10)
+        
+        self.submit_staff_ID_button = Tk.Button(self.enter_staff_ID_window, text="Submit")
+        self.submit_staff_ID_button.pack()
 
     def create_discount_popup(self):
         if self.discount_window and self.discount_window.winfo_exists(): 

@@ -165,3 +165,37 @@ class Order(ObservableModel):
         except ValueError:
             # Letting staff know about erroneous value
             return 'Table value selected has no number'
+        
+    
+    def verify_staff_ID(self, staff_ID):
+        try:
+            conn = dbfunc.getConnection()
+
+            if conn is not None and conn.is_connected():
+                dbcursor = conn.cursor()
+
+                # Check if the employee with the given staff_ID exists
+                query = "SELECT employee_id FROM employee WHERE employee_id = %s;"
+                params = (staff_ID,)
+
+                dbcursor.execute(query, params)  # parameterized query to avoid SQL injection
+                result = dbcursor.fetchone()
+
+                dbcursor.close()
+                conn.close()
+
+                if result:
+                    print(f"Employee with ID {staff_ID} exists.")
+                    return True
+                else:
+                    print(f"Employee with ID {staff_ID} does not exist.")
+                    return False
+
+            else:
+                print("Database connection failed.")
+                return False
+
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            return False
+

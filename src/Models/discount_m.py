@@ -53,8 +53,8 @@ class Discount(ObservableModel):
             if conn is not None and conn.is_connected():
                 dbcursor = conn.cursor()
 
-                # Fetch the inventory from the database for the restaurant specified
-                query = "SELECT discount_name, discount_value FROM discounts WHERE restaurant_id = %s;"
+                # Fetch the inventory from the database for the restaurant specified and that its not expired
+                query = "SELECT discount_name, discount_value FROM discounts WHERE restaurant_id = %s AND discount_end >= CURDATE();"
                 params = (restaurant_ID,)
 
                 dbcursor.execute(query, params) # parameterized query to avoid SQl injection
@@ -64,7 +64,7 @@ class Discount(ObservableModel):
                 conn.close()
 
                 if not self.discounts:
-                    print("No discount data found.")
+                    print("No unexpired discount data found.")
                 print(self.discounts)
                 return self.discounts
 
