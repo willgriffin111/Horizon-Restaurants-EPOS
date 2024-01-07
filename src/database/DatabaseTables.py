@@ -26,8 +26,19 @@ TABLES['INVENTORY'] = 'CREATE TABLE inventory (\
   inventory_item_stock INT NOT NULL,\
   inventory_item_reorder_level INT NOT NULL,\
   inventory_item_type VARCHAR(64) NOT NULL,\
+  is_available tinyint(1)\
   FOREIGN KEY (restaurant_id) \
   REFERENCES restaurant (restaurant_id)\
+);'
+
+TABLES['DISCOUNTS'] = 'CREATE TABLE discounts (\
+    discount_id INT AUTO_INCREMENT PRIMARY KEY,\
+    restaurant_id INT,\
+    discount_name VARCHAR(255),\
+    discount_start DATE,\
+    discount_end DATE,\
+    discount_value FLOAT,\
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id)\
 );'
 
 TABLES['INVENTORY_RESTAURANT'] = 'CREATE TABLE inventory_restaurant (\
