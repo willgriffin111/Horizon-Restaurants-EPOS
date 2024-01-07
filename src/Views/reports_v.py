@@ -4,76 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import datetime, timedelta
 
-salesData = {
-    '2024-01-01': {
-        'Birmingham': {'Restaurant1': 247, 'Restaurant2': 271},
-        'Bristol': {'Restaurant1': 226, 'Restaurant2': 271},
-        'Cardiff': {'Restaurant1': 196, 'Restaurant2': 264},
-        'Glasgow': {'Restaurant1': 214, 'Restaurant2': 178},
-        'Manchester': {'Restaurant1': 132, 'Restaurant2': 211},
-        'Nottingham': {'Restaurant1': 188, 'Restaurant2': 267},
-        'London': {'Restaurant1': 289, 'Restaurant2': 212}
-    },
-    '2024-01-10': {
-        'Birmingham': {'Restaurant1': 247, 'Restaurant2': 248},
-        'Bristol': {'Restaurant1': 228, 'Restaurant2': 125},
-        'Cardiff': {'Restaurant1': 247, 'Restaurant2': 174},
-        'Glasgow': {'Restaurant1': 134, 'Restaurant2': 223},
-        'Manchester': {'Restaurant1': 218, 'Restaurant2': 248},
-        'Nottingham': {'Restaurant1': 262, 'Restaurant2': 265},
-        'London': {'Restaurant1': 269, 'Restaurant2': 253}
-    },
-    '2024-01-20': {
-        'Birmingham': {'Restaurant1': 244, 'Restaurant2': 182},
-        'Bristol': {'Restaurant1': 178, 'Restaurant2': 105},
-        'Cardiff': {'Restaurant1': 103, 'Restaurant2': 291},
-        'Glasgow': {'Restaurant1': 197, 'Restaurant2': 227},
-        'Manchester': {'Restaurant1': 127, 'Restaurant2': 151},
-        'Nottingham': {'Restaurant1': 177, 'Restaurant2': 245},
-        'London': {'Restaurant1': 233, 'Restaurant2': 291}
-    },
-    '2024-01-30': {
-        'Birmingham': {'Restaurant1': 121, 'Restaurant2': 296},
-        'Bristol': {'Restaurant1': 293, 'Restaurant2': 223},
-        'Cardiff': {'Restaurant1': 196, 'Restaurant2': 174},
-        'Glasgow': {'Restaurant1': 169, 'Restaurant2': 154},
-        'Manchester': {'Restaurant1': 187, 'Restaurant2': 238},
-        'Nottingham': {'Restaurant1': 122, 'Restaurant2': 206},
-        'London': {'Restaurant1': 162, 'Restaurant2': 192}
-    },
-    '2024-02-01': {
-        'Birmingham': {'Restaurant1': 282, 'Restaurant2': 275},
-        'Bristol': {'Restaurant1': 291, 'Restaurant2': 205},
-        'Cardiff': {'Restaurant1': 255, 'Restaurant2': 126},
-        'Glasgow': {'Restaurant1': 213, 'Restaurant2': 246},
-        'Manchester': {'Restaurant1': 289, 'Restaurant2': 103},
-        'Nottingham': {'Restaurant1': 287, 'Restaurant2': 240},
-        'London': {'Restaurant1': 130, 'Restaurant2': 175}
-    },
-    '2024-02-10': {
-        'Birmingham': {'Restaurant1': 264, 'Restaurant2': 178},
-        'Bristol': {'Restaurant1': 144, 'Restaurant2': 279},
-        'Cardiff': {'Restaurant1': 109, 'Restaurant2': 242},
-        'Glasgow': {'Restaurant1': 271, 'Restaurant2': 139},
-        'Manchester': {'Restaurant1': 261, 'Restaurant2': 257},
-        'Nottingham': {'Restaurant1': 206, 'Restaurant2': 104},
-        'London': {'Restaurant1': 187, 'Restaurant2': 180}
-    },
-    '2024-02-20': {
-        'Birmingham': {'Restaurant1': 189, 'Restaurant2': 106},
-        'Bristol': {'Restaurant1': 156, 'Restaurant2': 242},
-        'Cardiff': {'Restaurant1': 248, 'Restaurant2': 167},
-        'Glasgow': {'Restaurant1': 225, 'Restaurant2': 201},
-        'Manchester': {'Restaurant1': 206, 'Restaurant2': 247},
-        'Nottingham': {'Restaurant1': 245, 'Restaurant2': 136},
-        'London': {'Restaurant1': 222, 'Restaurant2': 152}
-    }
-}
 
-staffData = {
-    'Will': (100,20,64,35.599,105),
-    'Neil': (200,122,1000,400,10,67)
-}
 
 
 class ReportView(tk.Frame):
@@ -120,31 +51,23 @@ class ReportView(tk.Frame):
         self.restaurantDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selectedRestaurnant, values=restaurantOptions)
         self.restaurantDropdown.current(0)
         self.restaurantDropdown.pack(pady=10)
-        
-
-
-        
-    def getRestaurantOptions(self):
-        options = ["Show All Restaurants"]
-
-        firstDayData = salesData[list(salesData.keys())[0]]
-
-        for city in firstDayData:
-            for restaurant in firstDayData[city]:
-                options.append(f"{city} - {restaurant}")
-                
-        return options
     
     
     def update_graph(self, days, totalSales, selected):
         print("Updating graph...")  
+        try:
+            self.dowloadReport_btn
+        except AttributeError:
+            self.dowloadReport_btn = tk.Button(self.dateInputFrame, text="Download Report")
+            self.dowloadReport_btn.pack(side=tk.LEFT, padx=10)
+            
         if selected == "Show All Restaurants":
             self.cleargraph()
             # Plotting the new graph
             fig, ax = plt.subplots(figsize=(5, 4), dpi=75)
             ax.clear()  
             ax.plot(days, totalSales, label="Total Sales of All Restaurants")
-            ax.set(xlabel='Week Starting', ylabel='Sales (£)', title='Weekly Sales Data - All Restaurants')
+            ax.set(xlabel='Date', ylabel='Sales (£)', title='Weekly Sales Data - All Restaurants')
             ax.grid()
             plt.xticks(rotation=45)
             plt.tight_layout()
@@ -161,7 +84,7 @@ class ReportView(tk.Frame):
             fig, ax = plt.subplots(figsize=(5, 4), dpi=75)
             ax.clear()  
             ax.plot(days, totalSales, label=f"Sales of {selected}")
-            ax.set(xlabel='Week Starting', ylabel='Sales (£)', title=f'Weekly Sales Data - {selected}')
+            ax.set(xlabel='Date', ylabel='Sales (£)', title=f'Weekly Sales Data - {selected}')
             ax.grid()
             plt.xticks(rotation=45)
             plt.tight_layout()
@@ -171,40 +94,11 @@ class ReportView(tk.Frame):
             self.canvas.draw()
             self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
             
+            
     def cleargraph(self):
         if hasattr(self, 'canvas'):
                 self.canvas.get_tk_widget().destroy()
 
-    # def showStaffReports(self):
-    #     self.clearContent()
-    #     self.staffLabel = tk.Label(self.contentFrame, text="Staff Reports", font=('Arial', 20))
-    #     self.staffLabel.pack(pady=20)
-
-    #     self.selected_employee = tk.StringVar()
-    #     self.emplyeeOptions = list(staffData.keys())  
-    #     self.employeeDropdown = ttk.Combobox(self.contentFrame, textvariable=self.selected_employee, values=self.emplyeeOptions)
-    #     self.employeeDropdown.current(0)  # Default selection is the first option
-    #     self.employeeDropdown.pack(pady=10)
-    #     self.employeeDropdown.bind("<<ComboboxSelected>>", self.updateStaffReport) 
-
-    #     self.totalSalesLabel = tk.Label(self.contentFrame, text="", font=('Arial', 16))
-    #     self.totalSalesLabel.pack(pady=10)
-
-    #     self.updateStaffReport()
-
-    # def updateStaffReport(self, event=None):
-    #     self.selectedEmployees = self.selected_employee.get()
-    #     self.emplyeeSales = staffData[self.selectedEmployees]
-
-
-    #     self.totalSales = sum(self.emplyeeSales)
-    #     self.numberOfOrders = len(self.emplyeeSales)
-    #     self.averageOrderPrice = self.totalSales / self.numberOfOrders 
-
-    #     self.displayText = (f"Total Sales for {self.selectedEmployees}: £{self.totalSales}\n"
-    #                     f"Number of Orders: {self.numberOfOrders}\n"
-    #                     f"Average Order Price: £{self.averageOrderPrice:.2f}")
-    #     self.totalSalesLabel.config(text=self.displayText)
         
     
     # Staff performace tree view table ------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -214,23 +108,27 @@ class ReportView(tk.Frame):
         self.top_frame = tk.Frame(self.contentFrame,bg='white')
         self.top_frame.pack(pady=20)
 
-        self.frame_label = tk.Label(self.top_frame, text='Staff Performance Score', fg='black', bg='white', font=("Arial", 15))
+        self.frame_label = tk.Label(self.top_frame, text='Staff Performance', fg='black', bg='white', font=("Arial", 15))
         self.frame_label.pack()
+        
         self.staff_perform_table_space()
 
 
     def staff_perform_table_space(self):
         self.mid_frame = tk.Frame(self.contentFrame, bg='white')
         self.mid_frame.pack(side='left',padx=10)
+        
+        self.dowloadReport_btn = tk.Button(self.top_frame, text="Download Report")
+        self.dowloadReport_btn.pack(pady=10)
 
         self.mid_lbl_frame = tk.Frame(self.mid_frame, bg='white')
         self.mid_lbl_frame.pack()
 
         self.profit_label = tk.Label(self.mid_lbl_frame, text='Staff profit record', fg='black', bg='white', font=("Arial", 11))
-        self.profit_label.pack(side='left',padx=70,pady=20)
+        self.profit_label.pack(side='left',padx=70,pady=10)
 
         self.profit_label = tk.Label(self.mid_lbl_frame, text='Staff order record', fg='black', bg='white', font=("Arial", 11))
-        self.profit_label.pack(side='left',padx=70,pady=20)
+        self.profit_label.pack(side='left',padx=70,pady=10)
  
 # Staff performance tree view (Profits made ) -------------------------------------------------------------------------------------------------------------------------------------------------------|
 
