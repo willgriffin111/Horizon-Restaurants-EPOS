@@ -49,7 +49,7 @@
 - **Make Qty lower than Re-order level**
   "This makes the row orange, indicating they are low on stock."
 
-# NOW FOLLOW INSTRUCTIONS CLOSELY
+- **NOW FOLLOW INSTRUCTIONS CLOSELY**
 - **Make the Qty of a menu item equal to 2 and remember the item**
 - **Make the Qty of a menu item equal to 10 and remember the item**
 - **Click on home**
@@ -136,4 +136,3 @@
 - **After you're done, click home and go to Admin Features**
   "Here you can perform CRUD on employee accounts. Use double click to update cells."
 
-**THAT IS ALLLLLL!!**
