@@ -55,11 +55,8 @@ class ReportView(tk.Frame):
     
     def update_graph(self, days, totalSales, selected):
         print("Updating graph...")  
-        try:
-            self.dowloadReport_btn
-        except AttributeError:
-            self.dowloadReport_btn = tk.Button(self.dateInputFrame, text="Download Report")
-            self.dowloadReport_btn.pack(side=tk.LEFT, padx=10)
+        self.dowloadReport_btn = tk.Button(self.dateInputFrame, text="Download Report")
+        self.dowloadReport_btn.pack(side=tk.LEFT, padx=10)
             
         if selected == "Show All Restaurants":
             self.cleargraph()
