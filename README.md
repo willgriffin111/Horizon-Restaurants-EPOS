@@ -6,6 +6,9 @@
 - **pip install tkcalendar**
 - **pip install fpdf2**
 - **pip install mysql-connector-python**
+- **pip install passlib**
+- **pip install tk**
+- **pip pip install matplotlib**
 
 ## 1. Menu Management
 - **Login with Usercode 2, Password=password**
