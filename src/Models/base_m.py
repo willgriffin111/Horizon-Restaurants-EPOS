@@ -1,3 +1,13 @@
+'''
+*    Title: How To Organize Multi-frame TKinter Application With MVC Pattern
+*    Author: Nazmul Ahsan
+*    Date: Jan 6, 2023
+*    Code version: 1.0
+*    Availability: https://nazmul-ahsan.medium.com/how-to-organize-multi-frame-tkinter-application-with-mvc-pattern-79247efbb02b
+*
+'''
+
+
 from typing import Callable, TypeVar, Any
 
 Self = TypeVar("Self", bound="ObservableModel")

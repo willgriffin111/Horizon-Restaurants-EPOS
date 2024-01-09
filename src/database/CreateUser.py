@@ -36,36 +36,36 @@ restcap = 6
 #     print('DBFunc error')
     
 # Create USER
-conn = dbfunc.getConnection() 
-if conn != None:    #Checking if connection is None
-    if conn.is_connected(): #Checking if connection is established
-        print('MySQL Connection is established')                          
-        dbcursor = conn.cursor()    #Creating cursor object
-        dbcursor.execute('USE {};'.format(DB_NAME)) #use database
-        dbcursor.execute("INSERT INTO employee (employee_id, restaurant_id, employee_name, employee_account_type, \
-                                 employee_password) VALUES (%s, %s, %s, %s, %s)", (staffId, restrantid, staffName, staffType, staffPassword))     
-        conn.commit() 
-        print("User created sucsesfully")
-        dbcursor.close()       
-        conn.close() #Connection must be closed
-    else:
-        print('DB connection error')
-else:
-    print('DBFunc error')
-    
-# Create TABLE
 # conn = dbfunc.getConnection() 
 # if conn != None:    #Checking if connection is None
 #     if conn.is_connected(): #Checking if connection is established
 #         print('MySQL Connection is established')                          
 #         dbcursor = conn.cursor()    #Creating cursor object
 #         dbcursor.execute('USE {};'.format(DB_NAME)) #use database
-#         dbcursor.execute("INSERT INTO tables (table_number, table_capacity, restaurant_id) VALUES (%s, %s, %s)", (1, 6, 1))    
+#         dbcursor.execute("INSERT INTO employee (employee_id, restaurant_id, employee_name, employee_account_type, \
+#                                  employee_password) VALUES (%s, %s, %s, %s, %s)", (staffId, restrantid, staffName, staffType, staffPassword))     
 #         conn.commit() 
-#         print("table created sucsesfully")
+#         print("User created sucsesfully")
 #         dbcursor.close()       
 #         conn.close() #Connection must be closed
 #     else:
 #         print('DB connection error')
 # else:
 #     print('DBFunc error')
+    
+# Create TABLE
+conn = dbfunc.getConnection() 
+if conn != None:    #Checking if connection is None
+    if conn.is_connected(): #Checking if connection is established
+        print('MySQL Connection is established')                          
+        dbcursor = conn.cursor()    #Creating cursor object
+        dbcursor.execute('USE {};'.format(DB_NAME)) #use database
+        dbcursor.execute("INSERT INTO tables (table_number, table_capacity, restaurant_id) VALUES (%s, %s, %s)", (1, 6, 1))    
+        conn.commit() 
+        print("table created sucsesfully")
+        dbcursor.close()       
+        conn.close() #Connection must be closed
+    else:
+        print('DB connection error')
+else:
+    print('DBFunc error')

@@ -95,7 +95,6 @@ class PDFProfit(FPDF):
     def sales_record(self,dates,total):
 
             self.set_font('Helvetica', '', 12)
-            self.cell(76,20,'Restaurant: London',ln=True, align='C')
 
             self.table_data = [("Date","Sales")]  # Append this before inserting data
             

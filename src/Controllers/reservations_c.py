@@ -42,12 +42,12 @@ class ReservationsController:
         self.tableNum = self.frame.tableNumUI.get()
         
         if self.model.auth.current_user.getAccountType() == "ADMIN" or self.model.auth.current_user.getAccountType() == "MANAGER":
-            #checks to see if all boxes have entered data
+            #checks to see if all boxes have entered data for manager create reservation
             if not all([self.restaurantName, self.customerName, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
                 messagebox.showerror("Error", "All fields are required")
                 return
         else:
-            #checks to see if all boxes have entered data
+            #checks to see if all boxes have entered data for other create reservation
             if not all([self.customerName, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
                 messagebox.showerror("Error", "All fields are required")
                 return

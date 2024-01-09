@@ -14,7 +14,7 @@ menuItems = {
     "LOLOLOL": ["asodasda", "sadasdas"]
 }
 
-tables = ["Select Table", "Table 1", "Table 2", "Table 3"]  
+tables = ["Select Table", "Table 1", "Table 2", "Table 4","Table 5","Table 6"]  
 
 # FIRST ITEM IS THE ITEM NAME, SECOND IS THE QUANTITY, THIRD IS PRICE
 order = {
@@ -241,7 +241,7 @@ class OrderCreate(Frame):
         Tk.Label(self.summaryFrame, text=f"Total: £{self.discounted_price:.2f}", fg='black', bg="#F0FFFF").pack(padx=10, pady=5, anchor='w')
     # Window Side bar ----------------------------------------------------------------------------------------------------------------------------------------|
     def sidebar(self):
-        self.sidebar = Tk.Frame(self, width=300, height=478, bg="#F0FFFF")
+        self.sidebar = Tk.Frame(self, bg="#F0FFFF")
         self.sidebar.pack(fill=Tk.Y, side=Tk.LEFT)
 
         self.sidebar.columnconfigure(0, weight=1)
@@ -251,7 +251,7 @@ class OrderCreate(Frame):
         topBox = Tk.Frame(self.sidebar, bg="#F0FFFF")
         topBox.columnconfigure((0,1), weight=1)
         topBox.rowconfigure(0, weight=1)
-        topBox.grid(column=0, row=0, padx=10, pady=10)
+        topBox.grid(column=0, row=0, padx=40, pady=10)
 
 
         tableMenu = Tk.OptionMenu(topBox, self.selected_table, *tables, command=self.selectedTableChanged)
@@ -283,14 +283,14 @@ class OrderCreate(Frame):
         self.buttonFrame.columnconfigure((0,1,2), weight=1)
         self.buttonFrame.rowconfigure(0, weight=1)
 
-        self.pay_button = Tk.Button(self.buttonFrame, text="Pay", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
-        self.pay_button.grid(row=0, column=0,sticky='new')
+        self.pay_button = Tk.Button(self.buttonFrame, text="Pay", bg="#F0FFFF", fg="black", borderwidth=0, width=6, height=3)
+        self.pay_button.grid(row=0, column=0,sticky='new',padx=8)
 
-        self.view_discount_button = Tk.Button(self.buttonFrame, text="Discount", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
-        self.view_discount_button.grid(row=0, column=1,sticky='new')
+        self.view_discount_button = Tk.Button(self.buttonFrame, text="Discount", bg="#F0FFFF", fg="black", borderwidth=0, width=6, height=3)
+        self.view_discount_button.grid(row=0, column=1,sticky='new',padx=8)
 
-        self.modify = Tk.Button(self.buttonFrame, text="Modify", bg="#F0FFFF", fg="black", borderwidth=0, width=4, height=3)
-        self.modify.grid(row=0, column=2,sticky='new')
+        self.modify = Tk.Button(self.buttonFrame, text="Modify", bg="#F0FFFF", fg="black", borderwidth=0, width=6, height=3)
+        self.modify.grid(row=0, column=2,sticky='new',padx=8)
     
     def selectedTableChanged(self, selectedValue):
         '''

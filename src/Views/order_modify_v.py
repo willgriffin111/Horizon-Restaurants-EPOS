@@ -35,7 +35,7 @@ class OrderModifyView(Frame):
         self.sidebar()
         self.topbar(userName=userName, userID=userId)
         self.mainButtons()
-        self.bottombar()
+        # self.bottombar()
         self.updateItemList()
 
         self.discount_window = None

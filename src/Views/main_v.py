@@ -1,5 +1,14 @@
-from typing import TypedDict
+'''
+*    Title: How To Organize Multi-frame TKinter Application With MVC Pattern
+*    Author: Nazmul Ahsan
+*    Date: Jan 6, 2023
+*    Code version: 1.0
+*    Availability: https://nazmul-ahsan.medium.com/how-to-organize-multi-frame-tkinter-application-with-mvc-pattern-79247efbb02b
+*
+'''
 
+
+from typing import TypedDict
 from .root_v import Root
 from .home_v import HomeView
 from .login_v import LoginView

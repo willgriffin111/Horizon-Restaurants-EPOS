@@ -273,6 +273,6 @@ class ReportView(tk.Frame):
     def bottomBar(self):
         self.bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='black')
         self.bottomFrame.pack(fill=tk.X, side=tk.BOTTOM)
-        self.bottomLabel = tk.Label(self.bottomFrame, text="", bg='#1A1A1A')
+        self.bottomLabel = tk.Label(self.bottomFrame, text="", bg='black')
         self.bottomLabel.pack()
 
