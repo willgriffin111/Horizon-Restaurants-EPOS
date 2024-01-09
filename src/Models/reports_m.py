@@ -41,11 +41,13 @@ class Reports(ObservableModel):
                         order_time_created BETWEEN (%s) AND (%s);", (dateStart,dateStart + datetime.timedelta(days=1)))   
                                                          
                     self.orderList = dbcursor.fetchall()
-                    
+                    self.orderID =  0
                     for order in self.orderList:
-                        dbcursor.execute(f"SELECT * FROM bill WHERE bill_id = {order[0]}")
-                        self.billList = dbcursor.fetchone()
-                        totalforday += float(self.billList[1])
+                        if order[0] !=  self.orderID:
+                            dbcursor.execute(f"SELECT * FROM bill WHERE bill_id = {order[0]}")
+                            self.billList = dbcursor.fetchone()
+                            totalforday += float(self.billList[1])
+                            self.orderID = order[0]
                         
                     self.totalRev += totalforday 
                     self.orderstotals.append(totalforday)
@@ -84,10 +86,13 @@ class Reports(ObservableModel):
                     
                     self.orderList = dbcursor.fetchall()
                     
+                    self.orderID =  0
                     for order in self.orderList:
-                        dbcursor.execute(f"SELECT * FROM bill WHERE bill_id = {order[0]}")
-                        self.billList = dbcursor.fetchone()
-                        totalforstaff += float(self.billList[1])
+                        if order[0] !=  self.orderID:
+                            dbcursor.execute(f"SELECT * FROM bill WHERE bill_id = {order[0]}")
+                            self.billList = dbcursor.fetchone()
+                            totalforstaff += float(self.billList[1])
+                            self.orderID =  order[0]
                         
                     self.stafflist.append([str(employee[0]),str(employee[2]),str(employee[3]),str(totalforstaff)])
                     
