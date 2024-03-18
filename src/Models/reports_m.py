@@ -116,10 +116,15 @@ class Reports(ObservableModel):
                 self.employeeList = dbcursor.fetchall()
                 
                 for employee in self.employeeList:
-                    totalforstaff = 0 
-                    dbcursor.execute(f"SELECT order_menu_item_qty, order_price FROM orders WHERE order_author = {employee[0]};")  
+                    dbcursor.execute(f"SELECT order_menu_item_qty, order_price, bill_id FROM orders WHERE order_author = {employee[0]};")  
         
-                    dbcursor.fetchall()
+                    self.orderList = dbcursor.fetchall()
+                    self.numOrders = 0
+                    self.orderID =  0
+                    for order in self.orderList:
+                        if order[2] !=  self.orderID:
+                            self.numOrders += 1
+                            self.orderID =  order[2]
                         
                     self.stafflist.append([str(employee[0]),str(employee[2]),str(employee[3]),str(dbcursor.rowcount)])
                     
