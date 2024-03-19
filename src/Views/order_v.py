@@ -63,7 +63,6 @@ class OrderCreate(Frame):
     def setOrder(self, order):
         self.order = order
         
-
     # Jevs Button function -----------------------------------------------------------------------------------------------------------------------------------|
 
     def homeAction(self):
