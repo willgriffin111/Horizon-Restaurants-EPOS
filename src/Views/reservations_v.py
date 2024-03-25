@@ -1,78 +1,60 @@
-'''
-Author: Will Griffin
-Date Created: 22/12/2023
-'''
+import tkinter as tk
+from tkinter import ttk, Frame
+from tkinter import Toplevel
+from datetime import datetime, timedelta
 
-import tkinter as Tk
-from tkinter import Toplevel, ttk, messagebox
-import random
+# List of times in "HH:MM AM/PM" format
+times_str = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"]
 
+# Convert to datetime.timedelta
+times = []
+for time_str in times_str:
+    time_obj = datetime.strptime(time_str, "%I:%M %p")
+    timedelta_since_midnight = timedelta(hours=time_obj.hour, minutes=time_obj.minute)
+    times.append(timedelta_since_midnight)
 
-
-
-'''
-Impentation example:
-
-index = "SELECT reservationID FROM RESERVATION"
-
-for i in index:
-    booking = (SELECT reservationID FROM RESERVATION", "SELECT customerName FROM RESERVATION", "SELECT customerNumber FROM RESERVATION", \
-        "SELECT restaurantName FROM RESERVATION", "SELECT date FROM RESERVATION", "SELECT time FROM RESERVATION")
-    bookings.append(booking)
-
-'''
-
-
-class ReservationsView(Tk.Frame):
+class ReservationsView(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.geometry("800x600")
-        # self.title("Reservations Page")
-        self.configure(bg="white")
-        # self.resizable(False, False)
+        # self.title('Horizon Restaurant')
+        self.configure(bg='#1A58B5')
+        self.reservations = {}  # Stores reservation status
+        self.buttons = {}  # Stores button references
         self.topbar()
-        self.bottombar()
-        self.sidebar()
-        self.showBookings()
+        self.bottomBar()
+        self.resvationDetailsUI()
+        self.createReservationTable()
 
 
-    # Top bar of window --------------------------------------------------------------------------------------------------------------------------------------|
-    
+
     def topbar(self):
-        self.topFrame = Tk.Frame(self, borderwidth=25, relief=Tk.FLAT, bg="#2976E9")
-        self.topFrame.pack(fill=Tk.X)
-
-        self.label = Tk.Label(self.topFrame, text="Horizon Restaurant", fg="white", bg="#2976E9", anchor="w", font=("Arial", 20), underline=True)
-        self.label.pack(fill=Tk.BOTH, expand=True)
-
-        self.topUnderline = Tk.Canvas(self.topFrame, height=2, bg="#2976E9", highlightthickness=0)
-        self.topUnderline.create_line(4, 2, 175, 2, width=2, fill="white")
-        self.topUnderline.pack(fill=Tk.X)
-
-        self.username = Tk.Label(self.topFrame, text=f"", fg="white", bg="#2976E9", font=("Arial", 12))
-        self.username.pack(side=Tk.RIGHT, anchor="e")
-        self.username.place(relx=1.0, rely=0.5, anchor="e", x=-170, y=4)
-
-        self.userIDLabel = Tk.Label(self.topFrame, text=f"", fg="white", bg="#2976E9", font=("Arial", 12))
-        self.userIDLabel.pack(side=Tk.RIGHT, anchor="e")
-        self.userIDLabel.place(relx=1.0, rely=0.5, anchor="e", x=-90, y=4)
-
-        # Home Button
-        self.homeButton = Tk.Button(self.topFrame, text="Home", bd=0, highlightthickness=0, highlightbackground="#2976E9", pady=10, border=None)
-        self.homeButton.place(relx=1.0, rely=0.5, anchor="e", x=3, y=4)
-
-    # Side bar  --------------------------------------------------------------------------------------------------------------------------------------|
-    def sidebar(self):
-        self.sidebar = Tk.Frame(self, bg="lightgrey")
-        self.sidebar.pack(fill=Tk.Y, side=Tk.LEFT)
-
-        self.create_btn = Tk.Button(self.sidebar, text="Create ", bg="white", width=10, height=5)
-        self.create_btn.pack(pady=30,padx=35)
-
-        self.delete_button = Tk.Button(self.sidebar, text="Delete ", bg="white", width=10, height=5)
-        self.delete_button.pack(pady=30,padx=35)
+        self.topFrame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='#2976E9')
+        self.topFrame.pack(fill=tk.X)
+        label = tk.Label(self.topFrame, text="Horizon Restaurant", fg='white', bg='#2976E9', anchor='w', font=('Arial', 25), underline=True)
+        label.pack(fill=tk.BOTH, expand=True)
+        canvas = tk.Canvas(self.topFrame, height=2, bg='#2976E9', highlightthickness=0)
+        canvas.create_line(4, 2, 218, 2, width=2, fill='white')
+        canvas.pack(fill=tk.X)
+        self.username = tk.Label(self.topFrame, fg='white', bg='#2976E9', font=('Arial', 14))
+        self.username.pack(side=tk.RIGHT, anchor='e')
+        self.username.place(relx=1.0, rely=0.5, anchor='e', x=-350, y=4)
+        self.userIDLabel = tk.Label(self.topFrame, fg='white', bg='#2976E9', font=('Arial', 14))
+        self.userIDLabel.pack(side=tk.RIGHT, anchor='e')
+        self.userIDLabel.place(relx=1.0, rely=0.5, anchor='e', x=-260, y=4)
         
-    # Create window popup --------------------------------------------------------------------------------------------------------------------------------------|
+        self.homeButton = tk.Button(self.topFrame, text="Home", bd=0, highlightthickness=0, highlightbackground="#2976E9", pady=10, border=None)
+        self.homeButton.place(relx=1.0, rely=0.5, anchor="e", x=3, y=4)
+        
+        self.refreshButton = tk.Button(self.topFrame, text='Refresh', bd=0, highlightthickness=0,highlightbackground='#2976E9', pady=10, border=None)
+        self.refreshButton.place(relx=1.0, rely=0.5, anchor='e', x=-110, y=4)
+
+    def bottomBar(self):
+        bottomFrame = tk.Frame(self, borderwidth=7, relief=tk.FLAT, bg='#2976E9')
+        bottomFrame.pack(fill=tk.X, side=tk.BOTTOM)
+        bottomLabel = tk.Label(bottomFrame, text="", bg='#2976E9')
+        bottomLabel.pack()
+
     def createReservationsManager(self):
         
         self.reservationsPopUp = Toplevel(self)
@@ -80,55 +62,51 @@ class ReservationsView(Tk.Frame):
         self.reservationsPopUp.geometry("400x550")  
         self.reservationsPopUp.resizable(False,False)
         self.reservationsPopUp.configure(bg="#FFFFFF")  
-
-        # List of restaurant names for the dropdown (this will dynamicaly load from db)
-          # Add your restaurant names here
-
-       
-        Tk.Label(self.reservationsPopUp, text="Restaurant name", bg="white").pack(pady=(20, 5))
+        
+        tk.Label(self.reservationsPopUp, text="Restaurant name", bg="white").pack(pady=(20, 5))
         self.restaurantNameDropDown = ttk.Combobox(self.reservationsPopUp)
         self.restaurantNameDropDown.pack(pady=(0, 20), padx=20)
 
 
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer name").pack(pady=(10, 0))
-        self.customerNameUI = Tk.Entry(self.reservationsPopUp,bg='white',fg='black')
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer name").pack(pady=(10, 0))
+        self.customerNameUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
         self.customerNameUI.pack(pady=(0, 10))
 
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer number").pack(pady=(10, 0))
-        self.customerNumberUI = Tk.Entry(self.reservationsPopUp,bg='white',fg='black')
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer number").pack(pady=(10, 0))
+        self.customerNumberUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
         self.customerNumberUI.pack(pady=(0, 10))
         
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Table number").pack(pady=(10, 0))
-        self.tableNumUI = Tk.Entry(self.reservationsPopUp,bg='white',fg='black')
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Table number").pack(pady=(10, 0))
+        self.tableNumUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
         self.tableNumUI.pack(pady=(0, 10))
 
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Party size").pack(pady=(10, 0))
-        self.partySizeUI = Tk.Entry(self.reservationsPopUp,bg='white',fg='black')
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Party size").pack(pady=(10, 0))
+        self.partySizeUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
         self.partySizeUI.pack(pady=(0, 10))
 
-        self.datetimeframe = Tk.Frame(self.reservationsPopUp, bg="white")
-        self.datetimeframe.pack(fill=Tk.X, pady=20)
+        self.datetimeFrame = tk.Frame(self.reservationsPopUp, bg="white")
+        self.datetimeFrame.pack(fill=tk.X, pady=20)
 
-        self.dateFrame = Tk.Frame(self.datetimeframe, bg="white")
-        self.dateFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
+        self.dateFrame = tk.Frame(self.datetimeFrame, bg="white")
+        self.dateFrame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        Tk.Label(self.dateFrame,bg='white',fg='black', text="Date YYYY-MM-DD").pack()
-        self.dateUI = Tk.Entry(self.dateFrame,bg='white',fg='black')
+        tk.Label(self.dateFrame,bg='white',fg='black', text="Date YYYY-MM-DD").pack()
+        self.dateUI = tk.Entry(self.dateFrame,bg='white',fg='black')
         self.dateUI.pack()
 
-        self.timeframe = Tk.Frame(self.datetimeframe, bg="white" , width=5)
-        self.timeframe.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
+        self.timeFrame = tk.Frame(self.datetimeFrame, bg="white" , width=5)
+        self.timeFrame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        Tk.Label(self.timeframe,bg='white',fg='black', text="Time HH:MM:SS").pack()
-        self.timeUI = Tk.Entry(self.timeframe,bg='white',fg='black')
+        tk.Label(self.timeFrame,bg='white',fg='black', text="Time HH:MM:SS").pack()
+        self.timeUI = tk.Entry(self.timeFrame,bg='white',fg='black')
         self.timeUI.pack(expand=True)
 
         # Submit Button
-        self.submitButtonFrame = Tk.Frame(self.reservationsPopUp, bg="white")
+        self.submitButtonFrame = tk.Frame(self.reservationsPopUp, bg="white")
         self.submitButtonFrame.pack(pady=10)
 
-        self.submitUI_btn = Tk.Button(self.submitButtonFrame, text="Submit", bg="white",width=10,height=10)
-        self.submitUI_btn.pack()
+        self.submitUIBtn = tk.Button(self.submitButtonFrame, text="Submit", bg="white",width=10,height=10)
+        self.submitUIBtn.pack()
         
     def createReservationsOther(self):
         
@@ -138,113 +116,129 @@ class ReservationsView(Tk.Frame):
         self.reservationsPopUp.resizable(False,False)
         self.reservationsPopUp.configure(bg="#FFFFFF")  
 
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer name").pack(pady=(10, 0))
-        self.customerNameUI = Tk.Entry(self.reservationsPopUp)
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer name").pack(pady=(10, 0))
+        self.customerNameUI = tk.Entry(self.reservationsPopUp)
         self.customerNameUI.pack(pady=(0, 10))
 
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer number").pack(pady=(10, 0))
-        self.customerNumberUI = Tk.Entry(self.reservationsPopUp)
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer number").pack(pady=(10, 0))
+        self.customerNumberUI = tk.Entry(self.reservationsPopUp)
         self.customerNumberUI.pack(pady=(0, 10))
         
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Table number").pack(pady=(10, 0))
-        self.tableNumUI = Tk.Entry(self.reservationsPopUp)
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Table number").pack(pady=(10, 0))
+        self.tableNumUI = tk.Entry(self.reservationsPopUp)
         self.tableNumUI.pack(pady=(0, 10))
 
-        Tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Party size").pack(pady=(10, 0))
-        self.partySizeUI = Tk.Entry(self.reservationsPopUp)
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Party size").pack(pady=(10, 0))
+        self.partySizeUI = tk.Entry(self.reservationsPopUp)
         self.partySizeUI.pack(pady=(0, 10))
 
-        self.datetimeframe = Tk.Frame(self.reservationsPopUp, bg="white")
-        self.datetimeframe.pack(fill=Tk.X, pady=20)
+        self.datetimeFrame = tk.Frame(self.reservationsPopUp, bg="white")
+        self.datetimeFrame.pack(fill=tk.X, pady=20)
 
-        self.dateFrame = Tk.Frame(self.datetimeframe, bg="white")
-        self.dateFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
+        self.dateFrame = tk.Frame(self.datetimeFrame, bg="white")
+        self.dateFrame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        Tk.Label(self.dateFrame,bg='white',fg='black', text="Date YYYY-MM-DD", width=5).pack()
-        self.dateUI = Tk.Entry(self.dateFrame)
+        tk.Label(self.dateFrame,bg='white',fg='black', text="Date YYYY-MM-DD", width=5).pack()
+        self.dateUI = tk.Entry(self.dateFrame)
         self.dateUI.pack()
 
-        self.timeframe = Tk.Frame(self.datetimeframe, bg="white" , width=5)
-        self.timeframe.pack(side=Tk.LEFT, fill=Tk.X, expand=True)
+        self.timeFrame = tk.Frame(self.datetimeFrame, bg="white" , width=5)
+        self.timeFrame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        Tk.Label(self.timeframe,bg='white',fg='black', text="Time HH:MM:SS").pack()
-        self.timeUI = Tk.Entry(self.timeframe)
+        tk.Label(self.timeFrame,bg='white',fg='black', text="Time HH:MM:SS").pack()
+        self.timeUI = tk.Entry(self.timeFrame)
         self.timeUI.pack(expand=True)
 
         # Submit Button
-        self.submitButtonFrame = Tk.Frame(self.reservationsPopUp, bg="white")
-        self.submitButtonFrame.pack(side=Tk.BOTTOM, fill=Tk.X, pady=20)
-        self.submitUI_btn = Tk.Button(self.submitButtonFrame, text="Submit")
-        self.submitUI_btn.pack()
-        
+        self.submitButtonFrame = tk.Frame(self.reservationsPopUp, bg="white")
+        self.submitButtonFrame.pack(side=tk.BOTTOM, fill=tk.X, pady=20)
+        self.submitUIBtn = tk.Button(self.submitButtonFrame, text="Submit")
+        self.submitUIBtn.pack()
     
+    def viewReservation(self):
 
-    # Modifying value in the table --------------------------------------------------------------------------------------------------------------------------------------|
+        self.modifyOrderWindow = tk.Toplevel(self)
+        self.modifyOrderWindow.title("Reservation Details")
+        self.modifyOrderWindow.geometry("500x500")
+        self.modifyOrderWindow.resizable(False, False)
+        self.modifyOrderWindow.configure(bg="#FFFFFF")  
+
+        self.reservationId = tk.Label(self.modifyOrderWindow, text="Reservation ID: ", bg="white")
+        self.reservationId.pack(pady=(20, 5))
         
-    def editWindowPopup(self, row_id, column_id):
-        self.editWindow = Toplevel(self)
-        self.editWindow.title("Edit Cell Value")
-        self.editWindow.geometry("300x100")
-
-        # Calculate column index
-        self.column_index = int(column_id[1:]) - 1
-        self.current_value = self.tree.item(row_id, 'values')[self.column_index]
-
-        self.newValueUI = Tk.Entry(self.editWindow)
-        self.newValueUI.pack(pady=10)
-        self.newValueUI.insert(0, self.current_value)
+        self.restaurantId = tk.Label(self.modifyOrderWindow, text="Restaurant ID: ", bg="white")
+        self.restaurantId.pack(pady=(20, 5))
         
-        self.saveEditButton = Tk.Button(self.editWindow, text="Save")
-        self.saveEditButton.pack()
-
-    def modifyReservations(self):
-        self.updated_bookings = [self.tree.item(child, 'values') for child in self.tree.get_children()]
-        self.bookings = self.updated_bookings
-        print("Reservations updated:", self.bookings)
+        self.customerName = tk.Label(self.modifyOrderWindow, text="Customer Name: ", bg="white")
+        self.customerName.pack(pady=(20, 5))
+        
+        self.customerNumber = tk.Label(self.modifyOrderWindow, text="Customer Number: ", bg="white")
+        self.customerNumber.pack(pady=(20, 5))
+        
+        self.partySize = tk.Label(self.modifyOrderWindow, text="Party Size: ", bg="white")
+        self.partySize.pack(pady=(20, 5))
+        
+        self.date = tk.Label(self.modifyOrderWindow, text="Date: ", bg="white")
+        self.date.pack(pady=(20, 5))
+        
+        self.time = tk.Label(self.modifyOrderWindow, text="Time: ", bg="white")
+        self.time.pack(pady=(20, 5))
+        
+        self.cancelButton = tk.Button(self.modifyOrderWindow, text="Cancel", bg="white" , padx=10, pady=5)
+        self.cancelButton.pack(pady=(20, 5))
         
 
-    # Displaying table  --------------------------------------------------------------------------------------------------------------------------------------|
-    def showBookings(self):
-        reserve_lbl = Tk.Label(self, text='Reservations',fg='black', bg='white', font=("Arial", 18))
-        reserve_lbl.pack(fill='x',pady=20)
-        
-        if hasattr(self, 'tree'):
-            self.tree.destroy()
-        
-        columns = ("Reservation ID", "Customer name", "Customer number", "Restaurant ID", "Table Number", "Date", "Time")
-        self.tree = ttk.Treeview(self, columns=columns, show='headings', selectmode='browse')
-        
-        for col in columns:
-            self.tree.heading(col, text=col)
-            self.tree.column(col, width=100, anchor="center")
+    def resvationDetailsUI(self):
+        self.inputFrame = tk.Frame(self, bg="white")
+        self.inputFrame.pack(pady=0)  
 
+        self.dateLabel = tk.Label(self.inputFrame, text="Date:")
+        self.dateLabel.pack(side=tk.LEFT, pady=0)  
 
-        self.insert_data()
+        self.dateEntry = tk.Entry(self.inputFrame, bg="white", width=10)
+        self.dateEntry.pack(side=tk.LEFT, padx=(10, 0), pady=0) 
 
-        self.tree.pack(side='right', fill='both', expand=True)
+        self.restaurantNameLabel = tk.Label(self.inputFrame, text="Restaurant name: ", bg="white")
+        self.restaurantNameLabel.pack(side=tk.LEFT, pady=0, padx=20)  
 
-         
-        self.scrollbar = ttk.Scrollbar(self, orient='vertical', command=self.tree.yview)
-        self.tree.configure(yscroll=self.scrollbar.set)
-        self.scrollbar.pack(side='right', fill='y')
+        self.restaurantNameDropDown = ttk.Combobox(self.inputFrame)
+        self.restaurantNameDropDown.pack(side=tk.LEFT, pady=0, padx=(0, 20))  
         
-    def clear_table(self):
-        for record in self.tree.get_children():
-            self.tree.delete(record)
+        self.submitButton = tk.Button(self.inputFrame, text="Submit", bg="white", padx=10, pady=5)
+        self.submitButton.pack(side=tk.LEFT, pady=0, padx=(0, 20))
+
     
-    def insert_data(self, data = None):
-        # For loop to generate the values in the database 
-        if data != None:
-            for row in data:
-                self.tree.insert('', 'end', values=row)
-        
-    # Deleting reservations --------------------------------------------------------------------------------------------------------------------------------------|
-    
-            
-    # Bottom bar --------------------------------------------------------------------------------------------------------------------------------------|
-    def bottombar(self):
-        self.bottomFrame = Tk.Frame(self, borderwidth=7, relief=Tk.FLAT, bg='#2976E9')
-        self.bottomFrame.pack(fill=Tk.X, side=Tk.BOTTOM)
-        self.bottom_label = Tk.Label(self.bottomFrame, text="", bg='#2976E9')
-        self.bottom_label.pack()
+    def createReservationTable(self):
+        if hasattr(self, 'tableFrame'):
+            self.tableFrame.destroy()
 
+        self.tableFrame = tk.Frame(self, bg='#1A58B5')
+        self.tableFrame.pack(fill=tk.BOTH, expand=True, padx=75, pady=10)
+
+        tableNumbers = [1, 2, 3, 4, 5, 6]
+
+        for i, tableNum in enumerate(tableNumbers):
+            tk.Label(self.tableFrame, text=f"Table {tableNum}", borderwidth=2, relief="groove").grid(row=0, column=i+1, sticky='nsew')
+
+        for j, time in enumerate(times):
+            tk.Label(self.tableFrame, text=str(time), borderwidth=2, relief="groove").grid(row=j+1, column=0, sticky='nsew')
+
+            for i, tableNum in enumerate(tableNumbers):
+                key = (tableNum, time)
+                self.button = tk.Button(self.tableFrame, padx=10, pady=5, bg='green', text="Available", borderwidth=2, relief="groove")
+                self.button.grid(row=j+1, column=i+1, sticky='nsew')
+                self.buttons[key] = self.button
+
+                
+    def insertData(self, reservations):
+        print(reservations)
+
+        for key, button in self.buttons.items():
+            button.config(bg='green', text='Available')
+
+        for reservationTime, tableId, count in reservations:
+            key = (tableId, reservationTime)
+
+            if key in self.buttons:
+                if count > 0: 
+                    self.buttons[key].config(bg='red', text='Reserved')
