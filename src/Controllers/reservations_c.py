@@ -68,16 +68,12 @@ class ReservationsController:
     def reserved_slot_clicked(self, table_number, time_slot):
         print(f"Reserved slot clicked: Table {table_number}, Time Slot {time_slot}")
         
-        # Call the view to open the reservation details popup
         self.frame.viewReservation(table_number, time_slot)
 
-        # Fetch reservation details based on table number and time slot
         reservationDetails = self.model.reservation.getReservationDetails(table_number, time_slot)
         
-        # Assuming getReservationDetails returns a list of details for reservations
-        # And assuming there's only one reservation detail set for simplicity
         if reservationDetails:
-            details = reservationDetails[0]  # Assuming there's only one matching reservation
+            details = reservationDetails[0]  
             resID, restID, custName, custNum, partySize, date, time_delta = details
 
             hours, remainder = divmod(time_delta.seconds, 3600)
@@ -86,10 +82,9 @@ class ReservationsController:
 
             self.frame.tree.insert("", "end", values=(resID, restID, custName, custNum, partySize, date, formatted_time))
             
-            # Fix: Use lambda for deferred execution with the current resID
+           
             self.frame.cancel_button.config(command=lambda resID=resID: self.cancelReservation(resID))
             
-            # If you're binding double-click to edit details, ensure the onDoubleClick method is correctly implemented
             self.frame.tree.bind("<Double-1>", self.onDoubleClick)
         else:
             messagebox.showinfo("Info", "No reservation details found for this slot.")
