@@ -1,3 +1,4 @@
+
 from .base_m import ObservableModel
 from database import dbfunc
 from tkinter import messagebox
@@ -21,6 +22,104 @@ class OrderView(ObservableModel):
     #     }
     #     return tableOrders  
     
+    def updateOrder(self, column_index, newValue, restaurant_ID, tableNum, currentValue):
+        try:
+            with dbfunc.getConnection() as conn:
+                if conn.is_connected():
+
+                    
+                    if column_index == 1:
+                        query = """
+                                UPDATE orders 
+                                SET order_menu_item_qty = %s 
+                                WHERE restaurant_id = %s AND order_table_num = %s AND order_menu_item_qty = %s;
+                                """
+                        params = (newValue, restaurant_ID, tableNum, currentValue)
+
+                    elif column_index == 2:
+                        query = """
+                                UPDATE orders 
+                                SET order_menu_item_desc = %s 
+                                WHERE restaurant_id = %s AND order_table_num = %s AND order_menu_item_desc = %s;
+                                """
+                        params = (newValue, restaurant_ID, tableNum, currentValue)
+                    
+                    with conn.cursor() as cursor:
+                        print(query, params)
+                        cursor.execute(query, params)
+                        conn.commit()
+                        messagebox.showinfo("Success", "Order updated successfully.")
+                        return True 
+                else:
+                    print("Database connection failed.")
+                    return False
+        except mysql.connector.Error as err:
+            print(f"Database Error: {err}")
+            return False
+            
+    
+    # def updateOrder(self, column_index, newValue, orderID):
+    #     try:
+    #         with dbfunc.getConnection() as conn:
+    #             if conn.is_connected():
+    #                 if column_index == 1:
+    #                     query = """
+    #                             UPDATE orders 
+    #                             SET order_menu_item = %s 
+    #                             WHERE order_id = %s;
+    #                             """
+                        
+    #                 elif column_index == 2:
+    #                     query = """
+    #                             UPDATE orders 
+    #                             SET order_menu_item_qty = %s 
+    #                             WHERE order_id = %s;
+    #                             """
+
+    #                 elif column_index == 3:
+    #                     query = """
+    #                             UPDATE orders 
+    #                             SET order_menu_item_desc = %s 
+    #                             WHERE order_id = %s;
+    #                             """
+    #                 params = (newValue, orderID)
+    #                 with conn.cursor() as cursor:
+    #                     cursor.execute(query, params)
+    #                     conn.commit()
+    #                     messagebox.showinfo("Success", "Order updated successfully.")
+    #                     return True
+                    
+                    
+    #             else:
+    #                 print("Database connection failed.")
+    #                 return False
+    #     except mysql.connector.Error as err:
+    #         print(f"Database Error: {err}")
+    #         return False
+       
+    
+    def getSingleOrder(self, restaurant_ID, tableNum) -> tuple:
+        try:
+            with dbfunc.getConnection() as conn:
+                if conn.is_connected():
+                    query = """
+                            SELECT order_menu_item, order_menu_item_qty, order_menu_item_desc
+                            FROM orders 
+                            WHERE restaurant_id = %s AND order_table_num = %s AND order_status = 'PENDING';
+                            """
+                    params = (restaurant_ID, tableNum)
+                    with conn.cursor() as cursor:
+                        cursor.execute(query, params)
+                        order_details = {}
+                        for row in cursor:
+                            order_details[row[0]] = (row[1], row[2])
+                    return order_details
+                else:
+                    print("Database connection failed.")
+                    return {}
+        except mysql.connector.Error as err:
+            print(f"Database Error: {err}")
+            return {}
     
     def getTableOrders(self, restaurant_ID) -> dict:
 
@@ -72,6 +171,26 @@ class OrderView(ObservableModel):
         except mysql.connector.Error as err:
             print(f"Database Error: {err}")
             return False
+    
+    def cancelOrder(self, restaurant_ID, tableNum):
+            try:
+                with dbfunc.getConnection() as conn:
+                    if conn.is_connected():
+                        query = """
+                                DELETE FROM orders 
+                                WHERE restaurant_id = %s AND order_table_num = %s;
+                                """
+                        params = (restaurant_ID, tableNum)
+                        with conn.cursor() as cursor:
+                            cursor.execute(query, params)
+                            conn.commit()
+                            return True
+                    else:
+                        print("Database connection failed.")
+                        return False
+            except mysql.connector.Error as err:
+                print(f"Database Error: {err}")
+                return False
 
 
     # def getOrders(self, restaurant_ID) -> None:

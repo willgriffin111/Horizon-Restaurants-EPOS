@@ -4,8 +4,8 @@ Date: 12/12/2023
 Version: 1.1
 '''
 import tkinter as tk
-from tkinter import ttk, Frame
-
+from tkinter import ttk, Frame, Toplevel
+from .order_v import OrderCreate
 
 
 # tableOrders = {
@@ -31,10 +31,12 @@ class OrdersView(Frame):
         super().__init__()
         self.tableOrders = {}  
         self.doneButton = tk.Button(self, text="Done")
+        self.cancelButton = tk.Button(self, text="Cancel")  
+        self.modifyButton = tk.Button(self, text="Modify")
+
+
         self.create_top_frame()
     
-    def setOrderCompleteCallback(self, callback):
-        self.orderCompleteCallback = callback
 
     def create_top_frame(self):
         topFrame = tk.Frame(self, borderwidth=25, relief=tk.FLAT, bg='#2976E9')
@@ -115,14 +117,95 @@ class OrdersView(Frame):
             orderLabel = tk.Label(tableFrame, text=orderText)
             orderLabel.pack(anchor=tk.W, padx=5)
             
-    
-        doneButton = tk.Button(tableFrame, text="Done",
-                                command=lambda tn=tableNumber: self.orderCompleteCallback(tn))
-        doneButton.pack(anchor=tk.S, padx=5)
+        buttonFrame = tk.Frame(tableFrame)
+        buttonFrame.pack(side=tk.BOTTOM, pady=5)
 
-    def removeOrder(self, tableNumber):
-        self.tableOrders.pop(tableNumber)
-        self.refreshGUI()
+        doneButton = tk.Button(buttonFrame, text="Done",
+                                command=lambda tn=tableNumber: self.orderCompleteCallback(tn))
+        doneButton.pack(side=tk.LEFT, padx=5)
+        
+        modifyButton = tk.Button(buttonFrame, text="Modify",
+                                command=lambda tn=tableNumber: self.orderModifyCallback(tn))
+        modifyButton.pack(side=tk.LEFT, padx=5)
+        
+        cancelButton = tk.Button(buttonFrame, text="Cancel",
+                                command=lambda tn=tableNumber: self.orderCancelCallback(tn))
+        cancelButton.pack(side=tk.LEFT, padx=5)
+        
+    def setOrderCompleteCallback(self, callback):
+        self.orderCompleteCallback = callback
+        
+    def setOrderCancelCallback(self, callback):
+        self.orderCancelCallback = callback
+    
+    def setOrderModifyCallback(self, callback):
+        self.orderModifyCallback = callback
+        
+    
+    def modifyOrderPopUp(self, data):
+        if not hasattr(self, 'modifyOrderWindow') or not self.modifyOrderWindow.winfo_exists():
+            self.modifyOrderWindow = tk.Toplevel(self)
+            self.modifyOrderWindow.title("Modify Order")
+            self.modifyOrderWindow.geometry("500x500")
+            self.modifyOrderWindow.resizable(False, False)
+            self.modifyOrderWindow.configure(bg="#FFFFFF")  
+
+            reserve_lbl = tk.Label(self.modifyOrderWindow, text='Order', fg='black', bg='white', font=("Arial", 18))
+            reserve_lbl.pack(fill='x', pady=20)
+
+            if hasattr(self, 'tree'):
+                self.tree.destroy()
+
+            columns = ("Item", "Quantity", "Notes")
+            self.tree = ttk.Treeview(self.modifyOrderWindow, columns=columns, show='headings', selectmode='browse')
+
+            for col in columns:
+                self.tree.heading(col, text=col)
+                self.tree.column(col, width=80, anchor="center")
+
+            self.tree.pack(side='right', fill='both', expand=True)
+            self.insert_data(data)
+
+            # self.scrollbar = ttk.Scrollbar(self.modifyOrderWindow, orient='vertical', command=self.tree.yview)
+            # self.tree.configure(yscroll=self.scrollbar.set)
+            # self.scrollbar.pack(side='right', fill='y')
+            
+    def clear_table(self):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+    
+    def insert_data(self, data):
+        self.clear_table()  # Clears existing data
+        for row in data:
+            self.tree.insert('', 'end', values=row)  # Insert new data
+
+    def editWindowPopup(self, row_id, column_id):
+        self.editWindow = Toplevel(self)
+        self.editWindow.title("Edit Cell Value")
+        self.editWindow.geometry("300x100")
+
+        # Calculate column index
+        self.column_index = int(column_id[1:]) - 1
+        self.current_value = self.tree.item(row_id, 'values')[self.column_index]
+
+        self.newValueUI = tk.Entry(self.editWindow)
+        self.newValueUI.pack(pady=10)
+        self.newValueUI.insert(0, self.current_value)
+        
+        self.saveEditButton = tk.Button(self.editWindow, text="Save")
+        self.saveEditButton.pack()
+
+        
+    # def cancelOrder(self, tableNumber):
+    #     # if tableNumber in self.tableOrders:
+    #     #     self.tableOrders.pop(tableNumber)
+    #     #     self.refreshGUI()
+    #      self.orderCancelCallback = tableNumber
+        
+    # def removeOrder(self, tableNumber):
+    #     self.tableOrders.pop(tableNumber)
+    #     self.refreshGUI()
 
     def refreshGUI(self):
         self.mainFrame.destroy()
@@ -133,3 +216,4 @@ class OrdersView(Frame):
 # if __name__ == "__main__":
 #     app = OrdersView(tableOrders)
 #     app.mainloop()
+
