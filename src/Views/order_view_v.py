@@ -156,7 +156,7 @@ class OrdersView(Frame):
             if hasattr(self, 'tree'):
                 self.tree.destroy()
 
-            columns = ("Item", "Quantity", "Notes")
+            columns = ("ID","Item", "Quantity", "Notes")
             self.tree = ttk.Treeview(self.modifyOrderWindow, columns=columns, show='headings', selectmode='browse')
 
             for col in columns:
@@ -179,6 +179,7 @@ class OrdersView(Frame):
         self.clear_table()  # Clears existing data
         for row in data:
             self.tree.insert('', 'end', values=row)  # Insert new data
+            print(row)
 
     def editWindowPopup(self, row_id, column_id):
         self.editWindow = Toplevel(self)

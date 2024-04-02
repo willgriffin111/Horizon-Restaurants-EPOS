@@ -22,40 +22,56 @@ class OrderView(ObservableModel):
     #     }
     #     return tableOrders  
     
-    def updateOrder(self, column_index, newValue, restaurant_ID, tableNum, currentValue):
+    def updateOrder(self, column_index, newValue, restaurant_ID, tableNum, orderID):
         try:
             with dbfunc.getConnection() as conn:
                 if conn.is_connected():
-
-                    
-                    if column_index == 1:
-                        query = """
-                                UPDATE orders 
-                                SET order_menu_item_qty = %s 
-                                WHERE restaurant_id = %s AND order_table_num = %s AND order_menu_item_qty = %s;
-                                """
-                        params = (newValue, restaurant_ID, tableNum, currentValue)
-
-                    elif column_index == 2:
-                        query = """
-                                UPDATE orders 
-                                SET order_menu_item_desc = %s 
-                                WHERE restaurant_id = %s AND order_table_num = %s AND order_menu_item_desc = %s;
-                                """
-                        params = (newValue, restaurant_ID, tableNum, currentValue)
-                    
                     with conn.cursor() as cursor:
-                        print(query, params)
-                        cursor.execute(query, params)
-                        conn.commit()
-                        messagebox.showinfo("Success", "Order updated successfully.")
-                        return True 
+                        if column_index == 2:  # If updating quantity
+                            # Fetch the unit price of the item linked to this order by matching menu item names
+                            cursor.execute("""
+                                            SELECT m.menu_item_price
+                                            FROM orders o
+                                            JOIN menu m ON o.order_menu_item = m.menu_item_name AND o.restaurant_id = m.restaurant_id
+                                            WHERE o.order_id = %s AND o.restaurant_id = %s;
+                                            """, (orderID, restaurant_ID))
+                            result = cursor.fetchone()
+                            if result:
+                                unit_price = result[0]
+                                new_price = float(newValue) * unit_price
+                                
+                                # Update order with new quantity and price
+                                cursor.execute("""
+                                                UPDATE orders
+                                                SET order_menu_item_qty = %s, order_price = %s
+                                                WHERE order_id = %s AND restaurant_id = %s;
+                                                """, (newValue, new_price, orderID, restaurant_ID))
+                                conn.commit()
+                                messagebox.showinfo("Success", "Order updated successfully.")
+                            return True
+
+                        elif column_index == 3:
+                            # Update description without affecting the price
+                            cursor.execute("""
+                                        UPDATE orders
+                                        SET order_menu_item_desc = %s
+                                        WHERE order_id = %s;
+                                        """, (newValue, orderID))
+                            conn.commit()
+                            messagebox.showinfo("Success", "Order description updated successfully.")
+
+                    return True
+
                 else:
                     print("Database connection failed.")
                     return False
+
         except mysql.connector.Error as err:
             print(f"Database Error: {err}")
             return False
+
+
+
             
     
     # def updateOrder(self, column_index, newValue, orderID):
@@ -103,7 +119,7 @@ class OrderView(ObservableModel):
             with dbfunc.getConnection() as conn:
                 if conn.is_connected():
                     query = """
-                            SELECT order_menu_item, order_menu_item_qty, order_menu_item_desc
+                            SELECT order_id, order_menu_item, order_menu_item_qty, order_menu_item_desc
                             FROM orders 
                             WHERE restaurant_id = %s AND order_table_num = %s AND order_status = 'PENDING';
                             """
@@ -112,7 +128,7 @@ class OrderView(ObservableModel):
                         cursor.execute(query, params)
                         order_details = {}
                         for row in cursor:
-                            order_details[row[0]] = (row[1], row[2])
+                            order_details[row[0]] = (row[1], row[2], row[3])
                     return order_details
                 else:
                     print("Database connection failed.")

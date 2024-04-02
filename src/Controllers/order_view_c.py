@@ -67,55 +67,46 @@ class OrderViewController:
                 print("SELECTED ORDER ID: ", table_number)
                 
     def modifyOrder(self, table_number):
-
         if table_number.startswith("Table "):
             self.table_num = table_number[len("Table "):].strip()  # Store table_num
         else:
             self.table_num = table_number.strip()
-       
+
         order_details = self.model.orderView.getSingleOrder(self.model.auth.current_user.getRestrantID(), self.table_num)
-          
-        data_to_insert = [(item, details[0], details[1]) for item, details in order_details.items()]
+
+        data_to_insert = []
+        for orderID, details in order_details.items():
+            item = details[0]  
+            quantity = details[1] 
+            description = details[2] if len(details) > 2 else ""  
+            data_to_insert.append((orderID, item, quantity, description))
 
         self.frame.modifyOrderPopUp(data_to_insert)
         self.frame.tree.bind("<Double-1>", self.onDoubleClick)
+
         
     def onDoubleClick(self, event):
-        self.rowId = self.frame.tree.identify_row(event.y) #finds out what coloum and row have been selected
+        self.rowId = self.frame.tree.identify_row(event.y)
         self.columnId = self.frame.tree.identify_column(event.x)
+
         if self.rowId and self.columnId:
             self.column_index = int(self.columnId[1:]) - 1
-            
-            if self.column_index != 0:
-                #creates pop up window
-                self.frame.editWindowPopup(self.rowId, self.columnId)
-                #binds buttons
-                self.frame.saveEditButton.config(command=self.saveNewValue)
+            if self.column_index == 0 or self.column_index == 1:
+                messagebox.showinfo("Error", "You cannot edit this column.")
             else:
-                print(self.rowId)
-                messagebox.showerror("Error", "You cannot edit this value")
-    
+                self.currentValues = list(self.frame.tree.item(self.rowId, 'values'))
+                self.orderID = self.currentValues[0]  
+                self.frame.editWindowPopup(self.rowId, self.columnId)
+                self.frame.saveEditButton.config(command=lambda: self.saveNewValue(self.orderID))
 
-    def saveNewValue(self):
-        #formats index
-        self.column_index = int(self.columnId[1:]) - 1
-        #gets all values from
-        
-        self.curentValues = list(self.frame.tree.item(self.rowId, 'values'))
-        print("Table Num: ",self.curentValues[self.column_index])
-
-        a = "(self, column_index, newValue, restaurant_ID, tableNum)"
-        self.model.orderView.updateOrder(self.column_index, self.frame.newValueUI.get(),self.model.auth.current_user.getRestrantID(), self.table_num, self.curentValues[0])
-        # self.model.orderView.updateOrder(self.column_index, self.frame.newValueUI.get(), self.curentValues[0])
+    def saveNewValue(self, orderID):
+        newValue = self.frame.newValueUI.get()
+        self.model.orderView.updateOrder(self.column_index, newValue, self.model.auth.current_user.getRestrantID(), self.table_num, orderID)
         self.frame.editWindow.destroy()
-        self.refreshOrderTable()
+        self.frame.modifyOrderWindow.destroy()
+        self.updateOrders()
+        self.modifyOrder(self.table_num)
+
 
         
         
-    def refreshOrderTable(self):
-        #updates the table by getting new bookings data from the database
-        self.frame.clear_table()
-        tableOrders = self.model.orderView.getTableOrders(self.model.auth.current_user.getRestrantID()) 
-        self.frame.insert_data(tableOrders)
-        self.frame.tree.bind("<Double-1>", self.onDoubleClick)
-
