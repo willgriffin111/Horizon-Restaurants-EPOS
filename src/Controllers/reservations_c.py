@@ -47,7 +47,11 @@ class ReservationsController:
         
 
     def available_slot_clicked(self, table_number, time_slot):
-        if self.frame.dateEntry.get() < datetime.now().strftime('%Y-%m-%d'):
+        
+        time_slot_datetime = (datetime.min + time_slot).time()
+        
+        
+        if self.frame.dateEntry.get() < datetime.now().strftime('%Y-%m-%d') or time_slot_datetime < datetime.now().time():
             messagebox.showerror("Error", "You cannot book a table for a past date")
         else:
             print(f"Available slot clicked: Table {table_number}, Time Slot {time_slot}")
@@ -179,7 +183,7 @@ class ReservationsController:
     
     def loadTable(self):
 
-        self.displayUI()
+        # self.displayUI()
         current_user = self.model.auth.current_user
         if current_user:
             
