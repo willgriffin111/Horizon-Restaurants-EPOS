@@ -2,7 +2,7 @@ from Models.main_m import Model
 from Views.main_v import View
 from tkinter import messagebox
 from datetime import datetime
-import re
+import re, time
 
 class ReservationsController:
     def __init__(self, model: Model, view: View) -> None:
@@ -99,7 +99,10 @@ class ReservationsController:
         if confirmation == 'yes':
             self.model.reservation.cancelReservation(resID)
             self.frame.reservationsPopUp.destroy()  # Close the details window
-            self.loadTable()  # Refresh the reservations table
+        time.sleep(0.5)
+        
+        self.displayUI()  # Refresh the reservations UI
+        # self.loadTable()  # Refresh the reservations table
 
         
         

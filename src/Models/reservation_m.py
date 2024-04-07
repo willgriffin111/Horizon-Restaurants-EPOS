@@ -104,22 +104,24 @@ class ReservationModel(ObservableModel):
                     reservation = dbcursor.fetchone()  
                     date = self.formatdate(newValue)
                     time = self.formattime(reservation[2])
-                    if (self.checkAvailability(date, time,reservation[1],reservation[0],reservation[3])):
-                        dbcursor.execute('UPDATE reservation SET reservation_date = %s WHERE reservation_id = %s;', (date,reservationID))
-                        messagebox.showinfo("Sucsess", "Date has been updated")
-                    else:
-                        messagebox.showerror("Error", "Table not available at that time.")
+                    if date != False and time != False:
+                        if (self.checkAvailability(date, time,reservation[1],reservation[0],reservation[3])):
+                            dbcursor.execute('UPDATE reservation SET reservation_date = %s WHERE reservation_id = %s;', (date,reservationID))
+                            messagebox.showinfo("Sucsess", "Date has been updated")
+                        else:
+                            messagebox.showerror("Error", "Table not available at that time.")
                         
                 elif column_index == 7:
                     dbcursor.execute("SELECT restaurant_id, table_id, reservation_date, reservation_party_size FROM reservation WHERE reservation_id = "+str(reservationID)+";")
                     reservation = dbcursor.fetchone() 
                     date = self.formatdate(reservation[2])
                     time = self.formattime(newValue) 
-                    if (self.checkAvailability(date, time,reservation[1],reservation[0],reservation[3])):
-                        dbcursor.execute('UPDATE reservation SET reservation_time = %s WHERE reservation_id = %s;', (time,reservationID)) 
-                        messagebox.showinfo("Sucsess", "Time has been updated")
-                    else:
-                        messagebox.showerror("Error", "Table not available at that time.")                                              
+                    if date != False and time != False:
+                        if (self.checkAvailability(date, time,reservation[1],reservation[0],reservation[3])):
+                            dbcursor.execute('UPDATE reservation SET reservation_time = %s WHERE reservation_id = %s;', (time,reservationID)) 
+                            messagebox.showinfo("Sucsess", "Time has been updated")
+                        else:
+                            messagebox.showerror("Error", "Table not available at that time.")                                              
                 
                 conn.commit()
                 dbcursor.close()
@@ -142,7 +144,7 @@ class ReservationModel(ObservableModel):
     def checkAvailability(self,reservationDate,reservationTime,tableid,restaurantID, partySize):
         # Calculate the start and end times  
         self.beforeReservationTime = reservationTime 
-        self.afterReservationTime = reservationTime  + timedelta(hours=1)
+        self.afterReservationTime = reservationTime + timedelta(minutes=59)
         
         print(f"Befor: {self.beforeReservationTime}")
         print(f"After: {self.afterReservationTime}")
@@ -197,6 +199,7 @@ class ReservationModel(ObservableModel):
             return(date)
         except:
             messagebox.showerror("Error", "Date should be in format Year-Month-Day e.g. 2024-12-12")
+            return False
     
     def formattime(self,time):
         try:
@@ -205,6 +208,7 @@ class ReservationModel(ObservableModel):
             return(time)
         except:
             messagebox.showerror("Error", "Time should be in format Hour:Minuite:Seccond e.g. 12:00:00")
+            return False
     
     def getReservationDetails(self, tableNum, timeSlot):
         conn = dbfunc.getConnection() 
