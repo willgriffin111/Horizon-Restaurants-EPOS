@@ -78,13 +78,13 @@ class ReservationsController:
         
         if reservationDetails:
             details = reservationDetails[0]  
-            resID, restID, custName, custNum, partySize, date, time_delta = details
+            resID, restID, custName, custEmail, custNum, partySize, date, time_delta = details
 
             hours, remainder = divmod(time_delta.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             formatted_time = f"{hours:02d}:{minutes:02d}"
 
-            self.frame.tree.insert("", "end", values=(resID, restID, custName, custNum, partySize, date, formatted_time))
+            self.frame.tree.insert("", "end", values=(resID, restID, custName, custEmail, custNum, partySize, date, formatted_time))
             
            
             self.frame.cancel_button.config(command=lambda resID=resID: self.cancelReservation(resID))
@@ -142,17 +142,18 @@ class ReservationsController:
         if self.model.auth.current_user.getAccountType() == "ADMIN" or self.model.auth.current_user.getAccountType() == "MANAGER":
             self.restaurantName = self.frame.restaurantNameDropDown.get()
         self.customerName = self.frame.customerNameUI.get()
+        self.customerEmail = self.frame.customerEmailUI.get()
         self.customerNumber = self.frame.customerNumberUI.get()
         self.partySize = self.frame.partySizeUI.get()
         
         if self.model.auth.current_user.getAccountType() == "ADMIN" or self.model.auth.current_user.getAccountType() == "MANAGER":
             #checks to see if all boxes have entered data for manager create reservation
-            if not all([self.restaurantName, self.customerName, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
+            if not all([self.restaurantName, self.customerName, self.customerEmail, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
                 messagebox.showerror("Error", "All fields are required")
                 return
         else:
             #checks to see if all boxes have entered data for other create reservation
-            if not all([self.customerName, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
+            if not all([self.customerName, self.customerEmail, self.customerNumber, self.partySize, self.date, self.time, self.tableNum]):
                 messagebox.showerror("Error", "All fields are required")
                 return
             
@@ -166,7 +167,7 @@ class ReservationsController:
             print(self.restaurantID)
             
         #creates reservation in database table
-        self.model.reservation.createReservation(self.restaurantID, self.customerName, 
+        self.model.reservation.createReservation(self.restaurantID, self.customerName, self.customerEmail, 
                                                 self.customerNumber , self.partySize ,self.date,
                                                 self.time,self.model.auth.current_user.getStaffId(), self.tableNum)
         

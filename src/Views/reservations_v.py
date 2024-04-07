@@ -71,6 +71,10 @@ class ReservationsView(Frame):
         tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer name").pack(pady=(10, 0))
         self.customerNameUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
         self.customerNameUI.pack(pady=(0, 10))
+        
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer Email").pack(pady=(10, 0))
+        self.customerEmailUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
+        self.customerEmailUI.pack(pady=(0, 10))
 
         tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer number").pack(pady=(10, 0))
         self.customerNumberUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
@@ -118,10 +122,16 @@ class ReservationsView(Frame):
         tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer name").pack(pady=(10, 0))
         self.customerNameUI = tk.Entry(self.reservationsPopUp)
         self.customerNameUI.pack(pady=(0, 10))
+        
+        tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer Email").pack(pady=(10, 0))
+        self.customerEmailUI = tk.Entry(self.reservationsPopUp,bg='white',fg='black')
+        self.customerEmailUI.pack(pady=(0, 10))
 
         tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Customer number").pack(pady=(10, 0))
         self.customerNumberUI = tk.Entry(self.reservationsPopUp)
         self.customerNumberUI.pack(pady=(0, 10))
+        
+        
         
         # tk.Label(self.reservationsPopUp,bg='white',fg='black', text="Table number").pack(pady=(10, 0))
         # self.tableNumUI = tk.Entry(self.reservationsPopUp)
@@ -171,7 +181,7 @@ class ReservationsView(Frame):
         self.cancel_button = tk.Button(self.reservationsPopUp, text="Cancel Reservation")
         self.cancel_button.pack(pady=10)
 
-        self.tree = ttk.Treeview(self.reservationsPopUp, columns=("Reservation ID", "Restaurant ID", "Customer Name", "Customer Number", "Party Size", "Date", "Time"), show="headings")
+        self.tree = ttk.Treeview(self.reservationsPopUp, columns=("Reservation ID", "Restaurant ID", "Customer Name", "Customer Email", "Customer Number", "Party Size", "Date", "Time"), show="headings")
         self.tree.pack(expand=True, fill='both')
 
         for col in self.tree["columns"]:
@@ -180,6 +190,7 @@ class ReservationsView(Frame):
         self.tree.column("Reservation ID", anchor="center", width=100)
         self.tree.column("Restaurant ID", anchor="center", width=100)
         self.tree.column("Customer Name", anchor="center", width=120)
+        self.tree.column("Customer Email", anchor="center", width=120)
         self.tree.column("Customer Number", anchor="center", width=120)
         self.tree.column("Party Size", anchor="center", width=80)
         self.tree.column("Date", anchor="center", width=100)

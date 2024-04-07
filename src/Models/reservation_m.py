@@ -52,7 +52,7 @@ class ReservationModel(ObservableModel):
     
 
     # creates the reservation with inserted data
-    def createReservation(self,restaurantID,customerName,customerNumber,partySize,date,time,employeeID,tableNum):
+    def createReservation(self,restaurantID,customerName, customerEmail,customerNumber,partySize,date,time,employeeID,tableNum):
         self.tableID = self.getTableID(tableNum, restaurantID)
         if self.tableID != None:
             date = self.formatdate(date)
@@ -62,9 +62,9 @@ class ReservationModel(ObservableModel):
                 if conn != None:    #Checking if connection is None                    
                     if conn.is_connected(): #Checking if connection is established  
                         dbcursor = conn.cursor()    #Creating cursor object                                                 
-                        dbcursor.execute("INSERT INTO reservation (restaurant_id, reservation_customer_name, reservation_customer_phone, \
+                        dbcursor.execute("INSERT INTO reservation (restaurant_id, reservation_customer_name, reservation_customer_email, reservation_customer_phone, \
                                         table_id, reservation_party_size, reservation_author, reservation_creation_time, reservation_date,\
-                                            reservation_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (restaurantID, customerName, customerNumber, self.tableID,
+                                            reservation_time) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (restaurantID, customerName, customerEmail, customerNumber, self.tableID,
                                                                                                         partySize, employeeID,datetime.now(), date, time)) 
                         conn.commit()
                         dbcursor.close()
@@ -88,14 +88,18 @@ class ReservationModel(ObservableModel):
                     dbcursor.execute('UPDATE reservation SET reservation_customer_name = %s WHERE reservation_id = %s;', (newValue,reservationID))
                     messagebox.showinfo("Sucsess", "Name has been updated")
                 elif column_index == 3:
+                    dbcursor.execute('UPDATE reservation SET reservation_customer_email = %s WHERE reservation_id = %s;', (newValue,reservationID))
+                    messagebox.showinfo("Sucsess", "Email has been updated")
+                    
+                elif column_index == 4:
                     dbcursor.execute('UPDATE reservation SET reservation_customer_phone = %s WHERE reservation_id = %s;', (newValue,reservationID))
                     messagebox.showinfo("Sucsess", "Phone number has been updated")
                     
-                elif column_index == 4:
+                elif column_index == 5:
                     dbcursor.execute('UPDATE reservation SET reservation_party_size = %s WHERE reservation_id = %s;', (newValue, reservationID))
                     messagebox.showinfo("Success", "Party size has been updated")
                     
-                elif column_index == 5:
+                elif column_index == 6:
                     dbcursor.execute("SELECT restaurant_id, table_id, reservation_time, reservation_party_size FROM reservation WHERE reservation_id = "+str(reservationID)+";")
                     reservation = dbcursor.fetchone()  
                     date = self.formatdate(newValue)
@@ -106,7 +110,7 @@ class ReservationModel(ObservableModel):
                     else:
                         messagebox.showerror("Error", "Table not available at that time.")
                         
-                elif column_index == 6:
+                elif column_index == 7:
                     dbcursor.execute("SELECT restaurant_id, table_id, reservation_date, reservation_party_size FROM reservation WHERE reservation_id = "+str(reservationID)+";")
                     reservation = dbcursor.fetchone() 
                     date = self.formatdate(reservation[2])
@@ -207,7 +211,7 @@ class ReservationModel(ObservableModel):
         if conn != None:    #Checking if connection is None                    
             if conn.is_connected(): #Checking if connection is established  
                 dbcursor = conn.cursor()    #Creating cursor object 
-                dbcursor.execute("SELECT reservation_id, restaurant_id, reservation_customer_name, reservation_customer_phone, reservation_party_size, reservation_date, reservation_time \
+                dbcursor.execute("SELECT reservation_id, restaurant_id, reservation_customer_name, reservation_customer_email, reservation_customer_phone, reservation_party_size, reservation_date, reservation_time \
                     FROM reservation WHERE table_id = %s AND reservation_time = %s;", (tableNum, timeSlot))
                 reservationDetails = dbcursor.fetchall()
                 dbcursor.close()
