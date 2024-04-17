@@ -99,24 +99,22 @@ class OrdersView(Frame):
         
 
     def createTableFrame(self, parentFrame, orders, tableNumber, row, col):
-        
         tableFrame = tk.Frame(parentFrame, borderwidth=2, relief=tk.GROOVE)
         tableFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
         
-        # tableFrame = tk.Frame(parentFrame, borderwidth=2, relief=tk.GROOVE)
-        # tableFrame.pack(side=tk.LEFT, expand=True, padx=10, pady=10)
-
         tableNumberTitle = tk.Label(tableFrame, text=tableNumber, font=("inter", 12), bg="lightgrey")
         tableNumberTitle.pack(fill=tk.X)
 
-        for order in orders:
-            
-            orderText = f"{order[1]} x {order[0]}"
-            if len(order) > 2:  # Special instructions
-                orderText += " (" + ", ".join(order[2:]) + ")"
+        # Loop through orders, which are now properly formatted as (item, quantity, description)
+        for item, quantity, description in orders:
+            # Build the order text
+            orderText = f"{quantity} x {item}"
+            if description:  # Add description if present
+                orderText += f" ({description})"
             orderLabel = tk.Label(tableFrame, text=orderText)
             orderLabel.pack(anchor=tk.W, padx=5)
             
+        # Button frame for operations on the table
         buttonFrame = tk.Frame(tableFrame)
         buttonFrame.pack(side=tk.BOTTOM, pady=5)
 
@@ -131,6 +129,7 @@ class OrdersView(Frame):
         cancelButton = tk.Button(buttonFrame, text="Cancel",
                                 command=lambda tn=tableNumber: self.orderCancelCallback(tn))
         cancelButton.pack(side=tk.LEFT, padx=5)
+
         
     def setOrderCompleteCallback(self, callback):
         self.orderCompleteCallback = callback

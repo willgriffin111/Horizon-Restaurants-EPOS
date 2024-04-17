@@ -138,7 +138,6 @@ class OrderView(ObservableModel):
             return {}
     
     def getTableOrders(self, restaurant_ID) -> dict:
-
         table_orders = {}
         try:
             with dbfunc.getConnection() as conn:
@@ -153,21 +152,45 @@ class OrderView(ObservableModel):
                         cursor.execute(query, params)
                         for row in cursor:
                             table_num = f"Table {row[0]}"
-                            order_details = (row[1], row[2], row[3])  
-                            if table_num not in table_orders:
-                                table_orders[table_num] = []
-                            table_orders[table_num].append(order_details)
+                            item_description = (row[1].strip(), row[3].strip() if row[3] else '')  # Ensure whitespace or None does not affect comparison
+                            quantity = int(row[2])
 
-                    return table_orders
-                else:
-                    print("Database connection failed.")
-                    return table_orders
+                            if table_num not in table_orders:
+                                table_orders[table_num] = {}
+
+                            if item_description in table_orders[table_num]:
+                                table_orders[table_num][item_description] += quantity
+                            else:
+                                table_orders[table_num][item_description] = quantity
+
+                            print(f"Processed: {item_description} with quantity {quantity} for {table_num}")
+
         except mysql.connector.Error as err:
             print(f"Database Error: {err}")
             return table_orders
+
+        # Reformat the dictionary to match expected output
+        formatted_table_orders = {}
+        for table, items in table_orders.items():
+            formatted_table_orders[table] = []
+            for item_desc, qty in items.items():
+                formatted_table_orders[table].append((item_desc[0], qty, item_desc[1]))
+                print(f"Table: {table}, Item: {item_desc[0]}, Total Qty: {qty}, Desc: {item_desc[1]}")
+
+        return formatted_table_orders
+
+
+        # Reformat the dictionary to match expected output
+        formatted_table_orders = {}
+        for table, items in table_orders.items():
+            formatted_table_orders[table] = []
+            for item_desc, qty in items.items():
+                formatted_table_orders[table].append((item_desc[0], qty, item_desc[1]))
+
+        return formatted_table_orders
+
     
     def completeOrder(self, restaurant_ID, tableNum):
-        
         try:
             with dbfunc.getConnection() as conn:
                 if conn.is_connected():

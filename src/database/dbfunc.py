@@ -4,7 +4,7 @@ import mysql.connector
 from mysql.connector import errorcode
  
 # MYSQL CONFIG VARIABLES
-name = "alex"
+name = "will"
 if name == "alex":
     #idk why this isnt working man
     hostname    = "localhost"
