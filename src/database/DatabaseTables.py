@@ -76,6 +76,15 @@ TABLES['MENU_INGREDIENTS'] = 'CREATE TABLE menu_ingredients(\
   REFERENCES restaurant (restaurant_id)\
 );'
 
+TABLES['CUSTOMER'] = 'CREATE TABLE customer (\
+  customer_email VARCHAR(255) NOT NULL, \
+  PRIMARY KEY (customer_email),\
+  customer_first_name VARCHAR(255) NOT NULL,\
+  customer_last_name VARCHAR(255) NOT NULL,\
+  customer_password VARCHAR(255) NOT NULL,\
+  customer_phone_details VARCHAR(20) NOT NULL\
+);'
+
 # TABLES['DISCOUNT'] = 'CREATE TABLE discount (\
 #   discount_id INT NOT NULL AUTO_INCREMENT, \
 #   PRIMARY KEY (discount_id),\
@@ -113,6 +122,7 @@ TABLES['RESERVATIONS'] = 'CREATE TABLE reservation (\
   reservation_id INT NOT NULL AUTO_INCREMENT, \
   PRIMARY KEY (reservation_id),\
   reservation_customer_name VARCHAR(64) NOT NULL,\
+  reservation_customer_email Varchar(255) NOT NULL, \
   reservation_customer_phone VARCHAR(11) NOT NULL,\
   reservation_party_size INT NOT NULL,\
   reservation_author VARCHAR(64) NOT NULL,\
